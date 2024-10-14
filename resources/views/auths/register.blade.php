@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="mt-4 mt-md-5 text-center">
-                    <p class="mb-0">© 2023 Web89.vn</p>
+                    {{-- <p class="mb-0">© 2023 Web89.vn</p> --}}
                 </div>
             </div>
         </div>
