@@ -16,7 +16,7 @@
                     <form method="POST" class="mt-4 pt-2" action="{{route('post-login-admin')}}">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label">Username hoặc Email</label>
+                            <label class="form-label">Email</label>
                             <input name="email" type="text" class="form-control" id="username">
                             @error('email')
                                 <div class="invalid-feedback d-block">

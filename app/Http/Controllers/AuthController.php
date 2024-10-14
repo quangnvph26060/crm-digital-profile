@@ -65,7 +65,7 @@ class AuthController extends Controller
         $result = $this->authService->postLoginAdmin($request->except('_token'));
 
         if ($result['success']) {
-            return redirect()->route('admin.mission.list');
+            return redirect()->route('admin.config.update');
         } else {
             return back()->with('error', $result['message']);
         }
