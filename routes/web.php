@@ -184,6 +184,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
 	Route::group(["prefix" => "admin", "as" => "admin.", "middleware" => "role-admin"], function () {
         Route::get('/list', 'AdminController@list')->name('list');
         Route::get('/add', 'AdminController@add')->name('add');
+        Route::get('/{id}/edit', 'AdminController@edit')->name('edit');
+        Route::post('/{id}/update', 'AdminController@update')->name('update');
         Route::post('/store', 'AdminController@store')->name('store');
         Route::get("/{id}/delete", 'AdminController@delete')->name("delete");
     });

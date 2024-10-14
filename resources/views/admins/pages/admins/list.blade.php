@@ -51,7 +51,6 @@
                                             <th data-priority="3">Email</th>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
-                                            <th style="text-align: center" data-priority="7">Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -63,21 +62,16 @@
                                                 <td>{{$userItem->level === 1 ? "User" :"Admin"}}</td>
                                                
                                                
-                                                <td>
-                                                    @if($userItem->status)
-                                                    <div class="badge badge-soft-success">Hoạt động</div>
-                                                    @else
-                                                    <div class="badge badge-soft-danger">Đã khóa</div>
-                                                    @endif
-                                                </td>
-                                                <td align="center">
-                                                    <a  onclick="return confirm('Bạn có chắc chắn muốn khóa?')"
-                                                        href="{{ route('admin.admin.delete', ['id' => $userItem->id]) }}" 
-                                                        class="{{$userItem->status === 1 ? "btn btn-danger" : "btn btn-primary"}}">
-                                                      
-                                                         {{$userItem->status === 1 ? "Khóa" : "Mở"}}
-                                                    </a>
-                                                </td>
+                                               <td  class="d-flex gap-1">
+                                                <a href="{{ route('admin.admin.edit', ['id' => $userItem->id]) }}" class="btn btn-warning">
+                                                    Sửa
+                                                </a>
+                                                <form method="GET" action="{{ route('admin.admin.delete', ['id' => $userItem->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                    @csrf
+                                                  
+                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                </form>
+                                               </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
