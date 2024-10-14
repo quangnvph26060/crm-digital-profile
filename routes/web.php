@@ -181,7 +181,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get("/{id}/delete", 'UserController@delete')->name("delete");
     });
 
-	Route::group(["prefix" => "admin", "as" => "admin.", "middleware" => "role-admin"], function () {
+	Route::group(["prefix" => "admin", "as" => "admin."], function () {
         Route::get('/list', 'AdminController@list')->name('list');
         Route::get('/add', 'AdminController@add')->name('add');
         Route::get('/{id}/edit', 'AdminController@edit')->name('edit');

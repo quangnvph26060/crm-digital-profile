@@ -7,7 +7,7 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
 
-                @if (auth('admin')->user()->level === 2)
+                {{-- @if (auth('admin')->user()->level === 2) --}}
                     <li>
                         <a href="javascript: void(0);" class="has-arrow">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5 11.5v-1h7v1h-7Zm0-4v-1h7v1h-7Zm-2.5 7h8.725L18 18.758V4H6v10.5ZM6 20h11.685l-3.435-4.5H6V20Zm13 1H5V3h14v18ZM6 20V4v16Zm0-4.5v-1v1Z"/></svg>
@@ -68,7 +68,7 @@
                             </li>
                         </ul>
                     </li>
-                @endif
+                {{-- @endif --}}
             </ul>
         </div>
         <!-- Sidebar -->

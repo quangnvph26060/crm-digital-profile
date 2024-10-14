@@ -50,7 +50,9 @@
                                             <th data-priority="2">Họ tên</th>
                                             <th data-priority="3">Email</th>
                                             <th>Vai trò</th>
+                                            @if (auth('admin')->user()->level === 2)
                                             <th>Trạng thái</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -61,17 +63,18 @@
                                                 <td>{{ $userItem->email }}</td>
                                                 <td>{{$userItem->level === 1 ? "User" :"Admin"}}</td>
                                                
-                                               
-                                               <td  class="d-flex gap-1">
-                                                <a href="{{ route('admin.admin.edit', ['id' => $userItem->id]) }}" class="btn btn-warning">
-                                                    Sửa
-                                                </a>
-                                                <form method="GET" action="{{ route('admin.admin.delete', ['id' => $userItem->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                                    @csrf
-                                                  
-                                                    <button type="submit" class="btn btn-danger">Xóa</button>
-                                                </form>
-                                               </td>
+                                                 @if (auth('admin')->user()->level === 2)
+                                                    <td  class="d-flex gap-1">
+                                                        <a  href="{{ route('admin.admin.edit', ['id' => $userItem->id]) }}" class="btn btn-warning">
+                                                            Sửa
+                                                        </a>
+                                                        <form method="GET" action="{{ route('admin.admin.delete', ['id' => $userItem->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                            @csrf
+                                                        
+                                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                                        </form>
+                                                    </td>  
+                                               @endif
                                             </tr>
                                         @endforeach
                                     </tbody>
