@@ -11,6 +11,7 @@ class Profile extends Model
     protected $fillable = [
         'config_id',
         'ma_muc_luc',
+        'ma_phong',
         'hop_so',
         'ho_so_so',
         'tieu_de_ho_so',
@@ -26,6 +27,7 @@ class Profile extends Model
     public static $rules = [
         'config_id' => 'required|exists:configs,id',
         'ma_muc_luc' => 'required|string',
+        'ma_phong' => 'required|string',
         'hop_so' => 'required|string',
         'ho_so_so' => 'required|string',
         'tieu_de_ho_so' => 'required|string',
@@ -39,5 +41,10 @@ class Profile extends Model
     public function config()
     {
         return $this->belongsTo(Config::class, 'config_id');
+    }
+
+    public function maPhong()
+    {
+        return $this->belongsTo(Phong::class, 'ma_phong');
     }
 }

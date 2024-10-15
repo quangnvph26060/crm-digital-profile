@@ -88,12 +88,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
 
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('', [ProfileController::class, 'index'])->name('index');
-        Route::get('/add-config', [ConfigController::class, 'add'])->name('add');
-        Route::get('/edit-config/{id}', [ConfigController::class, 'edit'])->name('edit');
-        Route::get('/get-agency-code', [ConfigController::class, 'getAgencyCode'])->name('get-agency-code');
-        Route::post('/add-config', [ConfigController::class, 'store'])->name('store');
-        Route::delete('delete/{id}', [ConfigController::class, 'delete'])->name('delete');
-        Route::post('/update-config/{id}', [ConfigController::class, 'update'])->name('update');
+        Route::get('/add-config', [ProfileController::class, 'add'])->name('add');
+        Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
+        Route::get('/get-agency-code', [ProfileController::class, 'getAgencyCode'])->name('get-agency-code');
+        Route::post('/add-config', [ProfileController::class, 'store'])->name('store');
+        Route::delete('delete/{id}', [ProfileController::class, 'delete'])->name('delete');
+        Route::post('/update-config/{id}', [ProfileController::class, 'update'])->name('update');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
 
