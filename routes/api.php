@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,4 @@ Route::get('/district', function () {
         ]
     ]);
 });
+Route::get('/phong-to-config', [ProfileController::class, 'PhongDetailToConfig'])->name('phong-to-config');

@@ -28,26 +28,65 @@
                                 <div class="row">
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label for="">Tiêu đề hồ sơ </label>
+                                            <label for="">Tiêu đề hồ sơ và Mã Cơ quan</label>
                                             <input value="{{ isset($inputs['name']) ? $inputs['name'] : '' }}"
                                                 autocomplete="off" name="name" placeholder="Tìm kiếm..." type="text"
                                                 class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="">Phông</label>
+                                            <select class="form-select"  name="phong" id="phong">
+                                                <option value="">Chọn Phông</option>
+                                                @foreach($phongdata as $item)
+                                                    <option value="{{$item->id}}" {{ isset($inputs['phong']) ?  $inputs['phong'] == $item->id ? "selected" : "" : ""}}>{{$item->ten_phong}}</option>
+                                                @endforeach
+                                                <!-- Thêm các tùy chọn phòng khác nếu cần -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="">Mục lục</label>
+                                            <select class="form-select" name="muc_luc" id="muc_luc">
+                                                <option value="">Chọn mục lục</option>
+                                                @foreach($muclucdata as $item)
+                                                    <option value="{{$item->id}}" {{ isset($inputs['muc_luc']) ? $inputs['muc_luc'] == $item->id ? "selected" :"" : ""}}>{{$item->ten_mucluc}}</option>
+                                                @endforeach
+                                                <!-- Thêm các tùy chọn mục lục khác nếu cần -->
+                                            </select>
+                                        </div>   
+                                    </div>
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label for="" style="opacity: 0">1</label> <br>
                                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
                                                 kiếm</button>
                                             <a href="{{ url()->current() }}" class="btn btn-danger"><i
                                                     class="fas fa-history"></i> Tải lại</a>
-                                            <a class="btn btn-success" href="{{ route('admin.config.add') }}">
+                                            <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
                                                 <i class="fas fa-plus"></i> Thêm mới
                                             </a>
+                                          
                                         </div>
-                                    </div>
+                                    </div>  
                                 </div>
                             </form>
+                            <div class="col-lg-6 mt-2">
+                              <div class="row">
+                                <div class="col-lg-2">
+                                    <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
+                                        <i class="fas fa-plus"></i> Xuất Excel
+                                    </a>
+                               </div>
+                               <div class="col-lg-2">
+                                    <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
+                                        <i class="fas fa-plus"></i> Nhập Excel
+                                    </a>
+                                </div>
+                              </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             @include('globals.alert')
@@ -83,7 +122,8 @@
                                                         {{ $item->config->agency_code }}
                                                     </td>
                                                     <td>
-                                                        {{ $item->config->font_code }}
+                                                        Phông:{{ $item->maPhong->ten_phong }} <br>
+                                                        Mã phông:{{ $item->maPhong->ma_phong }}
                                                     </td>
                                                     <td>
                                                         {{ $key + 1 }}
@@ -109,21 +149,27 @@
                                                     <td>
                                                         {{ $item->ghi_chu }}
                                                     </td>
-                                                    @if (auth('admin')->user()->level === 2)
-                                                        <td class="d-flex gap-1">
-                                                            <a href="{{ route('admin.config.edit', ['id' => $item->id]) }}"
-                                                                class="btn btn-warning">
-                                                                Sửa
+                                                   
+                                                        <td class="d-flex gap-1"> 
+                                                            @if (auth('admin')->user()->level === 2)
+                                                                <a href="{{ route('admin.config.edit', ['id' => $item->id]) }}"
+                                                                    class="btn btn-warning">
+                                                                    Sửa
+                                                                </a>
+                                                                <form method="post"
+                                                                    action="{{ route('admin.config.delete', ['id' => $item->id]) }}"
+                                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                                </form>
+                                                             @endif
+                                                             <a href="{{ route('admin.config.edit', ['id' => $item->id]) }}"
+                                                                class="btn btn-primary">
+                                                                Thông tin hồ sơ
                                                             </a>
-                                                            <form method="post"
-                                                                action="{{ route('admin.config.delete', ['id' => $item->id]) }}"
-                                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Xóa</button>
-                                                            </form>
                                                         </td>
-                                                    @endif
+                                                   
                                                 </tr>
                                             @endforeach
                                         </tbody>
