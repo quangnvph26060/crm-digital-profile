@@ -47,4 +47,8 @@ class Profile extends Model
     {
         return $this->belongsTo(Phong::class, 'ma_phong');
     }
+    public function maMucLuc()
+    {
+        return $this->belongsTo(MucLuc::class, 'ma_muc_luc');
+    }
 }

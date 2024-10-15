@@ -34,7 +34,7 @@
                                     <div class="col-lg-12">
                                         @include('globals.alert')
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <div>
                                             <div class="row">
                                                 <div class="col-lg-4 mb-3">
@@ -98,6 +98,30 @@
                                                         name="ho_so_so" type="text" id="example-text-input"
                                                         placeholder="Hồ sơ số">
                                                 </div>
+                                                <div class="col-lg-3">
+                                                    <label for="example-text-input" class="form-label">Số tờ <span
+                                                            class="text text-danger">*</span></label>
+                                                    <input value="{{ old('so_to') }}" required class="form-control"
+                                                        name="so_to" type="text" id="example-text-input"
+                                                        placeholder="số tờ">
+                                                    @error('so_to')
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label for="example-text-input" class="form-label"> THBQ <span
+                                                            class="text text-danger">*</span></label>
+                                                    <input value="{{ old('thbq') }}" required class="form-control"
+                                                        name="thbq" type="text" id="example-text-input"
+                                                        placeholder="THBQ">
+                                                    @error('thbq')
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="example-text-input" class="form-label">Tiêu đề hồ sơ <span
@@ -136,32 +160,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-lg-2">
-                                                    <label for="example-text-input" class="form-label">Số tờ <span
-                                                            class="text text-danger">*</span></label>
-                                                    <input value="{{ old('so_to') }}" required class="form-control"
-                                                        name="so_to" type="text" id="example-text-input"
-                                                        placeholder="số tờ">
-                                                    @error('so_to')
-                                                        <div class="invalid-feedback d-block">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label for="example-text-input" class="form-label"> THBQ <span
-                                                            class="text text-danger">*</span></label>
-                                                    <input value="{{ old('thbq') }}" required class="form-control"
-                                                        name="thbq" type="text" id="example-text-input"
-                                                        placeholder="THBQ">
-                                                    @error('thbq')
-                                                        <div class="invalid-feedback d-block">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
-                                                </div>
-                                            </div>
+                                          
                                             <div class="col-lg-12 " style="display: flex !important;flex-direction: column;">
     
                                                 <p>
