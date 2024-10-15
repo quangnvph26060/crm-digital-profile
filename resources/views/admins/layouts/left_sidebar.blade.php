@@ -32,9 +32,9 @@
                             <span data-key="t-apps">Quản lý văn bản</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                          
+
                             <li>
-                                <a href="#">
+                                <a href="{{ route('admin.vanban.index') }}">
                                     <span data-key="t-chat">Danh sách</span>
                                 </a>
                             </li>
@@ -46,7 +46,7 @@
                             <span data-key="t-apps">Quản lý người dùng</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                          
+
                             <li>
                                 <a href="{{route('admin.admin.list')}}">
                                     <span data-key="t-chat">Danh sách</span>
@@ -60,7 +60,7 @@
                             <span data-key="t-apps">Cấu hình</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                          
+
                             <li>
                                 <a href="{{route('admin.config.index')}}">
                                     <span data-key="t-chat">Cơ quan</span>
@@ -76,7 +76,7 @@
                                     <span data-key="t-chat">Mục lục</span>
                                 </a>
                             </li>
-                            
+
                         </ul>
                     </li>
                 {{-- @endif --}}

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BillController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\InformationVbController;
 use App\Http\Controllers\Admin\OaTemplateController;
 use App\Http\Controllers\Admin\PaymentSlipController;
 use App\Http\Controllers\Admin\ReceiptController;
@@ -96,6 +97,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/update-config/{id}', [ProfileController::class, 'update'])->name('update');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
+
+    Route::prefix('vanban')->name('vanban.')->group(function () {
+        Route::get('', [InformationVbController::class, 'index'])->name('index');
+        Route::get('/add-vanban', [InformationVbController::class, 'add'])->name('add');
+        Route::get('/edit-vanban/{id}', [InformationVbController::class, 'edit'])->name('edit');
+        Route::post('/add-vanban', [InformationVbController::class, 'store'])->name('store');
+        Route::delete('delete/{id}', [InformationVbController::class, 'delete'])->name('delete');
+        Route::post('/update-vanban/{id}', [InformationVbController::class, 'update'])->name('update');
+    });
+
     Route::prefix('receipt')->name('receipt.')->group(function () {
         Route::get('', [ReceiptController::class, 'index'])->name('index');
         Route::get('/client/{id}', [ReceiptController::class, 'showClientInfor'])->name('show');
