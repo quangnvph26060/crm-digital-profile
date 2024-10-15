@@ -15,21 +15,23 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $inputs = $request->all();
-        $configs = Profile::query();
-        
+       
+        $profiles = Profile::query();
+       
+        $title   = "Danh sách hồ sơ";
         if (isset($request->name) && $request->name != '') {
-            $configs->where(function($query) use ($request) {
+            $profiles->where(function($query) use ($request) {
                 $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');
             });
         }
         
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
-        $configs = $configs->paginate($perPage);
+        $profiles = $profiles->paginate($perPage);
         
-        $title   = "Danh sách Hồ sơ";
+           
         return view("admins.pages.profiles.index", [
-            "config" => $configs,
+            "profiles" => $profiles,
             "title"  => $title,
             "inputs" => $inputs,
         ]);

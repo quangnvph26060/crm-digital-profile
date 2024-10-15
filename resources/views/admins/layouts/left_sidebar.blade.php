@@ -20,7 +20,7 @@
                             </a>
                         </li> --}}
                             <li>
-                                <a href="{{ route('admin.admin.list') }}">
+                                <a href="{{ route('admin.profile.index') }}">
                                     <span data-key="t-chat">Danh sách</span>
                                 </a>
                             </li>
@@ -66,6 +66,17 @@
                                     <span data-key="t-chat">Cơ quan</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{route('admin.phong.index')}}">
+                                    <span data-key="t-chat">Phông</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{route('admin.mucluc.index')}}">
+                                    <span data-key="t-chat">Mục lục</span>
+                                </a>
+                            </li>
+                            
                         </ul>
                     </li>
                 {{-- @endif --}}

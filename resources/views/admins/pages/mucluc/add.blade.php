@@ -24,11 +24,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Thông tin cơ quan</h4>
+                            <h4 class="card-title">Thông tin mục lục</h4>
                         </div>
 
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.config.update',['id'=>$config->id]) }}" method="POST">
+                            <form action="{{ route('admin.mucluc.store') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -37,23 +37,23 @@
                                     <div class="col-lg-6">
                                         <div>
                                             <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Tên cơ quan <span
+                                                <label for="example-text-input" class="form-label">Tên mục lục <span
                                                         class="text text-danger">*</span></label>
-                                                <input value="{{ $config->agency_name }}" required class="form-control"
-                                                    name="agency_name" type="text" id="example-text-input">
-                                                @error('agency_name')
+                                                <input value="{{ old('ten_mucluc') }}" required class="form-control"
+                                                    name="ten_mucluc" type="text" id="example-text-input">
+                                                @error('ten_mucluc')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
-                                                <label for="example-search-input" class="form-label">Mã cơ quan <span
+                                                <label for="example-search-input" class="form-label">Mã mục lục <span
                                                         class="text text-danger">*</span></label>
-                                                <input value="{{ $config->agency_code }}" required class="form-control"
-                                                    name="agency_code" type="text" id="agency_code-search-input"
+                                                <input value="{{ old('ma_mucluc') }}" required class="form-control"
+                                                    name="ma_mucluc" type="text" id="agency_code-search-input"
                                                     list="agency-codes">
-                                                @error('agency_code')
+                                                @error('ma_mucluc')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
                                                     </div>
@@ -62,9 +62,9 @@
 
                                                 </datalist>
                                             </div>
+                                        
                                         </div>
                                     </div>
-                                  
                                     <div class="col-lg-12">
                                         <div>
                                             <button type="submit" class="btn btn-primary w-md">

@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Config;
+use App\Models\MucLuc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class ConfigController extends Controller
+class MucLucController extends Controller
 {
     public function index(Request $request)
     {
         $inputs = $request->all();
-        $configs = Config::query();
+        $configs = MucLuc::query();
         
         if (isset($request->name) && $request->name != '') {
             $configs->where(function($query) use ($request) {
-                $query->where('agency_name', 'like', '%' . $request->name . '%')
-                      ->orWhere('agency_code', 'like', '%' . $request->name . '%');
+                $query->where('ten_mucluc', 'like', '%' . $request->name . '%')
+                      ->orWhere('ma_mucluc', 'like', '%' . $request->name . '%');
             });
         }
         
@@ -25,35 +25,35 @@ class ConfigController extends Controller
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $configs = $configs->paginate($perPage);
         
-        $title   = "Danh sách cơ quan";
-        return view("admins.pages.config.list", [
-            "config" => $configs,
+        $title   = "Danh sách mục lục";
+        return view("admins.pages.mucluc.list", [
+            "mucluc" => $configs,
             "title"  => $title,
             "inputs" => $inputs,
         ]);
     }
     public function add()
     {
-        $title   = "Thêm mới cơ quan";
-        return view('admins.pages.config.add', ['title' => $title]);
+        $title   = "Thêm mới mục lục";
+        return view('admins.pages.mucluc.add', ['title' => $title]);
     }
     public function edit($id)
     {
-        $config = Config::find($id);
-        $title   = "Sửa thông tin cơ quan";
-        return view('admins.pages.config.edit', ['title' => $title,'config'=>$config]);
+        $config = MucLuc::find($id);
+        $title   = "Sửa mục lục";
+        return view('admins.pages.mucluc.edit', ['title' => $title,'config'=>$config]);
     }
     public function update(Request $request, $id)
     {
         try {
-            $config = Config::find($id);
+            $config = MucLuc::find($id);
 
             if (!$config) {
                 return back()->with('error', 'Không tìm thấy bản ghi cần chỉnh sửa.');
             }
             $config->update([
-                'agency_name' => $request->agency_name,
-                'agency_code' => $request->agency_code,
+                'ten_mucluc' => $request->ten_mucluc,
+                'ma_mucluc' => $request->ma_mucluc,
             ]);
             return back()->with('success', 'Chỉnh sửa thành công');
         } catch (\Exception $e) {
@@ -85,44 +85,45 @@ class ConfigController extends Controller
 
     private function checkExistingConfig($request)
     {
-        return Config::where('agency_name', $request->agency_name)
-            ->where('agency_code', $request->agency_code)
+        return MucLuc::where('ten_mucluc', $request->ten_mucluc)
+            ->where('ma_mucluc', $request->ma_mucluc)
             ->first();
     }
 
     private function validateConfig($request)
     {
+      
         return Validator::make($request->all(), [
-            'agency_name' => 'required|string|max:255',
-            'agency_code' => 'required|string|max:10',
+            'ten_mucluc' => 'required|string|max:255',
+            'ma_mucluc' => 'required|string|max:10',
         ]);
     }
 
     private function saveConfig($request)
     {
-        $config = new Config();
-        $config->agency_name = $request->agency_name;
-        $config->agency_code = $request->agency_code;
+        $config = new MucLuc();
+        $config->ten_mucluc = $request->ten_mucluc;
+        $config->ma_mucluc = $request->ma_mucluc;
         $config->save();
     }
     
     public function delete($userId)
     {
-        $config = Config::find($userId);
+        $config = MucLuc::find($userId);
         if ($config) {
             $config->delete();
-            return back()->with('success', 'Xóa cơ quan thành công');
+            return back()->with('success', 'Xóa mục lục thành công');
         }
-        return back()->with('error', 'Cơ quan không tồn tại');
+        return back()->with('error', 'Mục lục không tồn tại');
     }
 
     public function getAgencyCode(Request $request)
     {
         $query = $request->input('query');
 
-        $agencyCodes = DB::table('configs')
-            ->select('agency_code')
-            ->where('agency_code', 'like', '%' . $query . '%')
+        $agencyCodes = DB::table('mucluc')
+            ->select('ten_mucluc')
+            ->where('ma_mucluc', 'like', '%' . $query . '%')
             ->distinct()
             ->get();
 

@@ -62,46 +62,8 @@
 
                                                 </datalist>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="example-url-input" class="form-label">Tên phông <span
-                                                        class="text text-danger">*</span></label>
-                                                <input value="{{ old('font_name') }}" required class="form-control"
-                                                    name="font_name" type="text" id="example-email-input">
-                                                @error('font_name')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
+                                        
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="example-url-input" class="form-label">Mã phông<span
-                                                    class="text text-danger">*</span></label>
-                                            <input value="{{ old('font_code') }}" required class="form-control"
-                                                name="font_code" type="number" id="example-email-input">
-                                            @error('font_code')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="example-text-input" class="form-label">Tên mục lục <span
-                                                    class="text text-danger">*</span></label>
-                                            <select name="toc_name" class="form-control" data-trigger
-                                                name="choices-single-groups"id="choices-single-groups">
-                                                <option value="Vĩnh viễn">Vĩnh viễn</option>
-                                                <option value="Có thời hạn">Có thời hạn</option>
-                                            </select>
-                                            @error('toc_name')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-
                                     </div>
                                     <div class="col-lg-12">
                                         <div>

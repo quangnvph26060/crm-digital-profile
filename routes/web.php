@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\ZaloController;
 use App\Http\Controllers\Admin\ZnsMessageController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MucLucController;
+use App\Http\Controllers\PhongController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Receipt;
 use Illuminate\Support\Facades\Route;
@@ -62,6 +64,27 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/update-config/{id}', [ConfigController::class, 'update'])->name('update');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
+    Route::prefix('mucluc')->name('mucluc.')->group(function () {
+        Route::get('', [MucLucController::class, 'index'])->name('index');
+        Route::get('/add-mucluc', [MucLucController::class, 'add'])->name('add');
+        Route::get('/edit-mucluc/{id}', [MucLucController::class, 'edit'])->name('edit');
+        Route::get('/get-agency-code', [MucLucController::class, 'getAgencyCode'])->name('get-agency-code');
+        Route::post('/add-mucluc', [MucLucController::class, 'store'])->name('store');
+        Route::delete('delete/{id}', [MucLucController::class, 'delete'])->name('delete');
+        Route::post('/update-mucluc/{id}', [MucLucController::class, 'update'])->name('update');
+        // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
+    });
+    Route::prefix('phong')->name('phong.')->group(function () {
+        Route::get('', [PhongController::class, 'index'])->name('index');
+        Route::get('/add-phong', [PhongController::class, 'add'])->name('add');
+        Route::get('/edit-phong/{id}', [PhongController::class, 'edit'])->name('edit');
+        Route::get('/get-agency-code', [PhongController::class, 'getAgencyCode'])->name('get-agency-code');
+        Route::post('/add-phong', [PhongController::class, 'store'])->name('store');
+        Route::delete('delete/{id}', [PhongController::class, 'delete'])->name('delete');
+        Route::post('/update-phong/{id}', [PhongController::class, 'update'])->name('update');
+        // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
+    });
+
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('', [ProfileController::class, 'index'])->name('index');
         Route::get('/add-config', [ConfigController::class, 'add'])->name('add');

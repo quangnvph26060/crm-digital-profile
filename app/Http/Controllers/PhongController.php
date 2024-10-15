@@ -3,21 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\MucLuc;
+use App\Models\Phong;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
-class ConfigController extends Controller
+class PhongController extends Controller
 {
     public function index(Request $request)
     {
         $inputs = $request->all();
-        $configs = Config::query();
-        
+        $configs = Phong::query();
+     
         if (isset($request->name) && $request->name != '') {
             $configs->where(function($query) use ($request) {
-                $query->where('agency_name', 'like', '%' . $request->name . '%')
-                      ->orWhere('agency_code', 'like', '%' . $request->name . '%');
+                $query->where('ten_phong', 'like', '%' . $request->name . '%')
+                      ->orWhere('ma_phong', 'like', '%' . $request->name . '%');
             });
         }
         
@@ -25,35 +27,39 @@ class ConfigController extends Controller
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $configs = $configs->paginate($perPage);
         
-        $title   = "Danh sách cơ quan";
-        return view("admins.pages.config.list", [
-            "config" => $configs,
+        $title   = "Danh sách Phông";
+        return view("admins.pages.phong.list", [
+            "phong" => $configs,
             "title"  => $title,
             "inputs" => $inputs,
+           
         ]);
     }
     public function add()
     {
-        $title   = "Thêm mới cơ quan";
-        return view('admins.pages.config.add', ['title' => $title]);
+        $title   = "Thêm mới phông";
+        $macoquan = Config::all();
+        return view('admins.pages.phong.add', ['title' => $title,'macoquan'=>$macoquan]);
     }
     public function edit($id)
     {
-        $config = Config::find($id);
-        $title   = "Sửa thông tin cơ quan";
-        return view('admins.pages.config.edit', ['title' => $title,'config'=>$config]);
+        $macoquan = Config::all();
+        $config = Phong::find($id);
+        $title   = "Sửa thông tin phông";
+        return view('admins.pages.phong.edit', ['title' => $title,'config'=>$config,'macoquan'=>$macoquan]);
     }
     public function update(Request $request, $id)
     {
         try {
-            $config = Config::find($id);
+            $config = Phong::find($id);
 
             if (!$config) {
                 return back()->with('error', 'Không tìm thấy bản ghi cần chỉnh sửa.');
             }
             $config->update([
-                'agency_name' => $request->agency_name,
-                'agency_code' => $request->agency_code,
+                'ten_phong' => $request->ten_phong,
+                'ma_phong' => $request->ma_phong,
+                'coquan_id' => $request->ma_coquan,
             ]);
             return back()->with('success', 'Chỉnh sửa thành công');
         } catch (\Exception $e) {
@@ -70,11 +76,6 @@ class ConfigController extends Controller
                 return back()->with('error', 'Không thể thêm bản ghi vì trùng lặp dữ liệu.');
             }
             $validator = $this->validateConfig($request);
-
-            // if ($validator->fails()) {
-            //     $errors = $validator->errors()->all();
-            //     return back()->with('errors', $errors);
-            // }
             $this->saveConfig($request);
 
             return back()->with('success', 'Thêm thành công');
@@ -85,44 +86,61 @@ class ConfigController extends Controller
 
     private function checkExistingConfig($request)
     {
-        return Config::where('agency_name', $request->agency_name)
-            ->where('agency_code', $request->agency_code)
+        return Phong::where('ten_phong', $request->ten_phong)
+            ->where('ma_phong', $request->ma_phong)
             ->first();
     }
 
     private function validateConfig($request)
     {
         return Validator::make($request->all(), [
-            'agency_name' => 'required|string|max:255',
-            'agency_code' => 'required|string|max:10',
+            'ten_phong' => 'required|string|max:255',
+            'ma_phong' => 'required|string|max:10',
         ]);
     }
 
     private function saveConfig($request)
     {
-        $config = new Config();
-        $config->agency_name = $request->agency_name;
-        $config->agency_code = $request->agency_code;
-        $config->save();
+        $phong = new Phong();
+        $phong->ten_phong = $request->ten_phong;
+        $phong->ma_phong = $request->ma_phong;
+        $phong->coquan_id = $request->ma_coquan;
+        $phong->save();
+        $this->addPhongToTrungGian($phong->id);
+     
     }
     
+    public function addPhongToTrungGian($id)
+    {
+        $muclucs = MucLuc::all();
+    
+        $data = $muclucs->map(function ($mucluc) use ($id) {
+            return [
+                'phong_id' => $id,
+                'mucluc_id' => $mucluc->id,
+            ];
+        })->toArray();
+    
+        // Thêm dữ liệu vào bảng trung gian
+        DB::table('phong_mucluc')->insert($data);
+    }
     public function delete($userId)
     {
-        $config = Config::find($userId);
+        $config = Phong::find($userId);
         if ($config) {
             $config->delete();
-            return back()->with('success', 'Xóa cơ quan thành công');
+            return back()->with('success', 'Xóa phông thành công');
         }
-        return back()->with('error', 'Cơ quan không tồn tại');
+        return back()->with('error', 'Phông không tồn tại');
     }
 
     public function getAgencyCode(Request $request)
     {
         $query = $request->input('query');
 
-        $agencyCodes = DB::table('configs')
-            ->select('agency_code')
-            ->where('agency_code', 'like', '%' . $query . '%')
+        $agencyCodes = DB::table('phong')
+            ->select('ten_phong')
+            ->where('ten_phong', 'like', '%' . $query . '%')
             ->distinct()
             ->get();
 

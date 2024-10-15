@@ -24,11 +24,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Thông tin cơ quan</h4>
+                            <h4 class="card-title">Thông tin phông</h4>
                         </div>
-
+                       
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.config.update',['id'=>$config->id]) }}" method="POST">
+                            <form action="{{ route('admin.phong.update',['id'=>$config->id]) }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -37,23 +37,23 @@
                                     <div class="col-lg-6">
                                         <div>
                                             <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Tên cơ quan <span
+                                                <label for="example-text-input" class="form-label">Tên phông <span
                                                         class="text text-danger">*</span></label>
-                                                <input value="{{ $config->agency_name }}" required class="form-control"
-                                                    name="agency_name" type="text" id="example-text-input">
-                                                @error('agency_name')
+                                                <input value="{{ $config->ten_phong }}" required class="form-control"
+                                                    name="ten_phong" type="text" id="example-text-input">
+                                                @error('ten_phong')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
                                             </div>
                                             <div class="mb-3">
-                                                <label for="example-search-input" class="form-label">Mã cơ quan <span
+                                                <label for="example-search-input" class="form-label">Mã phông <span
                                                         class="text text-danger">*</span></label>
-                                                <input value="{{ $config->agency_code }}" required class="form-control"
-                                                    name="agency_code" type="text" id="agency_code-search-input"
+                                                <input value="{{ $config->ma_phong }}" required class="form-control"
+                                                    name="ma_phong" type="text" id="agency_code-search-input"
                                                     list="agency-codes">
-                                                @error('agency_code')
+                                                @error('ma_phong')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
                                                     </div>
@@ -61,6 +61,22 @@
                                                 <datalist id="agency-codes">
 
                                                 </datalist>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
+                                                        class="text text-danger">*</span></label>
+                                                <select class="form-select" name="ma_coquan" id="agency_code-select">
+                                                    <option value="">Chọn mã cơ quan</option>
+                                                    @foreach ($macoquan as $item)
+                                                        <option value="{{ $item->id }}" {{$item->id === $config->coquan_id ? "selected": ""}}>{{ $item->agency_name }} -
+                                                            {{ $item->agency_code }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('ma_coquan')
+                                                    <div class="invalid-feedback d-block">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>

@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Config extends Model
+class MucLuc extends Model
 {
     use HasFactory;
+    protected $table = "mucluc";
     protected $fillable = [
-        'agency_name',
-        'agency_code',
+        
+        'ten_mucluc',
+        'ma_mucluc',
     ];
 }

@@ -37,7 +37,7 @@
                                         <label for="" style="opacity: 0">1</label> <br>
                                         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm kiếm</button>
                                         <a href="{{url()->current()}}" class="btn btn-danger"><i class="fas fa-history"></i> Tải lại</a>
-                                        <a class="btn btn-success" href="{{route('admin.config.add')}}">
+                                        <a class="btn btn-success" href="{{route('admin.phong.add')}}">
                                             <i class="fas fa-plus"></i> Thêm mới
                                         </a>
                                     </div>
@@ -53,32 +53,35 @@
                                     <thead>
                                         <tr>
                                             <th>STT</th>
-                                            <th>Tên cơ quan</th>
                                             <th>Mã cơ quan</th>
+                                            <th>Tên Phông</th>
+                                            <th>Mã phông</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                        
-                                        @foreach ($config as $key => $item)
+                                        @foreach ($phong as $key => $item)
                                           
                                             <tr>
                                                 <td>
                                                     {{$key + 1}}
                                                 </td>
-                                             
                                                 <td>
-                                                    {{ $item->agency_name}}
+                                                    {{ $item->coquan->agency_name}} 
                                                 </td>
                                                 <td>
-                                                    {{ $item->agency_code}}
+                                                    {{ $item->ten_phong}}
+                                                </td>
+                                                <td>
+                                                    {{ $item->ma_phong}}
                                                 </td>
                                                
                                                 <td class="d-flex gap-1">
-                                                    <a href="{{ route('admin.config.edit', ['id' => $item->id]) }}" class="btn btn-warning">
+                                                    <a href="{{ route('admin.phong.edit', ['id' => $item->id]) }}" class="btn btn-warning">
                                                         Sửa
                                                     </a>
-                                                    <form method="post" action="{{ route('admin.config.delete', ['id' => $item->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                    <form method="post" action="{{ route('admin.phong.delete', ['id' => $item->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger">Xóa</button>
@@ -89,7 +92,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{$config->links()}}
+                            {{$phong->links()}}
                         </div>
 
                     </div>
