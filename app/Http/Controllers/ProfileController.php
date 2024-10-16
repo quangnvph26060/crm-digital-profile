@@ -8,6 +8,7 @@ use App\Models\Phong;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Models\Config;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -19,53 +20,65 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $inputs = $request->all();
-       // dd($request->all());
-        $profiles = Profile::query();
+        // dd($request->all());
+
         $phongdata  = Phong::all();
         $muclucdata = MucLuc::all();
         $title   = "Danh sách hồ sơ";
+        $profiles = Profile::query();
         if (isset($request->name) && $request->name != '') {
+
             $profiles->where(function($query) use ($request) {
+
                 $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');
             });
         }
         if (isset($request->phong) && $request->phong != '') {
+
             $profiles->where(function($query) use ($request) {
                 $query->where('ma_phong', 'like', '%' . $request->phong . '%');
             });
         }
         if (isset($request->muc_luc) && $request->muc_luc != '') {
+
             $profiles->where(function($query) use ($request) {
+
                 $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
             });
         }
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $profiles = $profiles->paginate($perPage);
-      //  dd($profiles);
+
 
         return view("admins.pages.profiles.index", [
             "profiles" => $profiles,
             "title"  => $title,
             "inputs" => $inputs,
-            "phongdata"=>$phongdata,
-            "muclucdata"=>$muclucdata,
+            "phongdata" => $phongdata,
+            "muclucdata" => $muclucdata,
         ]);
     }
-    public function add(){
+    public function add()
+    {
         $title   = "Thêm mới hồ sơ";
         $macoquan = ModelsConfig::all();
         $mamucluc = MucLuc::all();
-        return view('admins.pages.profiles.add',
-        [
-            'title' => $title,
-            'macoquan'=>$macoquan,
-            'mamucluc'=>$mamucluc
-        ]);
+
+        return view(
+            'admins.pages.profiles.add',
+            [
+                'title' => $title,
+                'macoquan' => $macoquan,
+                'mamucluc' => $mamucluc
+            ]
+        );
+
     }
-    public function PhongDetailToConfig(Request $request){
-        $phongdata = Phong::select('ma_phong', 'ten_phong','id')->where('coquan_id',$request->id)->get();
-        return response()->json(['status'=>"success",'data'=>$phongdata]);
+    public function PhongDetailToConfig(Request $request)
+    {
+        $phongdata = Phong::select('ma_phong', 'ten_phong', 'id')->where('coquan_id', $request->id)->get();
+        return response()->json(['status' => "success", 'data' => $phongdata]);
     }
     /**
      * Show the form for creating a new resource.
@@ -85,33 +98,69 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        $macoquan =  Config::find($request->ma_coquan);
-        if(!$macoquan){
-            return back()->with('error', 'Không tìm thấy mã cơ quan.');
-        }
-        $maphong = Phong::where('id', $request->ma_phong)
-        ->where('coquan_id', $request->ma_coquan)
-        ->first();
-        if(!$maphong){
-            return back()->with('error', 'Không tìm thấy mã phông trong cơ quan này.');
-        }
-       // dd($request->all());
-        $profile = new Profile();
-        $profile->config_id  = $request->ma_coquan;
-        $profile->ma_muc_luc = $request->ma_mucluc;
-        $profile->ma_phong = $request->ma_phong;
-        $profile->hop_so = $request->hop_so;
-        $profile->ho_so_so = $request->ho_so_so;
-        $profile->tieu_de_ho_so = $request->tieu_de_ho_so;
-        $profile->ngay_bat_dau = $request->date_start;
-        $profile->ngay_ket_thuc = $request->date_end;
-        $profile->so_to = $request->so_to;
-        $profile->thbq = $request->thbq;
-        $profile->ghi_chu = $request->ghi_chu;
-        $profile->save();
-        return back()->with('success', 'Thêm hồ sơ thành công');
 
+        DB::beginTransaction();
+
+        try {
+            $validatedData = $request->validate([
+                'ma_coquan' => 'required',
+                'ma_mucluc' => 'required',
+                'ma_phong' => 'required',
+                'hop_so' => 'required',
+                'ho_so_so' => 'required',
+                'tieu_de_ho_so' => 'required',
+                'date_start' => 'required|date',
+                'date_end' => 'required|date|after:date_start',
+                'so_to' => 'required',
+                'thbq' => 'required',
+                'ghi_chu' => 'nullable',
+            ]);
+            $macoquan = $this->checkExistence(Config::class, $request->ma_coquan, 'Không tìm thấy mã cơ quan.');
+
+            $maphong = Phong::where('id', $request->ma_phong)
+                ->where('coquan_id', $request->ma_coquan)
+                ->first();
+
+            if (!$maphong) {
+                DB::rollback();
+                return back()->with('error', 'Không tìm thấy mã phòng trong cơ quan này.');
+            }
+
+            $result_profile = Profile::where('hop_so', $request->hop_so)
+                ->where('config_id', $request->ma_coquan)
+                ->where('ma_phong', $request->ma_phong)
+                ->where('ma_muc_luc', $request->ma_mucluc)
+                ->where('ho_so_so', $request->ho_so_so)
+                ->first();
+
+            if ($result_profile) {
+                DB::rollback();
+                return back()->with('error', 'Đã có hồ sơ trong hộp này');
+            }
+
+            $profile = new Profile();
+            $profile->config_id = $request->ma_coquan;
+            $profile->ma_muc_luc = $request->ma_mucluc;
+            $profile->ma_phong = $request->ma_phong;
+            $profile->hop_so = $request->hop_so;
+            $profile->ho_so_so = $request->ho_so_so;
+            $profile->tieu_de_ho_so = $request->tieu_de_ho_so;
+            $profile->ngay_bat_dau = $request->date_start;
+            $profile->ngay_ket_thuc = $request->date_end;
+            $profile->so_to = $request->so_to;
+            $profile->thbq = $request->thbq;
+            $profile->ghi_chu = $request->ghi_chu;
+            $profile->save();
+
+            DB::commit();
+            return back()->with('success', 'Thêm hồ sơ thành công');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Đã xảy ra lỗi khi thêm hồ sơ');
+        }
     }
+
+
 
     /**
      * Display the specified resource.
@@ -123,18 +172,73 @@ class ProfileController extends Controller
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    private function checkExistence($model, $id, $errorMessage)
     {
-        //
+        $object = $model::find($id);
+        if (!$object) {
+            return back()->with('error', $errorMessage);
+        }
+        return $object;
     }
 
+    public function edit($id)
+    {
+        $profiles = Profile::query();
+        if (isset($request->name) && $request->name != '') {
+            $profiles->where(function ($query) use ($request) {
+                $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');
+            });
+        }
+        if (isset($request->phong) && $request->phong != '') {
+            $profiles->where(function ($query) use ($request) {
+                $query->where('ma_phong', 'like', '%' . $request->phong . '%');
+            });
+        }
+        if (isset($request->muc_luc) && $request->muc_luc != '') {
+            $profiles->where(function ($query) use ($request) {
+                $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
+            });
+        }
+        // Thêm phân trang ở đây
+        $perPage = 10; // Số lượng bản ghi trên mỗi trang
+        $profiles = $profiles->paginate($perPage);
+        //  dd($profiles);
+        $macoquan = Config::all();
+        $profile = Profile::find($id);
+        $mamucluc = MucLuc::all();
+        $title   = "Xem hồ sơ";
+
+        return view('admins.pages.profiles.edit', ['title' => $title, 'profile' => $profile, 'macoquan' => $macoquan, 'mamucluc' => $mamucluc, 'profiles' => $profiles]);
+    }
+    public function detail($id)
+    {
+        $profiles = Profile::query();
+        if (isset($request->name) && $request->name != '') {
+            $profiles->where(function ($query) use ($request) {
+                $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');
+            });
+        }
+        if (isset($request->phong) && $request->phong != '') {
+            $profiles->where(function ($query) use ($request) {
+                $query->where('ma_phong', 'like', '%' . $request->phong . '%');
+            });
+        }
+        if (isset($request->muc_luc) && $request->muc_luc != '') {
+            $profiles->where(function ($query) use ($request) {
+                $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
+            });
+        }
+        // Thêm phân trang ở đây
+        $perPage = 10; // Số lượng bản ghi trên mỗi trang
+        $profiles = $profiles->paginate($perPage);
+        //  dd($profiles);
+        $macoquan = Config::all();
+        $profile = Profile::find($id);
+        $mamucluc = MucLuc::all();
+        $title   = "Xem hồ sơ";
+
+        return view('admins.pages.profiles.detail', ['title' => $title, 'profile' => $profile, 'macoquan' => $macoquan, 'mamucluc' => $mamucluc, 'profiles' => $profiles]);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -144,7 +248,22 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $profile = $this->checkExistence(Profile::class, $id, 'Không tìm thấy thông tin hồ sơ.');
+
+        $profile->update([
+            'config_id ' => $request->ma_coquan,
+            'ma_phong' => $request->ma_phong,
+            'ma_muc_luc' => $request->ma_mucluc,
+            'hop_so'   => $request->hop_so,
+            'so_to' => $request->so_to,
+            'ho_so_so' => $request->ho_so_so,
+            'thbq' => $request->thbq,
+            'tieu_de_ho_so' => $request->tieu_de_ho_so,
+            'ghi_chu' => $request->ghi_chu,
+            'ngay_bat_dau' => $request->date_start,
+            'ngay_ket_thuc' => $request->date_end,
+        ]);
+        return back()->with('success', 'Chỉnh sửa thành công');
     }
 
     /**

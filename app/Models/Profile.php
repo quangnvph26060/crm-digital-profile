@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
+    protected $table = "profiles";
     protected $fillable = [
         'config_id',
         'ma_muc_luc',
@@ -46,5 +47,9 @@ class Profile extends Model
     public function maPhong()
     {
         return $this->belongsTo(Phong::class, 'ma_phong');
+    }
+    public function maMucLuc()
+    {
+        return $this->belongsTo(MucLuc::class, 'ma_muc_luc');
     }
 }

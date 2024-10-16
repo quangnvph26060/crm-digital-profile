@@ -126,7 +126,7 @@
                                                         Mã phông:{{ $item->maPhong->ma_phong ?? '' }}
                                                     </td>
                                                     <td>
-                                                        {{ $key + 1 }}
+                                                        {{ $item->maMucLuc->ten_mucluc }}
                                                     </td>
                                                     <td>
                                                         {{ $item->hop_so }}
@@ -152,19 +152,19 @@
 
                                                         <td class="d-flex gap-1">
                                                             @if (auth('admin')->user()->level === 2)
-                                                                <a href="{{ route('admin.config.edit', ['id' => $item->id]) }}"
+                                                                <a href="{{ route('admin.profile.edit', ['id' => $item->id]) }}"
                                                                     class="btn btn-warning">
                                                                     Sửa
                                                                 </a>
                                                                 <form method="post"
-                                                                    action="{{ route('admin.config.delete', ['id' => $item->id]) }}"
+                                                                    action="{{ route('admin.profile.delete', ['id' => $item->id]) }}"
                                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit" class="btn btn-danger">Xóa</button>
                                                                 </form>
                                                              @endif
-                                                             <a href="{{ route('admin.config.edit', ['id' => $item->id]) }}"
+                                                             <a href="{{ route('admin.profile.detail', ['id' => $item->id]) }}"
                                                                 class="btn btn-primary">
                                                                 Thông tin hồ sơ
                                                             </a>
