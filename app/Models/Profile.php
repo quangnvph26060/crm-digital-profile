@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
+    protected $table = "profiles";
     protected $fillable = [
         'config_id',
         'ma_muc_luc',
