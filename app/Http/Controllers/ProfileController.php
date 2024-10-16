@@ -26,24 +26,24 @@ class ProfileController extends Controller
         $title   = "Danh sách hồ sơ";
         if (isset($request->name) && $request->name != '') {
             $profiles->where(function($query) use ($request) {
-                $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');    
+                $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');
             });
         }
         if (isset($request->phong) && $request->phong != '') {
             $profiles->where(function($query) use ($request) {
-                $query->where('ma_phong', 'like', '%' . $request->phong . '%');    
+                $query->where('ma_phong', 'like', '%' . $request->phong . '%');
             });
         }
         if (isset($request->muc_luc) && $request->muc_luc != '') {
             $profiles->where(function($query) use ($request) {
-                $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');    
+                $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
             });
         }
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $profiles = $profiles->paginate($perPage);
       //  dd($profiles);
-           
+
         return view("admins.pages.profiles.index", [
             "profiles" => $profiles,
             "title"  => $title,
@@ -56,7 +56,7 @@ class ProfileController extends Controller
         $title   = "Thêm mới hồ sơ";
         $macoquan = ModelsConfig::all();
         $mamucluc = MucLuc::all();
-        return view('admins.pages.profiles.add', 
+        return view('admins.pages.profiles.add',
         [
             'title' => $title,
             'macoquan'=>$macoquan,
@@ -110,8 +110,8 @@ class ProfileController extends Controller
         $profile->ghi_chu = $request->ghi_chu;
         $profile->save();
         return back()->with('success', 'Thêm hồ sơ thành công');
-    
-    }  
+
+    }
 
     /**
      * Display the specified resource.

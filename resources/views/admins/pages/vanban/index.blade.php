@@ -41,7 +41,7 @@
                                                 kiếm</button>
                                             <a href="{{ url()->current() }}" class="btn btn-danger"><i
                                                     class="fas fa-history"></i> Tải lại</a>
-                                            <a class="btn btn-success" href="{{ route('admin.config.add') }}">
+                                            <a class="btn btn-success" href="{{ route('admin.vanban.add') }}">
                                                 <i class="fas fa-plus"></i> Thêm mới
                                             </a>
                                         </div>
@@ -75,7 +75,44 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                            @forelse ($vanban as $index =>  $item )
+                                                    <tr>
+                                                        <td>{{$loop->index + 1 }}</td>
+                                                        <td>{{ $item->config->agency_code }}</td>
+                                                        <td> {{ $item->maPhong->ten_phong  ?? ''}} - {{ $item->maPhong->ma_phong ?? '' }}</td>
+                                                        <td>{{ $item->maluuc_id }}</td>
+                                                        <td>{{ $item->hop_so }}</td>
+                                                        <td>{{ $item->ho_so_so }}</td>
+                                                        <td>{{ $item->so_kh_vb }}</td>
+                                                        <td>{{ $item->time_vb	 }}</td>
+                                                        <td>{{ $item->tac_gia }}</td>
+                                                        <td>{!! $item->noi_dung !!}</td>
+                                                        <td>{{ $item->to_so }}</td>
+                                                        <td>{{ $item->duong_dan }}</td>
+                                                        <td>{{ $item->ghi_chu }}</td>
+                                                        <td class="d-flex gap-1">
+                                                            @if (auth('admin')->user()->level === 2)
+                                                                <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"
+                                                                    class="btn btn-warning">
+                                                                    Sửa
+                                                                </a>
+                                                                <form method="post"
+                                                                    action="{{ route('admin.vanban.delete', ['id' => $item->id]) }}"
+                                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                                </form>
+                                                             @endif
+                                                             <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"
+                                                                class="btn btn-primary">
+                                                                Thông tin văn bản
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                            @empty
+                                                    <tr>Chưa có dữ liệu</tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>

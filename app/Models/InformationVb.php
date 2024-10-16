@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Config;
+use App\Models\Phong;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +29,16 @@ class InformationVb extends Model
         'duong_dan',
         'filepdf'
     ];
+
+    public function config()
+    {
+        return $this->belongsTo(Config::class, 'config_id');
+    }
+
+    public function maPhong()
+    {
+        return $this->belongsTo(Phong::class, 'ma_phong');
+    }
 
 
 

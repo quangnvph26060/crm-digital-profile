@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class InformationRequest extends FormRequest
 {
@@ -21,27 +22,32 @@ class InformationRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
-    {
-        return [
-            //public static $rules = [
-        'config_id' => 'required|exists:configs,id',
+    public function rules(Request $request)
+{
+    $rules = [
+        'config_id' => 'required|integer',
         'ma_phong' => 'required|integer',
         'ma_mucluc' => 'required|integer',
-        'hop_so' => 'required|integer',
-        'ho_so_so' => 'required|integer',
+        'hop_so' => 'required|string',
+        'ho_so_so' => 'required|string',
         'so_kh_vb' => 'required|string',
         'time_vb' => 'required|date',
         'tac_gia' => 'required|string',
-        'author' => 'nullable|integer',
         'noi_dung' => 'required|string',
         'to_so' => 'required|string',
         'ghi_chu' => 'required|string',
-        'duong_dan' => 'required|string',
-        'filepdf' =>'required|string',
     ];
 
+
+    if ($request->isMethod('post')) {
+        $rules['duong_dan'] = 'required|mimes:pdf';
+    } else {
+        $rules['duong_dan'] = 'mimes:pdf';
     }
+
+    return $rules;
+}
+
 
     public function messages(){
         return __('request.messages');
@@ -57,10 +63,10 @@ class InformationRequest extends FormRequest
             'so_kh_vb' => 'Số và ký hiệu văn bản',
             'time_vb' => 'Ngày tháng văn bản',
             'tac_gia' => 'Tác giả văn bản',
-            'author' => 'Tác giả văn bản',
-            'noi_dung' => 'Nội dung văn abnr',
+            'noi_dung' => 'Nội dung văn bản',
             'to_so' => 'Tờ số',
-            'duong_dan' => 'Đường dẫn'
+            'duong_dan' => 'Đường dẫn',
+            // 'ghi_chu' => "Ghi chú"
         ];
     }
 }

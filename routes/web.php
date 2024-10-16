@@ -103,7 +103,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/edit-vanban/{id}', [InformationVbController::class, 'edit'])->name('edit');
         Route::post('/add-vanban', [InformationVbController::class, 'store'])->name('store');
         Route::delete('delete/{id}', [InformationVbController::class, 'delete'])->name('delete');
-        Route::post('/update-vanban/{id}', [InformationVbController::class, 'update'])->name('update');
+        Route::put('/update-vanban/{id}', [InformationVbController::class, 'update'])->name('update');
     });
 
     Route::prefix('receipt')->name('receipt.')->group(function () {

@@ -10,10 +10,10 @@
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4>
                     </div>
-                    {{-- <div class="" style="float: right"> 
+                    {{-- <div class="" style="float: right">
                     <a class="btn btn-success" href="{{ route('admin.config.add') }}">
                         <i class="fas fa-plus"></i> Thêm mới
-                    </a> 
+                    </a>
                 </div> --}}
                 </div>
             </div>
@@ -56,7 +56,7 @@
                                                 @endforeach
                                                 <!-- Thêm các tùy chọn mục lục khác nếu cần -->
                                             </select>
-                                        </div>   
+                                        </div>
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="form-group">
@@ -68,9 +68,9 @@
                                             <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
                                                 <i class="fas fa-plus"></i> Thêm mới
                                             </a>
-                                          
+
                                         </div>
-                                    </div>  
+                                    </div>
                                 </div>
                             </form>
                             <div class="col-lg-6 mt-2">
@@ -122,8 +122,8 @@
                                                         {{ $item->config->agency_code }}
                                                     </td>
                                                     <td>
-                                                        Phông:{{ $item->maPhong->ten_phong }} <br>
-                                                        Mã phông:{{ $item->maPhong->ma_phong }}
+                                                        Phông:{{ $item->maPhong->ten_phong  ?? ''}} <br>
+                                                        Mã phông:{{ $item->maPhong->ma_phong ?? '' }}
                                                     </td>
                                                     <td>
                                                         {{ $key + 1 }}
@@ -149,8 +149,8 @@
                                                     <td>
                                                         {{ $item->ghi_chu }}
                                                     </td>
-                                                   
-                                                        <td class="d-flex gap-1"> 
+
+                                                        <td class="d-flex gap-1">
                                                             @if (auth('admin')->user()->level === 2)
                                                                 <a href="{{ route('admin.config.edit', ['id' => $item->id]) }}"
                                                                     class="btn btn-warning">
@@ -169,7 +169,7 @@
                                                                 Thông tin hồ sơ
                                                             </a>
                                                         </td>
-                                                   
+
                                                 </tr>
                                             @endforeach
                                         </tbody>
