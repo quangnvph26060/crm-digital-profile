@@ -90,6 +90,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('', [ProfileController::class, 'index'])->name('index');
         Route::get('/add-config', [ProfileController::class, 'add'])->name('add');
         Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
+        Route::get('/detail-config/{id}', [ProfileController::class, 'detail'])->name('detail');
         Route::get('/get-agency-code', [ProfileController::class, 'getAgencyCode'])->name('get-agency-code');
         Route::post('/add-config', [ProfileController::class, 'store'])->name('store');
         Route::delete('delete/{id}', [ProfileController::class, 'delete'])->name('delete');

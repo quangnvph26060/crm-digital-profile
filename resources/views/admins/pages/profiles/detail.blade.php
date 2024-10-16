@@ -184,20 +184,112 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 mt-4">
+                                    {{-- <div class="col-lg-12 mt-4">
                                         <div>
                                             <button type="submit" class="btn btn-primary w-md">
                                                 Xác nhận
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div> <!-- end col -->
             </div>
-          
+            <div class="row">
+                <div class="card-body">
+                    @include('globals.alert')
+                    <div class="table-rep-plugin">
+                        <div class="table-responsive mb-0" data-pattern="priority-columns">
+                            <table id="tech-companies-1" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã Cơ quan</th>
+                                        <th>Mã Phông</th>
+                                        <th>Mã mục lục</th>
+                                        <th>Hộp số</th>
+                                        <th>Hồ sơ số</th>
+                                        <th>Tiêu đề hồ sơ</th>
+                                        <th>Ngày tháng BĐ-KT</th>
+                                        <th>Số tờ</th>
+                                        <th>THBQ</th>
+                                        <th>Ghi chú</th>
+                                        @if (auth('admin')->user()->level === 2)
+                                            <th>Hành động</th>
+                                        @endif
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($profiles as $key => $item)
+                                        <tr>
+                                            <td>
+                                                {{ $key + 1 }}
+                                            </td>
+
+                                            <td>
+                                                {{ $item->config->agency_code }}
+                                            </td>
+                                            <td>
+                                                Phông:{{ $item->maPhong->ten_phong }} <br>
+                                                Mã phông:{{ $item->maPhong->ma_phong }}
+                                            </td>
+                                            <td>
+                                                {{ $key + 1 }}
+                                            </td>
+                                            <td>
+                                                {{ $item->hop_so }}
+                                            </td>
+                                            <td>
+                                                {{ $item->ho_so_so }}
+                                            </td>
+                                            <td>
+                                                {{ $item->tieu_de_ho_so }}
+                                            </td>
+                                            <td>
+                                                {{ $item->ngay_bat_dau }} - {{ $item->ngay_ket_thuc }}
+                                            </td>
+                                            <td>
+                                                {{ $item->so_to }}
+                                            </td>
+                                            <td>
+                                                {{ $item->thbq }}
+                                            </td>
+                                            <td>
+                                                {{ $item->ghi_chu }}
+                                            </td>
+                                           
+                                                <td class="d-flex gap-1"> 
+                                                    @if (auth('admin')->user()->level === 2)
+                                                        <a href="{{ route('admin.profile.edit', ['id' => $item->id]) }}"
+                                                            class="btn btn-warning">
+                                                            Sửa
+                                                        </a>
+                                                        <form method="post"
+                                                            action="{{ route('admin.profile.delete', ['id' => $item->id]) }}"
+                                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                                        </form>
+                                                     @endif
+                                                     <a href="{{ route('admin.profile.edit', ['id' => $item->id]) }}"
+                                                        class="btn btn-primary">
+                                                        Thông tin hồ sơ
+                                                    </a>
+                                                </td>
+                                           
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        {{ $profiles->links() }}
+                    </div>
+
+                </div>
+            </div>
             <!-- end row -->
 
         </div> <!-- container-fluid -->

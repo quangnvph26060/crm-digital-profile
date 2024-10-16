@@ -34,13 +34,14 @@
                                     <div class="col-lg-12">
                                         @include('globals.alert')
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <div>
                                             <div class="row">
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
                                                             class="text text-danger">*</span></label>
-                                                    <select class="form-select" name="ma_coquan" id="agency_code-select" required>
+                                                    <select class="form-select" name="ma_coquan" id="agency_code-select"
+                                                        required>
                                                         <option value="">Chọn mã cơ quan</option>
                                                         @foreach ($macoquan as $item)
                                                             <option value="{{ $item->id }}">{{ $item->agency_name }} -
@@ -69,7 +70,8 @@
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã mục lục <span
                                                             class="text text-danger">*</span></label>
-                                                    <select class="form-select" name="ma_mucluc" id="agency_code-select" required>
+                                                    <select class="form-select" name="ma_mucluc" id="agency_code-select"
+                                                        required>
                                                         <option value="">Chọn mã mục lục</option>
                                                         @foreach ($mamucluc as $item)
                                                             <option value="{{ $item->id }}">{{ $item->ten_mucluc }}
@@ -87,57 +89,18 @@
                                                 <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Hộp số<span
                                                             class="text text-danger">*</span></label>
-                                                    <input required value="{{ old('hop_so') }}" required class="form-control"
-                                                        name="hop_so" type="text" id="example-text-input"
-                                                        placeholder="Hộp số">
+                                                    <input required value="{{ old('hop_so') }}" required
+                                                        class="form-control" name="hop_so" type="text"
+                                                        id="example-text-input" placeholder="Hộp số">
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Hồ sơ số<span
                                                             class="text text-danger">*</span></label>
-                                                    <input  required value="{{ old('ho_so_so') }}" required class="form-control"
-                                                        name="ho_so_so" type="text" id="example-text-input"
-                                                        placeholder="Hồ sơ số">
+                                                    <input required value="{{ old('ho_so_so') }}" required
+                                                        class="form-control" name="ho_so_so" type="text"
+                                                        id="example-text-input" placeholder="Hồ sơ số">
                                                 </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Tiêu đề hồ sơ <span
-                                                        class="text text-danger">*</span></label>
-                                                <input required value="{{ old('tieu_de_ho_so') }}" required class="form-control"
-                                                    name="tieu_de_ho_so" type="text" id="example-text-input"
-                                                    placeholder="Tiêu đề hồ sơ ">
-                                                @error('tieu_de_ho_so')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-6 mb-3">
-                                                    <label for="example-text-input" class="form-label">Ngày bắt đầu <span
-                                                            class="text text-danger">*</span></label>
-                                                    <input required value="{{ old('date_start') }}" required class="form-control"
-                                                        name="date_start" type="date" id="example-text-input">
-                                                    @error('date_start')
-                                                        <div class="invalid-feedback d-block">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
-                                                </div>
-                                                <div class=" col-lg-6 mb-3">
-                                                    <label for="example-text-input" class="form-label">Ngày kết thúc <span
-                                                            class="text text-danger">*</span></label>
-                                                    <input value="{{ old('date_end') }}" required class="form-control"
-                                                        name="date_end" type="date" id="example-text-input">
-                                                    @error('date_end')
-                                                        <div class="invalid-feedback d-block">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-lg-2">
+                                                <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Số tờ <span
                                                             class="text text-danger">*</span></label>
                                                     <input value="{{ old('so_to') }}" required class="form-control"
@@ -149,7 +112,7 @@
                                                         </div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-lg-2">
+                                                <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label"> THBQ <span
                                                             class="text text-danger">*</span></label>
                                                     <input value="{{ old('thbq') }}" required class="form-control"
@@ -162,13 +125,53 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12 " style="display: flex !important;flex-direction: column;">
-    
+                                            <div class="mb-3">
+                                                <label for="example-text-input" class="form-label">Tiêu đề hồ sơ <span
+                                                        class="text text-danger">*</span></label>
+                                                <input required value="{{ old('tieu_de_ho_so') }}" required
+                                                    class="form-control" name="tieu_de_ho_so" type="text"
+                                                    id="example-text-input" placeholder="Tiêu đề hồ sơ ">
+                                                @error('tieu_de_ho_so')
+                                                    <div class="invalid-feedback d-block">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="date_start-text-input" class="form-label">Ngày bắt đầu <span
+                                                            class="text text-danger">*</span></label>
+                                                    <input required value="{{ old('date_start') }}" required
+                                                        class="form-control" name="date_start" type="date"
+                                                        id="date_start-text-input">
+                                                    @error('date_start')
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                                <div class=" col-lg-6 mb-3">
+                                                    <label for="date_end-text-input" class="form-label">Ngày kết thúc <span
+                                                            class="text text-danger">*</span></label>
+                                                    <input value="{{ old('date_end') }}" required class="form-control"
+                                                        name="date_end" type="date" id="date_end-text-input">
+                                                    @error('date_end')
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-lg-12 "
+                                                style="display: flex !important;flex-direction: column;">
+
                                                 <p>
-                                                    Ghi chú <span
-                                                    class="text text-danger">*</span>   
+                                                    Ghi chú <span class="text text-danger">*</span>
                                                 </p>
-                                                <textarea name="ghi_chu" id=""  cols="30" rows="5" placeholder="Ghi chú" style="border-radius: 5px;border:1px solid var(--bs-input-border);"></textarea>
+                                                <textarea name="ghi_chu" id="" cols="30" rows="5" placeholder="Ghi chú"
+                                                    style="border-radius: 5px;border:1px solid var(--bs-input-border);"></textarea>
                                                 @error('ghi_chu')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
@@ -197,6 +200,18 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#date_end-text-input').on('change', function() {
+               
+                
+                var startDate = new Date($('#date_start-text-input').val());
+                var endDate = new Date($(this).val());
+                if (endDate < startDate) {
+                    alert('Ngày kết thúc không thể nhỏ hơn ngày bắt đầu!');
+                    $(this).val('');
+                }
+            });
+        });
         $(document).ready(function() {
             $('#agency_code-select').change(function() {
                 var selectedValue = $(this).val();
