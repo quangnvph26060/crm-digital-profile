@@ -27,7 +27,8 @@ class InformationVb extends Model
         'to_so',
         'ghi_chu',
         'duong_dan',
-        'filepdf'
+        'filepdf',
+        'profile_id'
     ];
 
     public function config()

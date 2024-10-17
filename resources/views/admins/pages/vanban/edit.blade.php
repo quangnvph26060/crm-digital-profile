@@ -104,12 +104,9 @@
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã mục lục <span
                                                             class="text text-danger">*</span></label>
-                                                    <select class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}" name="ma_mucluc" id="agency_code-select" >
+                                                    <select class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}" name="ma_mucluc" id="muc-luc-select" >
                                                         <option value="">Chọn mã mục lục</option>
-                                                        @foreach ($mamucluc as $item)
-                                                            <option {{ $vanban->ma_mucluc == $item->id ? 'selected' : '' }} value="{{ $item->id }}">{{ $item->ten_mucluc }}
-                                                            </option>
-                                                        @endforeach
+
                                                     </select>
                                                     @error('ma_mucluc')
                                                         <div class="invalid-feedback d-block">
@@ -120,24 +117,24 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-lg-6">
-                                                    <label for="example-text-input" class="form-label">Hộp số<span
-                                                            class="text text-danger">*</span></label>
-                                                    <input  value="{{ $vanban->hop_so }}"  class="form-control {{ $errors->has('hopso') ? 'is-invalid' : '' }}"
-                                                        name="hop_so" type="text" id="example-text-input"
-                                                        placeholder="Hộp số">
-                                                        @error('hop_so')
+                                                    <label for="hop_so" class="form-label">Hộp số <span class="text-danger">*</span></label>
+                                                    <select name="hop_so" id="hop_so-select" class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
+                                                        <option value="">Chọn hộp số</option> <!-- Thêm tùy chọn mặc định -->
+
+                                                    </select>
+                                                    @error('hop_so')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    <label for="example-text-input" class="form-label">Hồ sơ số<span
-                                                            class="text text-danger">*</span></label>
-                                                    <input   value="{{ $vanban->ho_so_so }}"  class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}"
-                                                        name="ho_so_so" type="text" id="example-text-input"
-                                                        placeholder="Hồ sơ số">
-                                                        @error('ho_so_so')
+                                                    <label for="ho_so_so" class="form-label">Hồ sơ số <span class="text-danger">*</span></label>
+                                                    <select name="ho_so_so" id="ho_so_so-select" class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
+                                                        <option value="">Chọn hồ sơ số</option> <!-- Thêm tùy chọn mặc định -->
+
+                                                    </select>
+                                                    @error('ho_so_so')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
                                                         </div>
@@ -242,52 +239,227 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#agency_code-select').change(function() {
-                var selectedValue = $(this).val();
+$(document).ready(function() {
+    // Sự kiện thay đổi cho Agency Code (thẻ cha)
+    $('#agency_code-select').on('change', function() {
+        var selectedValue = $(this).val();
+        loadMaPhong(selectedValue, null); // Khi chọn lại thẻ cha, reset các giá trị con
+    });
 
-                if (selectedValue) {
-                    var url = "{{ route('phong-to-config') }}";
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        data: {
-                            id: selectedValue
-                        },
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                var selectElement = $(
-                                    '#ma-phong-select'); // Lấy đối tượng select
+    // Hàm load Ma Phong khi có Agency Code
+    function loadMaPhong(selectedValue, selectedMaPhong) {
+        var selectElementMaPhong = $('#ma-phong-select');
+        var selectElementMucLuc = $('#muc-luc-select');
+        var selectElementHopSo = $('#hop_so-select');
+        var selectElementHoSoSo = $('#ho_so_so-select');
 
-                                // Xóa tất cả các option hiện có trong select
-                                selectElement.find('option').remove();
+        // Reset tất cả các select box
+        selectElementMaPhong.find('option').remove().append('<option value="">Chọn mã phòng</option>');
+        selectElementMucLuc.find('option').remove().append('<option value="">Mục lục</option>');
+        selectElementHopSo.find('option').remove().append('<option value="">Hộp số</option>');
+        selectElementHoSoSo.find('option').remove().append('<option value="">Hồ sơ số</option>');
 
-                                // Thêm option mặc định
-                                selectElement.append('<option value="">Chọn mã phông</option>');
+        if (selectedValue) {
+            var url = "{{ route('phong-by-config_id') }}";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id: selectedValue
+                },
+                success: function(response) {
+                    console.log(response.data);
+                    if (response.status === 'success') {
+                        selectElementMaPhong.append('<option value="">Chọn mã phòng</option>');
+                        selectElementMucLuc.append('<option value="">Mục lục</option>');
+                        selectElementHopSo.append('<option value="">Hộp số</option>');
+                        selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+                        response.data.forEach(function(item) {
+                            var isSelected = item.ma_phong.id == selectedMaPhong ? 'selected' : '';
+                            selectElementMaPhong.append('<option value="' + item.ma_phong.id + '" ' + isSelected + '>' + item.ma_phong.ten_phong + '</option>');
+                        });
 
-                                // Thêm các option từ mảng dữ liệu vào select
-                                var selectedMaPhong = "{{ $vanban->ma_phong }}"; // Lấy giá trị đã lưu từ server
+                        // Gắn sự kiện change cho Ma Phong sau khi đổ dữ liệu
+                        selectElementMaPhong.off('change').on('change', function() {
+                            var selectedMaPhong = $(this).val();
+                            loadMucLuc(selectedValue, selectedMaPhong, null); // Reset Mục Lục khi thay đổi Ma Phong
+                        });
 
-                        // Thêm các option từ mảng dữ liệu vào select
-                                response.data.forEach(function(item) {
-                                    // Kiểm tra nếu item.id trùng với mã phông đã lưu, thì thêm thuộc tính 'selected'
-                                    var isSelected = item.id == selectedMaPhong ? 'selected' : '';
-                                    selectElement.append('<option value="' + item.id + '" ' + isSelected + '>' + item.ten_phong + '</option>');
-                                });
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error);
+                        // Nếu có giá trị sẵn, gọi loadMucLuc
+                        if (selectedMaPhong) {
+                            loadMucLuc(selectedValue, selectedMaPhong, `{{ $vanban->ma_mucluc }}`);
                         }
-                    });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
                 }
             });
-            var initialConfigId = $('#agency_code-select').val(); // Giá trị mã cơ quan đã chọn khi sửa
-            if (initialConfigId) {
-                $('#agency_code-select').trigger('change'); // Gọi hàm change() khi trang được tải để tự động lấy mã phông
-            }
-        });
+        }else{
+            selectElementMaPhong.append('<option value="">Chọn mã phòng</option>');
+            selectElementMucLuc.append('<option value="">Mục lục</option>');
+            selectElementHopSo.append('<option value="">Hộp số</option>');
+            selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+        }
+    }
+
+    // Hàm load Muc Luc khi có Ma Phong
+    function loadMucLuc(selectedValue, selectedMaPhong, selectedMucLuc) {
+        var selectElementMucLuc = $('#muc-luc-select');
+        var selectElementHopSo = $('#hop_so-select');
+        var selectElementHoSoSo = $('#ho_so_so-select');
+
+        // Reset tất cả các select box con
+        selectElementMucLuc.find('option').remove().append('<option value="">Mục lục</option>');
+        selectElementHopSo.find('option').remove().append('<option value="">Hộp số</option>');
+        selectElementHoSoSo.find('option').remove().append('<option value="">Hồ sơ số</option>');
+
+        if (selectedMaPhong) {
+            var url = "{{ route('mucluc-by-phong_id') }}";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id: selectedValue,
+                    phongId: selectedMaPhong
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+
+                        selectElementMucLuc.append('<option value="">Mục lục</option>');
+                        selectElementHopSo.append('<option value="">Hộp số</option>');
+                        selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+                        response.data.forEach(function(item) {
+                            var isSelected = item.ma_muc_luc.id == selectedMucLuc ? 'selected' : '';
+                            selectElementMucLuc.append('<option value="' + item.ma_muc_luc.id + '" ' + isSelected + '>' + item.ma_muc_luc.ten_mucluc + '</option>');
+                        });
+
+                        // Gắn sự kiện change cho Muc Luc sau khi đổ dữ liệu
+                        selectElementMucLuc.off('change').on('change', function() {
+                            var selectedMucLuc = $(this).val();
+                            loadHopSo(selectedValue, selectedMaPhong, selectedMucLuc, null); // Reset Hộp Số khi thay đổi Mục Lục
+                        });
+
+                        // Nếu có giá trị sẵn, gọi loadHopSo
+                        if (selectedMucLuc) {
+                            loadHopSo(selectedValue, selectedMaPhong, selectedMucLuc, `{{ $vanban->hop_so }}`);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }else{
+
+            selectElementMucLuc.append('<option value="">Mục lục</option>');
+            selectElementHopSo.append('<option value="">Hộp số</option>');
+            selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+        }
+    }
+
+    // Hàm load Hop So khi có Muc Luc
+    function loadHopSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo) {
+        var selectElementHopSo = $('#hop_so-select');
+        var selectElementHoSoSo = $('#ho_so_so-select');
+
+        // Reset select box Ho So So
+        selectElementHopSo.find('option').remove().append('<option value="">Hộp số</option>');
+        selectElementHoSoSo.find('option').remove().append('<option value="">Hồ sơ số</option>');
+
+        if (selectedMucLuc) {
+            var url = "{{ route('hopso-by-mucluc') }}";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id: selectedValue,
+                    phongId: selectedMaPhong,
+                    mucluc: selectedMucLuc
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+
+                        selectElementHopSo.append('<option value="">Hộp số</option>');
+                        selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+                        response.data.forEach(function(item) {
+                            var isSelected = item.hop_so == selectedHopSo ? 'selected' : '';
+                            selectElementHopSo.append('<option value="' + item.hop_so + '" ' + isSelected + '>' + item.hop_so + '</option>');
+                        });
+
+                        // Gắn sự kiện change cho Hộp Số sau khi đổ dữ liệu
+                        selectElementHopSo.off('change').on('change', function() {
+                            var selectedHopSo = $(this).val();
+                            loadHoSoSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo, null); // Reset Hồ Sơ Số khi thay đổi Hộp Số
+                        });
+
+                        // Nếu có giá trị sẵn, gọi loadHoSoSo
+                        if (selectedHopSo) {
+                            loadHoSoSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo, `{{ $vanban->ho_so_so }}`);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+        else{
+
+            selectElementHopSo.append('<option value="">Hộp số</option>');
+            selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+        }
+    }
+
+    // Hàm load Ho So So khi có Hop So
+    function loadHoSoSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo, selectedHoSoSo) {
+        var selectElementHoSoSo = $('#ho_so_so-select');
+
+        selectElementHoSoSo.find('option').remove().append('<option value="">Hồ sơ số</option>');
+        if (selectedHopSo) {
+            var url = "{{ route('hososo-by-hopso') }}";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id: selectedValue,
+                    phongId: selectedMaPhong,
+                    mucluc: selectedMucLuc,
+                    hopso: selectedHopSo
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        var selectElementHoSoSo = $('#ho_so_so-select');
+                        selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+                        response.data.forEach(function(item) {
+                            var isSelected = item.ho_so_so == selectedHoSoSo ? 'selected' : '';
+                            selectElementHoSoSo.append('<option value="' + item.ho_so_so + '" ' + isSelected + '>' + item.ho_so_so + '</option>');
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }else{
+             selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
+        }
+    }
+
+    // Khi trang được load lần đầu, tự động gọi loadMaPhong nếu đã có sẵn giá trị
+    var initialConfigId = $('#agency_code-select').val();
+    var initialMaPhong = `{{ $vanban->ma_phong }}`; // Giá trị mã phòng có sẵn
+
+    if (initialConfigId) {
+        loadMaPhong(initialConfigId, initialMaPhong); // Load mã phòng ban đầu
+    }
+});
+
+
+
     </script>
+
+
 
 <script>
     CKEDITOR.replace('content', {
