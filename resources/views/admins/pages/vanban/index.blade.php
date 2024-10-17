@@ -100,14 +100,17 @@
                         <div class="table-rep-plugin">
                             <div class="table-responsive mb-0" data-pattern="priority-columns">
                                 <table id="tech-companies-1" class="table table-striped">
+                                    @php
+                                        $currentProfileId = null;
+                                    @endphp
                                     <thead>
                                         <tr>
                                             <th>STT</th>
-                                            <th>Mã Cơ quan</th>
+                                            {{-- <th>Mã Cơ quan</th>
                                             <th>Mã Phông</th>
                                             <th>Mã mục lục</th>
                                             <th>Hộp số</th>
-                                            <th>Hồ sơ số</th>
+                                            <th>Hồ sơ số</th> --}}
                                             <th>Số và ký hiệu văn bản</th>
                                             <th>Ngày tháng văn bản</th>
                                             <th>Tác giả</th>
@@ -122,15 +125,26 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($vanban as $index => $item )
+                                            @if ($currentProfileId != $item->profile_id)
+                                                @php
+                                                    $currentProfileId = $item->profile_id;
+                                                @endphp
+                                                <!-- Hiển thị tiêu đề hồ sơ khi profile_id thay đổi -->
+                                                <tr>
+                                                    <td colspan="14">
+                                                        <strong>Phông: {{ $item->maPhong->ten_phong }}/Mục lục:  {{ $item->maMucLuc->ten_mucluc }}/Hộp số: {{ $item->hop_so }}/Hồ sơ số: {{ $item->ho_so_so }}/Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         <tr>
                                             <td>{{$loop->index + 1 }}</td>
-                                            <td>{{ $item->config->agency_code }}</td>
+                                            {{-- <td>{{ $item->config->agency_code }}</td>
                                             <td> {{ $item->maPhong->ten_phong ?? ''}} - {{ $item->maPhong->ma_phong ??
                                                 '' }}</td>
                                             <td>{{ $item->maMucLuc->ten_mucluc }} - {{ $item->maMucLuc->ma_mucluc }}
                                             </td>
                                             <td>{{ $item->hop_so }}</td>
-                                            <td>{{ $item->ho_so_so }}</td>
+                                            <td>{{ $item->ho_so_so }}</td> --}}
                                             <td>{{ $item->so_kh_vb }}</td>
                                             <td>{{ $item->time_vb }}</td>
                                             <td>{{ $item->tac_gia }}</td>

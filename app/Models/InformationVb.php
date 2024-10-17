@@ -60,11 +60,17 @@ class InformationVb extends Model
                 } else {
                     $html = '<span><span class="badge badge--dark">Không hoạt động</span></span>';
                 }   //Unfeatured
-
-                return $html;
+              
             }
-        );
+          }
+       }
+
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class, 'profile_id');
     }
+
+
 
 
 }
