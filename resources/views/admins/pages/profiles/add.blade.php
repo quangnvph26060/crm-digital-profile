@@ -40,11 +40,12 @@
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
                                                             class="text text-danger">*</span></label>
-                                                    <select class="form-select" name="ma_coquan" id="agency_code-select"
-                                                        required>
+                                                    <select  class="form-select {{ $errors->has('ma_coquan') ? 'is-invalid' : '' }}" name="ma_coquan" id="agency_code-select">
                                                         <option value="">Chọn mã cơ quan</option>
                                                         @foreach ($macoquan as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->agency_name }} -
+                                                            <option value="{{ $item->id }}"
+                                                                {{ old('ma_coquan') == $item->id ? 'selected' : '' }}>
+                                                                {{ $item->agency_name }} -
                                                                 {{ $item->agency_code }}</option>
                                                         @endforeach
                                                     </select>
@@ -57,7 +58,7 @@
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="ma-phong-select" class="form-label">Mã phông <span
                                                             class="text text-danger">*</span></label>
-                                                    <select class="form-select ma_phong" name="ma_phong" required
+                                                    <select class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }}" name="ma_phong"
                                                         id="ma-phong-select">
                                                         <option value="">Chọn mã phông</option>
                                                     </select>
@@ -70,11 +71,12 @@
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã mục lục <span
                                                             class="text text-danger">*</span></label>
-                                                    <select class="form-select" name="ma_mucluc" id="agency_code-select"
-                                                        required>
+                                                    <select class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}" name="ma_mucluc" id="agency_code-select">
                                                         <option value="">Chọn mã mục lục</option>
                                                         @foreach ($mamucluc as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->ten_mucluc }}
+                                                            <option value="{{ $item->id }}"
+                                                                {{ old('ma_mucluc') == $item->id ? 'selected' : '' }}>
+                                                                {{ $item->ten_mucluc }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -89,23 +91,31 @@
                                                 <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Hộp số<span
                                                             class="text text-danger">*</span></label>
-                                                    <input required value="{{ old('hop_so') }}" required
-                                                        class="form-control" name="hop_so" type="text"
-                                                        id="example-text-input" placeholder="Hộp số">
+                                                    <input value="{{ old('hop_so') }}" class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}" name="hop_so"
+                                                        type="text" id="example-text-input" placeholder="Hộp số">
+                                                    @error('hop_so')
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Hồ sơ số<span
                                                             class="text text-danger">*</span></label>
-                                                    <input required value="{{ old('ho_so_so') }}" required
-                                                        class="form-control" name="ho_so_so" type="text"
-                                                        id="example-text-input" placeholder="Hồ sơ số">
+                                                    <input value="{{ old('ho_so_so') }}" class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}"
+                                                        name="ho_so_so" type="text" id="example-text-input"
+                                                        placeholder="Hồ sơ số">
+                                                    @error('ho_so_so')
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Số tờ <span
                                                             class="text text-danger">*</span></label>
-                                                    <input value="{{ old('so_to') }}" required class="form-control"
-                                                        name="so_to" type="text" id="example-text-input"
-                                                        placeholder="số tờ">
+                                                    <input value="{{ old('so_to') }}" class="form-control {{ $errors->has('so_to') ? 'is-invalid' : '' }}" name="so_to"
+                                                        type="text" id="example-text-input" placeholder="số tờ">
                                                     @error('so_to')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
@@ -115,9 +125,8 @@
                                                 <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label"> THBQ <span
                                                             class="text text-danger">*</span></label>
-                                                    <input value="{{ old('thbq') }}" required class="form-control"
-                                                        name="thbq" type="text" id="example-text-input"
-                                                        placeholder="THBQ">
+                                                    <input value="{{ old('thbq') }}" class="form-control {{ $errors->has('thbq') ? 'is-invalid' : '' }}" name="thbq"
+                                                        type="text" id="example-text-input" placeholder="THBQ">
                                                     @error('thbq')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
@@ -128,9 +137,9 @@
                                             <div class="mb-3">
                                                 <label for="example-text-input" class="form-label">Tiêu đề hồ sơ <span
                                                         class="text text-danger">*</span></label>
-                                                <input required value="{{ old('tieu_de_ho_so') }}" required
-                                                    class="form-control" name="tieu_de_ho_so" type="text"
-                                                    id="example-text-input" placeholder="Tiêu đề hồ sơ ">
+                                                <input value="{{ old('tieu_de_ho_so') }}" class="form-control {{ $errors->has('tieu_de_ho_so') ? 'is-invalid' : '' }}"
+                                                    name="tieu_de_ho_so" type="text" id="example-text-input"
+                                                    placeholder="Tiêu đề hồ sơ ">
                                                 @error('tieu_de_ho_so')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
@@ -139,11 +148,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-6 mb-3">
-                                                    <label for="date_start-text-input" class="form-label">Ngày bắt đầu <span
-                                                            class="text text-danger">*</span></label>
-                                                    <input required value="{{ old('date_start') }}" required
-                                                        class="form-control" name="date_start" type="date"
-                                                        id="date_start-text-input">
+                                                    <label for="date_start-text-input" class="form-label">Ngày bắt đầu
+                                                        <span class="text text-danger">*</span></label>
+                                                    <input value="{{ old('date_start') }}" class="form-control {{ $errors->has('date_start') ? 'is-invalid' : '' }}"
+                                                        name="date_start" type="date" id="date_start-text-input">
                                                     @error('date_start')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
@@ -151,9 +159,9 @@
                                                     @enderror
                                                 </div>
                                                 <div class=" col-lg-6 mb-3">
-                                                    <label for="date_end-text-input" class="form-label">Ngày kết thúc <span
-                                                            class="text text-danger">*</span></label>
-                                                    <input value="{{ old('date_end') }}" required class="form-control"
+                                                    <label for="date_end-text-input" class="form-label">Ngày kết thúc
+                                                        <span class="text text-danger">*</span></label>
+                                                    <input value="{{ old('date_end') }}" class="form-control {{ $errors->has('date_end') ? 'is-invalid' : '' }}"
                                                         name="date_end" type="date" id="date_end-text-input">
                                                     @error('date_end')
                                                         <div class="invalid-feedback d-block">
@@ -202,8 +210,8 @@
     <script>
         $(document).ready(function() {
             $('#date_end-text-input').on('change', function() {
-               
-                
+
+
                 var startDate = new Date($('#date_start-text-input').val());
                 var endDate = new Date($(this).val());
                 if (endDate < startDate) {
@@ -213,6 +221,7 @@
             });
         });
         $(document).ready(function() {
+
             $('#agency_code-select').change(function() {
                 var selectedValue = $(this).val();
                 if (selectedValue) {
@@ -233,11 +242,13 @@
 
                                 // Thêm option mặc định
                                 selectElement.append('<option value="">Chọn mã phông</option>');
-
-                                // Thêm các option từ mảng dữ liệu vào select
                                 response.data.forEach(function(item) {
                                     selectElement.append('<option value="' + item.id +
-                                        '">' + item.ten_phong + '</option>');
+                                        '" >' + item
+                                        .ten_phong + '</option>');
+
+
+                                   
                                 });
                             }
                         },
@@ -247,6 +258,11 @@
                     });
                 }
             });
+            $('#ma-phong-select').change(function() {
+                var selectedValue = $(this).val();
+
+
+            })
         });
     </script>
 @endsection
