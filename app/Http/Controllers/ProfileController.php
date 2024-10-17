@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileRequest;
+use App\Imports\ProfileImport;
 use App\Models\Config as ModelsConfig;
 use App\Models\MucLuc;
 use App\Models\Phong;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Models\Config;
+use App\Models\InformationVb;
 use Illuminate\Support\Facades\DB;
-
+use Maatwebsite\Excel\Facades\Excel;
 class ProfileController extends Controller
 {
     /**
@@ -96,25 +99,13 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProfileRequest $request)
     {
 
         DB::beginTransaction();
 
         try {
-            $validatedData = $request->validate([
-                'ma_coquan' => 'required',
-                'ma_mucluc' => 'required',
-                'ma_phong' => 'required',
-                'hop_so' => 'required',
-                'ho_so_so' => 'required',
-                'tieu_de_ho_so' => 'required',
-                'date_start' => 'required|date',
-                'date_end' => 'required|date|after:date_start',
-                'so_to' => 'required',
-                'thbq' => 'required',
-                'ghi_chu' => 'nullable',
-            ]);
+           
             $macoquan = $this->checkExistence(Config::class, $request->ma_coquan, 'Không tìm thấy mã cơ quan.');
 
             $maphong = Phong::where('id', $request->ma_phong)
@@ -212,6 +203,19 @@ class ProfileController extends Controller
     }
     public function detail($id)
     {
+        $vanban = InformationVb::query();
+
+      
+        if (isset($request->name) && $request->name != '') {
+            $vanban->where(function($query) use ($request) {
+                $query->where('so_kh_vb', 'like', '%' . $request->name . '%');
+            });
+        }
+
+        // Thêm phân trang ở đây
+        $perPage = 10; // Số lượng bản ghi trên mỗi trang
+        $vanban = $vanban->paginate($perPage);
+
         $profiles = Profile::query();
         if (isset($request->name) && $request->name != '') {
             $profiles->where(function ($query) use ($request) {
@@ -236,8 +240,15 @@ class ProfileController extends Controller
         $profile = Profile::find($id);
         $mamucluc = MucLuc::all();
         $title   = "Xem hồ sơ";
-
-        return view('admins.pages.profiles.detail', ['title' => $title, 'profile' => $profile, 'macoquan' => $macoquan, 'mamucluc' => $mamucluc, 'profiles' => $profiles]);
+        return view('admins.pages.profiles.detail', 
+        [
+            'title' => $title, 
+            'profile' => $profile, 
+            'macoquan' => $macoquan, 
+            'mamucluc' => $mamucluc, 
+            'profiles' => $profiles,
+            'vanban'=>$vanban
+        ]);
     }
     /**
      * Update the specified resource in storage.
@@ -272,8 +283,25 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+    //   $vanban = InformationVb::where('')
+    }
+    public function import(Request $request)
+    {
+        if (!$request->hasFile('file')) {
+            return response()->json(['error' => 'Vui lòng chọn file Excel để nhập'], 400);
+        }
+
+        $file = $request->file('file');
+
+        try {
+            Excel::import(new ProfileImport, $file);
+        } catch (\Exception $e) {
+            \Log::info($e->getMessage());
+            return response()->json(['error' => 'Đã xảy ra lỗi khi nhập dữ liệu từ file Excel'], 500);
+        }
+
+        return response()->json(['success' => 'Dữ liệu đã được nhập thành công'], 200);
     }
 }

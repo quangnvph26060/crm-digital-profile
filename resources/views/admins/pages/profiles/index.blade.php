@@ -37,10 +37,12 @@
                                     <div class="col-lg-3">
                                         <div class="form-group">
                                             <label for="">Phông</label>
-                                            <select class="form-select"  name="phong" id="phong">
+                                            <select class="form-select" name="phong" id="phong">
                                                 <option value="">Chọn Phông</option>
-                                                @foreach($phongdata as $item)
-                                                    <option value="{{$item->id}}" {{ isset($inputs['phong']) ?  $inputs['phong'] == $item->id ? "selected" : "" : ""}}>{{$item->ten_phong}}</option>
+                                                @foreach ($phongdata as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ isset($inputs['phong']) ? ($inputs['phong'] == $item->id ? 'selected' : '') : '' }}>
+                                                        {{ $item->ten_phong }}</option>
                                                 @endforeach
                                                 <!-- Thêm các tùy chọn phòng khác nếu cần -->
                                             </select>
@@ -51,8 +53,10 @@
                                             <label for="">Mục lục</label>
                                             <select class="form-select" name="muc_luc" id="muc_luc">
                                                 <option value="">Chọn mục lục</option>
-                                                @foreach($muclucdata as $item)
-                                                    <option value="{{$item->id}}" {{ isset($inputs['muc_luc']) ? $inputs['muc_luc'] == $item->id ? "selected" :"" : ""}}>{{$item->ten_mucluc}}</option>
+                                                @foreach ($muclucdata as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ isset($inputs['muc_luc']) ? ($inputs['muc_luc'] == $item->id ? 'selected' : '') : '' }}>
+                                                        {{ $item->ten_mucluc }}</option>
                                                 @endforeach
                                                 <!-- Thêm các tùy chọn mục lục khác nếu cần -->
                                             </select>
@@ -74,18 +78,20 @@
                                 </div>
                             </form>
                             <div class="col-lg-6 mt-2">
-                              <div class="row">
-                                <div class="col-lg-2">
-                                    <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
-                                        <i class="fas fa-plus"></i> Xuất Excel
-                                    </a>
-                               </div>
-                               <div class="col-lg-2">
-                                    <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
-                                        <i class="fas fa-plus"></i> Nhập Excel
-                                    </a>
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <button class="btn btn-success">
+                                            <input type="file" style="display: none">
+                                            <i class="fas fa-plus"></i> Xuất Excel
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <button class="btn btn-success" id="exportExcelBtn">
+                                            <input type="file" style="display: none">
+                                            <i class="fas fa-plus"></i> Nhập Excel
+                                        </button>
+                                    </div>
                                 </div>
-                              </div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -119,14 +125,14 @@
                                                     </td>
 
                                                     <td>
-                                                        {{ $item->config->agency_code }}
+                                                        {{ $item->config->agency_code ?? "" }}
                                                     </td>
                                                     <td>
-                                                        Phông:{{ $item->maPhong->ten_phong  ?? ''}} <br>
+                                                        Phông:{{ $item->maPhong->ten_phong ?? '' }} <br>
                                                         Mã phông:{{ $item->maPhong->ma_phong ?? '' }}
                                                     </td>
                                                     <td>
-                                                        {{ $item->maMucLuc->ten_mucluc }}
+                                                        {{ $item->maMucLuc->ten_mucluc ?? "" }}
                                                     </td>
                                                     <td>
                                                         {{ $item->hop_so }}
@@ -150,25 +156,25 @@
                                                         {{ $item->ghi_chu }}
                                                     </td>
 
-                                                        <td class="d-flex gap-1">
-                                                            @if (auth('admin')->user()->level === 2)
-                                                                <a href="{{ route('admin.profile.edit', ['id' => $item->id]) }}"
-                                                                    class="btn btn-warning">
-                                                                    Sửa
-                                                                </a>
-                                                                <form method="post"
-                                                                    action="{{ route('admin.profile.delete', ['id' => $item->id]) }}"
-                                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger">Xóa</button>
-                                                                </form>
-                                                             @endif
-                                                             <a href="{{ route('admin.profile.detail', ['id' => $item->id]) }}"
-                                                                class="btn btn-primary">
-                                                                Thông tin hồ sơ
+                                                    <td class="d-flex gap-1">
+                                                        @if (auth('admin')->user()->level === 2)
+                                                            <a href="{{ route('admin.profile.edit', ['id' => $item->id]) }}"
+                                                                class="btn btn-warning">
+                                                                Sửa
                                                             </a>
-                                                        </td>
+                                                            <form method="post"
+                                                                action="{{ route('admin.profile.delete', ['id' => $item->id]) }}"
+                                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                                            </form>
+                                                        @endif
+                                                        <a href="{{ route('admin.profile.detail', ['id' => $item->id]) }}"
+                                                            class="btn btn-primary">
+                                                            Thông tin hồ sơ
+                                                        </a>
+                                                    </td>
 
                                                 </tr>
                                             @endforeach
@@ -186,4 +192,36 @@
 
         </div> <!-- container-fluid -->
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#exportExcelBtn').on('click', function() {
+                $('<input type="file">').change(function() {
+                    var selectedFile = this.files[0];
+                    console.log('File đã chọn:', selectedFile);
+
+                    
+                    var formData = new FormData();
+                    formData.append('file', selectedFile);
+                    var url = "{{ route('import') }}";
+                   
+                    $.ajax({
+                        url: url, 
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            console.log('Kết quả:', response);
+                          
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Đã xảy ra lỗi khi gửi file.');
+                        }
+                    });
+                }).click();
+            });
+        });
+    </script>
+
 @endsection

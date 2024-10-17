@@ -31,3 +31,4 @@ Route::get('/district', function () {
     ]);
 });
 Route::get('/phong-to-config', [ProfileController::class, 'PhongDetailToConfig'])->name('phong-to-config');
+Route::post('/import', [ProfileController::class, 'import'])->name('import');
