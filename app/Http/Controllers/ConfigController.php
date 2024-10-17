@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\Phong;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -108,6 +110,15 @@ class ConfigController extends Controller
     
     public function delete($userId)
     {
+        $phong = Phong::where('coquan_id',$userId)->first();
+        if($phong){
+            return back()->with('success', 'Mã cơ quan này còn liên quan đền phông');
+        }
+        $profiles = Profile::where('config_id',$userId)->first();
+        if($profiles){
+            return back()->with('success', 'Mã cơ quan này còn liên quan đền hồ sơ');
+        }
+       
         $config = Config::find($userId);
         if ($config) {
             $config->delete();

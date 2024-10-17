@@ -113,7 +113,7 @@
                                             <th>Tác giả</th>
                                             <th>Nội dung văn bản</th>
                                             <th>Tờ số</th>
-                                            <th>Đường dẫn</th>
+                                            {{-- <th>Đường dẫn</th> --}}
                                             <th>Ghi chú</th>
                                             @if (auth('admin')->user()->level === 2)
                                             <th>Hành động</th>
@@ -136,7 +136,7 @@
                                             <td>{{ $item->tac_gia }}</td>
                                             <td>{!! $item->noi_dung !!}</td>
                                             <td>{{ $item->to_so }}</td>
-                                            <td>{{ $item->duong_dan }}</td>
+                                            {{-- <td>{{ $item->duong_dan }}</td> --}}
                                             <td>{{ $item->ghi_chu }}</td>
                                             <td class="d-flex gap-1">
                                                 @if (auth('admin')->user()->level === 2)

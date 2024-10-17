@@ -35,7 +35,6 @@ class InformationRequest extends FormRequest
         'tac_gia' => 'required|string',
         'noi_dung' => 'required|string',
         'to_so' => 'required|string',
-        'ghi_chu' => 'required|string',
     ];
 
 
@@ -66,7 +65,6 @@ class InformationRequest extends FormRequest
             'noi_dung' => 'Nội dung văn bản',
             'to_so' => 'Tờ số',
             'duong_dan' => 'Đường dẫn',
-            // 'ghi_chu' => "Ghi chú"
         ];
     }
 }
