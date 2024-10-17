@@ -85,21 +85,21 @@
                                                         id="ma-phong-select">
                                                         <option value="">Chọn mã phông</option>
                                                     </select>
-                                                    @error('ma_phong')
+                                                    {{-- @error('ma_phong')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
                                                         </div>
-                                                    @enderror
+                                                    @enderror --}}
                                                 </div>
                                                 <div class="col-lg-4 mb-3">
-                                                    <label for="agency_code-select" class="form-label">Mã mục lục <span
+                                                    <label for="muc-luc-select" class="form-label">Mã mục lục <span
                                                             class="text text-danger">*</span></label>
-                                                    <select class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}" name="ma_mucluc" id="agency_code-select" >
+                                                    <select class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}" name="ma_mucluc" id="muc-luc-select" >
                                                         <option value="">Chọn mã mục lục</option>
-                                                        @foreach ($mamucluc as $item)
+                                                        {{-- @foreach ($mamucluc as $item)
                                                             <option value="{{ $item->id }}">{{ $item->ten_mucluc }}
                                                             </option>
-                                                        @endforeach
+                                                        @endforeach --}}
                                                     </select>
                                                     @error('ma_mucluc')
                                                         <div class="invalid-feedback d-block">
@@ -110,30 +110,35 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-lg-6">
-                                                    <label for="example-text-input" class="form-label">Hộp số<span
-                                                            class="text text-danger">*</span></label>
-                                                    <input  value="{{ old('hop_so') }}"  class="form-control {{ $errors->has('hopso') ? 'is-invalid' : '' }}"
-                                                        name="hop_so" type="text" id="example-text-input"
-                                                        placeholder="Hộp số">
-                                                        @error('hop_so')
+                                                    <label for="hop_so" class="form-label">Hộp số <span class="text-danger">*</span></label>
+                                                    <select name="hop_so" id="hop_so-select" class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
+                                                        <option value="">Chọn hộp số</option> <!-- Thêm tùy chọn mặc định -->
+                                                        <!-- Thêm các tùy chọn cho hộp số ở đây -->
+
+                                                        <!-- Thêm các tùy chọn khác nếu cần -->
+                                                    </select>
+                                                    @error('hop_so')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    <label for="example-text-input" class="form-label">Hồ sơ số<span
-                                                            class="text text-danger">*</span></label>
-                                                    <input   value="{{ old('ho_so_so') }}"  class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}"
-                                                        name="ho_so_so" type="text" id="example-text-input"
-                                                        placeholder="Hồ sơ số">
-                                                        @error('ho_so_so')
+                                                    <label for="ho_so_so" class="form-label">Hồ sơ số <span class="text-danger">*</span></label>
+                                                    <select name="ho_so_so" id="ho_so_so-select" class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
+                                                        <option value="">Chọn hồ sơ số</option> <!-- Thêm tùy chọn mặc định -->
+                                                        <!-- Thêm các tùy chọn cho hồ sơ số ở đây -->
+
+                                                        <!-- Thêm các tùy chọn kshác nếu cần -->
+                                                    </select>
+                                                    @error('ho_so_so')
                                                         <div class="invalid-feedback d-block">
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
                                                 </div>
                                             </div>
+
                                             <div class="mb-3">
                                                 <label for="example-text-input" class="form-label">Số và ký hiệu văn bản <span
                                                         class="text text-danger">*</span></label>
@@ -236,8 +241,12 @@
             $('#agency_code-select').change(function() {
                 var selectedValue = $(this).val();
                 // alert(selectedValue);
+                $('#ma-phong-select').find('option').remove().end().append('<option value="">Chọn mã phòng</option>').val('');
+                $('#muc-luc-select').find('option').remove().end().append('<option value="">Mục lục</option>').val('');
+                $('#hop_so-select').find('option').remove().end().append('<option value="">Hộp số</option>').val('');
+                $('#ho_so_so-select').find('option').remove().end().append('<option value="">Hồ sơ số</option>').val('');
                 if (selectedValue) {
-                    var url = "{{ route('phong-to-config') }}";
+                    var url = "{{ route('phong-by-config_id') }}";
                     $.ajax({
                         url: url,
                         type: 'GET',
@@ -245,20 +254,117 @@
                             id: selectedValue
                         },
                         success: function(response) {
+
                             if (response.status === 'success') {
-                                var selectElement = $(
-                                    '#ma-phong-select'); // Lấy đối tượng select
-
-                                // Xóa tất cả các option hiện có trong select
+                                var selectElement = $('#ma-phong-select');
                                 selectElement.find('option').remove();
-
-                                // Thêm option mặc định
                                 selectElement.append('<option value="">Chọn mã phông</option>');
-
-                                // Thêm các option từ mảng dữ liệu vào select
                                 response.data.forEach(function(item) {
-                                    selectElement.append('<option value="' + item.id +
-                                        '">' + item.ten_phong + '</option>');
+                                    selectElement.append('<option value="' + item.ma_phong.id +
+                                        '">' + item.ma_phong.ten_phong + '</option>');
+                                });
+                                selectElement.val('{{ old("ma_phong") }}');
+                                $('#ma-phong-select').change(function() {
+                                    var selectedMaPhongValue = $(this).val();
+                                    $('#muc-luc-select').find('option').remove().end().append('<option value="">Mục lục</option>').val('');
+                                    $('#hop_so-select').find('option').remove().end().append('<option value="">Hộp số</option>').val('');
+                                    $('#ho_so_so-select').find('option').remove().end().append('<option value="">Hồ sơ số</option>').val('');
+                                    if (selectedMaPhongValue) {
+                                        var url = "{{ route('mucluc-by-phong_id') }}";
+                                        $.ajax({
+                                            url: url,
+                                            type: 'GET',
+                                            data: {
+                                                id: selectedValue,
+                                                phongId: selectedMaPhongValue
+                                            },
+                                            success: function(response) {
+
+                                                if (response.status === 'success') {
+                                                    // console.log(response.data);
+                                                    var selectElement = $('#muc-luc-select');
+                                                    selectElement.find('option').remove();
+                                                    selectElement.append('<option value="">Mục lục</option>');
+                                                    response.data.forEach(function(item) {
+                                                        selectElement.append('<option value="' + item.ma_muc_luc.id +
+                                                            '">' + item.ma_muc_luc.ten_mucluc + '</option>');
+                                                    });
+
+                                                    $('#muc-luc-select').change(function() {
+                                                        var selectedMucLucValue = $(this).val();
+                                                        $('#hop_so-select').find('option').remove().end().append('<option value="">Hộp số</option>').val('');
+                                                         $('#ho_so_so-select').find('option').remove().end().append('<option value="">Hồ sơ số</option>').val('');
+                                                        if (selectedMucLucValue) {
+                                                            var url = "{{ route('hopso-by-mucluc') }}";
+                                                            $.ajax({
+                                                                url: url,
+                                                                type: 'GET',
+                                                                data: {
+                                                                    id: selectedValue,
+                                                                    phongId: selectedMaPhongValue,
+                                                                    mucluc : selectedMucLucValue
+                                                                },
+                                                                success: function(response) {
+
+                                                                    if (response.status === 'success') {
+                                                                        var selectElement = $('#hop_so-select');
+                                                                        selectElement.find('option').remove();
+                                                                        selectElement.append('<option value="">Hộp số</option>');
+                                                                        response.data.forEach(function(item) {
+                                                                            selectElement.append('<option value="' + item.hop_so +
+                                                                                '">' + item.hop_so + '</option>');
+                                                                        });
+
+                                                                        $('#hop_so-select').change(function() {
+                                                                            var selectedHopSoValue = $(this).val();
+                                                                            $('#ho_so_so-select').find('option').remove().end().append('<option value="">Hồ sơ số</option>').val('');
+                                                                            if (selectedMucLucValue) {
+                                                                                var url = "{{ route('hososo-by-hopso') }}";
+                                                                                $.ajax({
+                                                                                    url: url,
+                                                                                    type: 'GET',
+                                                                                    data: {
+                                                                                        id: selectedValue,
+                                                                                        phongId: selectedMaPhongValue,
+                                                                                        mucluc : selectedMucLucValue,
+                                                                                        hopso : selectedHopSoValue
+                                                                                    },
+                                                                                    success: function(response) {
+                                                                                        console.log(response.datass);
+                                                                                        if (response.status === 'success') {
+                                                                                            var selectElement = $('#ho_so_so-select');
+                                                                                            selectElement.find('option').remove();
+                                                                                            selectElement.append('<option value="">Hồ sơ số</option>');
+                                                                                            response.data.forEach(function(item) {
+                                                                                                selectElement.append('<option value="' + item.ho_so_so +
+                                                                                                    '">' + item.ho_so_so + '</option>');
+                                                                                            });
+                                                                                        }
+
+                                                                                    },
+                                                                                    error: function(xhr, status, error) {
+                                                                                        console.error(error);
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    }
+
+                                                                },
+                                                                error: function(xhr, status, error) {
+                                                                    console.error(error);
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }
+
+                                            },
+                                            error: function(xhr, status, error) {
+                                                console.error(error);
+                                            }
+                                        });
+                                    }
                                 });
                             }
                         },
@@ -268,6 +374,16 @@
                     });
                 }
             });
+
+            // $('#ma-phong-select').change(function() {
+            //     var selectedMaPhongValue = $(this).val();
+            //     alert(selectedMaPhongValue);
+            //     if (selectedMaPhongValue) {
+            //         // Thực hiện hành động mà bạn muốn khi chọn mã phòng
+            //         console.log("Mã phòng được chọn: " + selectedMaPhongValue);
+            //         // Bạn có thể thêm các hành động khác ở đây
+            //     }
+            // });
         });
     </script>
 
