@@ -80,7 +80,7 @@
                                                         <td>{{$loop->index + 1 }}</td>
                                                         <td>{{ $item->config->agency_code }}</td>
                                                         <td> {{ $item->maPhong->ten_phong  ?? ''}} - {{ $item->maPhong->ma_phong ?? '' }}</td>
-                                                        <td>{{ $item->maluuc_id }}</td>
+                                                        <td>{{ $item->maMucLuc->ten_mucluc }} - {{ $item->maMucLuc->ma_mucluc }} </td>
                                                         <td>{{ $item->hop_so }}</td>
                                                         <td>{{ $item->ho_so_so }}</td>
                                                         <td>{{ $item->so_kh_vb }}</td>
