@@ -46,6 +46,11 @@ class InformationVb extends Model
         return $this->belongsTo(MucLuc::class, 'ma_mucluc');
     }
 
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class, 'profile_id');
+    }
+
 
 
 }

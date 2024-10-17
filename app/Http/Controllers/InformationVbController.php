@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileRequest;
 use App\Http\Requests\InformationRequest;
-use App\Imports\VanBanImport;
+use App\Imports\InformationVbImport;
 use App\Models\Config;
 use App\Models\InformationVb;
 use App\Models\MucLuc;
@@ -20,7 +20,7 @@ class InformationVbController extends Controller
     //
     public function index(Request $request)
     {
-
+        // dd(InformationVb::get());
         $inputs = $request->all();
 
         $vanban = InformationVb::query();
@@ -34,7 +34,7 @@ class InformationVbController extends Controller
 
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
-        $vanban = $vanban->paginate($perPage);
+        $vanban = $vanban->orderBy('profile_id', 'asc')->paginate($perPage);
 
 
         return view("admins.pages.vanban.index", [
@@ -159,7 +159,15 @@ class InformationVbController extends Controller
     }
 
     public function importExcel(FileRequest $request){
+        try {
 
+            Excel::import(new InformationVbImport, $request->file('importexcel'));
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+            return response()->json(['error' => 'Đã xảy ra lỗi khi nhập dữ liệu từ file Excel'], 500);
+        }
+
+        return response()->json(['success' => 'Dữ liệu đã được nhập thành công'], 200);
     }
 
     public function PhongByConfigID(Request $request) {
