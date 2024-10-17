@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Constants\Status;
 use App\Models\Config;
 use App\Models\Phong;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class InformationVb extends Model
 {
@@ -28,7 +30,8 @@ class InformationVb extends Model
         'ghi_chu',
         'duong_dan',
         'filepdf',
-        'profile_id'
+        'profile_id',
+        'status'
     ];
 
     public function config()
@@ -45,11 +48,28 @@ class InformationVb extends Model
     {
         return $this->belongsTo(MucLuc::class, 'ma_mucluc');
     }
+    public function getStatus() : Attribute
+    {
+        return new Attribute(
+            function () {
+                $html = '';
+
+                if ($this->status == Status::ENABLE) {
+                    $html = '<span class="badge badge--primary">Hoạt động</span>';
+                    //Featured
+                } else {
+                    $html = '<span><span class="badge badge--dark">Không hoạt động</span></span>';
+                }   //Unfeatured
+              
+            }
+          }
+       }
 
     public function profile()
     {
         return $this->belongsTo(Profile::class, 'profile_id');
     }
+
 
 
 

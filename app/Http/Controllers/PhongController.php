@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Config;
 use App\Models\MucLuc;
 use App\Models\Phong;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -126,7 +127,12 @@ class PhongController extends Controller
     }
     public function delete($userId)
     {
+        $profiles = Profile::where('ma_phong',$userId)->first();
+        if($profiles){
+            return back()->with('error', 'Mã phông này còn liên quan đền hồ sơ');
+        }
         $config = Phong::find($userId);
+       
         if ($config) {
             $config->delete();
             return back()->with('success', 'Xóa phông thành công');

@@ -200,32 +200,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <form method="GET">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="">Tiêu đề hồ sơ </label>
-                                            <input value="{{ isset($inputs['name']) ? $inputs['name'] : '' }}"
-                                                autocomplete="off" name="name" placeholder="Tìm kiếm..." type="text"
-                                               class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="" style="opacity: 0">1</label> <br>
-                                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
-                                                kiếm</button>
-                                            <a href="{{ url()->current() }}" class="btn btn-danger"><i
-                                                    class="fas fa-history"></i> Tải lại</a>
-                                            <a class="btn btn-success" href="{{ route('admin.vanban.add') }}">
-                                                <i class="fas fa-plus"></i> Thêm mới
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                       
                         <div class="card-body">
                             @include('globals.alert')
                             <div class="table-rep-plugin">
@@ -234,18 +209,19 @@
                                         <thead>
                                             <tr>
                                                 <th>STT</th>
-                                                <th>Mã Cơ quan</th>
+                                                {{-- <th>Mã Cơ quan</th>
                                                 <th>Mã Phông</th>
-                                                <th>Mã mục lục</th>
-                                                <th>Hộp số</th>
-                                                <th>Hồ sơ số</th>
+                                                <th>Mã mục lục</th> --}}
+                                                {{-- <th>Hộp số</th>
+                                                <th>Hồ sơ số</th> --}}
                                                 <th>Số và ký hiệu văn bản</th>
                                                 <th>Ngày tháng văn bản</th>
                                                 <th>Tác giả</th>
                                                 <th>Nội dung văn bản</th>
                                                 <th>Tờ số</th>
-                                                <th>Đường dẫn</th>
+                                                {{-- <th>Đường dẫn</th> --}}
                                                 <th>Ghi chú</th>
+                                                <th>Trạng thái</th>
                                                 @if (auth('admin')->user()->level === 2)
                                                     <th>Hành động</th>
                                                 @endif
@@ -255,18 +231,21 @@
                                             @forelse ($vanban as $index =>  $item )
                                                     <tr>
                                                         <td>{{$loop->index + 1 }}</td>
-                                                        <td>{{ $item->config->agency_code }}</td>
+                                                        {{-- <td>{{ $item->config->agency_code }}</td>
                                                         <td> {{ $item->maPhong->ten_phong  ?? ''}} - {{ $item->maPhong->ma_phong ?? '' }}</td>
-                                                        <td>{{ $item->maluuc_id }}</td>
-                                                        <td>{{ $item->hop_so }}</td>
-                                                        <td>{{ $item->ho_so_so }}</td>
+                                                        <td>{{ $item->maMucLuc->ten_mucluc }} - {{ $item->maMucLuc->ma_mucluc }}</td> --}}
+                                                            {{-- <td>{{ $item->hop_so }}</td>
+                                                            <td>{{ $item->ho_so_so }}</td> --}}
                                                         <td>{{ $item->so_kh_vb }}</td>
                                                         <td>{{ $item->time_vb	 }}</td>
                                                         <td>{{ $item->tac_gia }}</td>
                                                         <td>{!! $item->noi_dung !!}</td>
                                                         <td>{{ $item->to_so }}</td>
-                                                        <td>{{ $item->duong_dan }}</td>
+                                                        {{-- <td>{{ $item->duong_dan }}</td> --}}
                                                         <td>{{ $item->ghi_chu }}</td>
+                                                        <td>
+                                                            {!! $item->getStatus !!}
+                                                        </td>
                                                         <td class="d-flex gap-1">
                                                             @if (auth('admin')->user()->level === 2)
                                                                 <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"
