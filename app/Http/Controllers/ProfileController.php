@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProfileExport;
 use App\Http\Requests\ProfileRequest;
 use App\Imports\ProfileImport;
 use App\Models\Config as ModelsConfig;
@@ -310,5 +311,9 @@ class ProfileController extends Controller
         }
 
         return response()->json(['success' => 'Dữ liệu đã được nhập thành công'], 200);
+    }
+    public function export()
+    {
+        return Excel::download(new ProfileExport, 'users.xlsx');
     }
 }

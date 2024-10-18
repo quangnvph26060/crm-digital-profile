@@ -95,6 +95,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/add-config', [ProfileController::class, 'store'])->name('store');
         Route::delete('delete/{id}', [ProfileController::class, 'delete'])->name('delete');
         Route::post('/update-config/{id}', [ProfileController::class, 'update'])->name('update');
+        Route::post('/export', [ProfileController::class, 'export'])->name('export');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
 

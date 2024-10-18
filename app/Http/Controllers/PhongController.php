@@ -107,24 +107,24 @@ class PhongController extends Controller
         $phong->ma_phong = $request->ma_phong;
         $phong->coquan_id = $request->ma_coquan;
         $phong->save();
-        $this->addPhongToTrungGian($phong->id);
+        // $this->addPhongToTrungGian($phong->id);
      
     }
     
-    public function addPhongToTrungGian($id)
-    {
-        $muclucs = MucLuc::all();
+    // public function addPhongToTrungGian($id)
+    // {
+    //     $muclucs = MucLuc::all();
     
-        $data = $muclucs->map(function ($mucluc) use ($id) {
-            return [
-                'phong_id' => $id,
-                'mucluc_id' => $mucluc->id,
-            ];
-        })->toArray();
+    //     $data = $muclucs->map(function ($mucluc) use ($id) {
+    //         return [
+    //             'phong_id' => $id,
+    //             'mucluc_id' => $mucluc->id,
+    //         ];
+    //     })->toArray();
     
-        // Thêm dữ liệu vào bảng trung gian
-        DB::table('phong_mucluc')->insert($data);
-    }
+    //     // Thêm dữ liệu vào bảng trung gian
+    //     DB::table('phong_mucluc')->insert($data);
+    // }
     public function delete($userId)
     {
         $profiles = Profile::where('ma_phong',$userId)->first();

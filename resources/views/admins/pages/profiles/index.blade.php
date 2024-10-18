@@ -94,10 +94,13 @@
                             <div class="col-lg-6 mt-2">
                                 <div class="row">
                                     <div class="col-lg-2">
-                                        <button class="btn btn-success">
-                                            <input type="file" style="display: none">
-                                            <i class="fas fa-plus"></i> Xuất Excel
-                                        </button>
+                                    
+                                        <form action="{{ route('admin.profile.export') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-plus"></i> Xuất Excel
+                                            </button>
+                                        </form>
                                     </div>
                                     <div class="col-lg-2">
                                         <button class="btn btn-success" id="exportExcelBtn">
