@@ -60,10 +60,10 @@ class InformationVb extends Model
                 } else {
                     $html = '<span><span class="badge badge--dark">Không hoạt động</span></span>';
                 }   //Unfeatured
-              
-            }
+
+            });
           }
-       }
+
 
     public function profile()
     {
