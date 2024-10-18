@@ -102,6 +102,7 @@
                                 <table id="tech-companies-1" class="table table-striped">
                                     @php
                                         $currentProfileId = null;
+                                        $currentPhong = null;
                                     @endphp
                                     <thead>
                                         <tr>
@@ -125,17 +126,18 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($vanban as $index => $item )
-                                            @if ($currentProfileId != $item->profile_id)
-                                                @php
-                                                    $currentProfileId = $item->profile_id;
-                                                @endphp
-                                                <!-- Hiển thị tiêu đề hồ sơ khi profile_id thay đổi -->
-                                                <tr>
-                                                    <td colspan="14">
-                                                        <strong>Phông: {{ $item->maPhong->ten_phong }}/Mục lục:  {{ $item->maMucLuc->ten_mucluc }}/Hộp số: {{ $item->hop_so }}/Hồ sơ số: {{ $item->ho_so_so }}/Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                        @if ($currentProfileId != $item->profile_id || $currentPhong != $item->maPhong)
+                                        @php
+                                            $currentProfileId = $item->profile_id;
+                                            $currentPhong = $item->maPhong;  // Cập nhật mã phòng hiện tại
+                                        @endphp
+                                        <!-- Hiển thị tiêu đề hồ sơ khi profile_id hoặc maPhong->ten_phong thay đổi -->
+                                        <tr>
+                                            <td colspan="14">
+                                                <strong>Phông: {{ $item->maPhong->ten_phong }}/Mục lục: {{ $item->maMucLuc->ten_mucluc }}/Hộp số: {{ $item->hop_so }}/Hồ sơ số: {{ $item->ho_so_so }}/Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
+                                            </td>
+                                        </tr>
+                                    @endif
                                         <tr>
                                             <td>{{$loop->index + 1 }}</td>
                                             {{-- <td>{{ $item->config->agency_code }}</td>
