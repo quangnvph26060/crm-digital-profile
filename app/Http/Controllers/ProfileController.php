@@ -13,6 +13,7 @@ use App\Models\Config;
 use App\Models\InformationVb;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+
 class ProfileController extends Controller
 {
     /**
@@ -27,6 +28,7 @@ class ProfileController extends Controller
 
         $phongdata  = Phong::all();
         $muclucdata = MucLuc::all();
+        $configdata = Config::all();
         $title   = "Danh sách hồ sơ";
         $profiles = Profile::query();
         if (isset($request->name) && $request->name != '') {
@@ -34,6 +36,12 @@ class ProfileController extends Controller
             $profiles->where(function($query) use ($request) {
 
                 $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');
+            });
+        }
+        if (isset($request->coquan) && $request->coquan != '') {
+
+            $profiles->where(function($query) use ($request) {
+                $query->where('config_id', 'like', '%' . $request->coquan . '%');
             });
         }
         if (isset($request->phong) && $request->phong != '') {
@@ -60,6 +68,7 @@ class ProfileController extends Controller
             "inputs" => $inputs,
             "phongdata" => $phongdata,
             "muclucdata" => $muclucdata,
+            "configdata" => $configdata,
         ]);
     }
     public function add()
@@ -211,9 +220,8 @@ class ProfileController extends Controller
                 $query->where('so_kh_vb', 'like', '%' . $request->name . '%');
             });
         }
-
-        // Thêm phân trang ở đây
-        $perPage = 10; // Số lượng bản ghi trên mỗi trang
+        $vanban->where('profile_id',$id);
+        $perPage = 10;
         $vanban = $vanban->paginate($perPage);
 
         $profiles = Profile::query();
@@ -298,7 +306,6 @@ class ProfileController extends Controller
         try {
             Excel::import(new ProfileImport, $file);
         } catch (\Exception $e) {
-            \Log::info($e->getMessage());
             return response()->json(['error' => 'Đã xảy ra lỗi khi nhập dữ liệu từ file Excel'], 500);
         }
 

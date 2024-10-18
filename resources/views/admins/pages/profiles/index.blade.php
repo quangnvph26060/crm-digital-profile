@@ -36,6 +36,20 @@
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="form-group">
+                                            <label for="">Cơ quan</label>
+                                            <select class="form-select" name="coquan" id="coquan">
+                                                <option value="">Chọn cơ quan</option>
+                                                @foreach ($configdata as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
+                                                        {{ $item->agency_name }}</option>
+                                                @endforeach
+                                                <!-- Thêm các tùy chọn phòng khác nếu cần -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
                                             <label for="">Phông</label>
                                             <select class="form-select" name="phong" id="phong">
                                                 <option value="">Chọn Phông</option>
@@ -102,9 +116,9 @@
                                         <thead>
                                             <tr>
                                                 <th>STT</th>
-                                                <th>Mã Cơ quan</th>
+                                                {{-- <th>Mã Cơ quan</th>
                                                 <th>Mã Phông</th>
-                                                <th>Mã mục lục</th>
+                                                <th>Mã mục lục</th> --}}
                                                 <th>Hộp số</th>
                                                 <th>Hồ sơ số</th>
                                                 <th>Tiêu đề hồ sơ</th>
@@ -124,7 +138,7 @@
                                                         {{ $key + 1 }}
                                                     </td>
 
-                                                    <td>
+                                                    {{-- <td>
                                                         {{ $item->config->agency_code ?? "" }}
                                                     </td>
                                                     <td>
@@ -133,7 +147,7 @@
                                                     </td>
                                                     <td>
                                                         {{ $item->maMucLuc->ten_mucluc ?? "" }}
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         {{ $item->hop_so }}
                                                     </td>
@@ -160,19 +174,21 @@
                                                         @if (auth('admin')->user()->level === 2)
                                                             <a href="{{ route('admin.profile.edit', ['id' => $item->id]) }}"
                                                                 class="btn btn-warning">
-                                                                Sửa
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 21h16M5.666 13.187A2.278 2.278 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.278 2.278 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001l-9.507 9.52Z"/></svg>
                                                             </a>
                                                             <form method="post"
                                                                 action="{{ route('admin.profile.delete', ['id' => $item->id]) }}"
                                                                 onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                                                <button type="submit" class="btn btn-danger">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 26 26"><path fill="currentColor" d="M11.5-.031c-1.958 0-3.531 1.627-3.531 3.594V4H4c-.551 0-1 .449-1 1v1H2v2h2v15c0 1.645 1.355 3 3 3h12c1.645 0 3-1.355 3-3V8h2V6h-1V5c0-.551-.449-1-1-1h-3.969v-.438c0-1.966-1.573-3.593-3.531-3.593h-3zm0 2.062h3c.804 0 1.469.656 1.469 1.531V4H10.03v-.438c0-.875.665-1.53 1.469-1.53zM6 8h5.125c.124.013.247.031.375.031h3c.128 0 .25-.018.375-.031H20v15c0 .563-.437 1-1 1H7c-.563 0-1-.437-1-1V8zm2 2v12h2V10H8zm4 0v12h2V10h-2zm4 0v12h2V10h-2z"/></svg>
+                                                                </button>
                                                             </form>
                                                         @endif
                                                         <a href="{{ route('admin.profile.detail', ['id' => $item->id]) }}"
                                                             class="btn btn-primary">
-                                                            Thông tin hồ sơ
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M0 4.13v1.428a.5.5 0 0 0 .725.446l.886-.446l.377-.19L2 5.362l1.404-.708l.07-.036l.662-.333l.603-.304a.5.5 0 0 0 0-.893l-.603-.305l-.662-.333l-.07-.036L2 1.706l-.012-.005l-.377-.19l-.886-.447A.5.5 0 0 0 0 1.51v2.62ZM7.25 2a.75.75 0 0 0 0 1.5h7a.25.25 0 0 1 .25.25v8.5a.25.25 0 0 1-.25.25h-9.5a.25.25 0 0 1-.25-.25V6.754a.75.75 0 0 0-1.5 0v5.496c0 .966.784 1.75 1.75 1.75h9.5A1.75 1.75 0 0 0 16 12.25v-8.5A1.75 1.75 0 0 0 14.25 2h-7Zm-.5 4a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5ZM6 9.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 0 1.5h-3.5A.75.75 0 0 1 6 9.25Z" clip-rule="evenodd"/></svg>
                                                         </a>
                                                     </td>
 

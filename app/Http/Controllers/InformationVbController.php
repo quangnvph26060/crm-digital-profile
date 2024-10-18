@@ -77,11 +77,16 @@ class InformationVbController extends Controller
                 ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
                 ->where('ho_so_so', $request->ho_so_so)
                 ->where('so_kh_vb', $request->so_kh_vb)->first();
+                
         if($vanban){
             return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
         }
+
         $profile = Profile::where('ma_phong', $request->ma_phong)
-        ->where('ma_muc_luc', $request->ma_mucluc)->where('hop_so', $request->hop_so)->first();
+            ->where('ma_muc_luc', $request->ma_mucluc)
+            ->where('hop_so', $request->hop_so)
+            ->first();
+
         if(!$profile){
             return back()->with('error', 'Hồ sơ không tồn tại.');
         }
@@ -98,6 +103,7 @@ class InformationVbController extends Controller
         $vanbannew->noi_dung = $request->noi_dung;
         $vanbannew->ghi_chu = $request->ghi_chu;
         $vanbannew->profile_id = $profile->id;
+        $vanbannew->status = $request->status;
         if ($request->file('duong_dan')) {
             $coquan = Config::find($request->config_id);
             $phong = Phong::find($request->ma_phong);
@@ -156,6 +162,7 @@ class InformationVbController extends Controller
         $vanbannew->tac_gia = $request->tac_gia;
         $vanbannew->noi_dung = $request->noi_dung;
         $vanbannew->ghi_chu = $request->ghi_chu;
+        $vanbannew->status = $request->status;
         $vanbannew->profile_id = $profile->id;
         if ($request->file('duong_dan')) {
             $coquan = Config::find($request->config_id);

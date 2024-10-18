@@ -14,7 +14,7 @@
     <!-- plugin css -->
     <link href="{{ asset('libs/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}"
         rel="stylesheet" type="text/css" />
-
+    <link rel="stylesheet" href="{{ asset('libs/assets/css/root.css') }}" type="text/css" />
     <!-- preloader css -->
     <link rel="stylesheet" href="{{ asset('libs/assets/css/preloader.min.css') }}" type="text/css" />
 
