@@ -9,6 +9,7 @@ use App\Imports\InformationVbImport;
 use App\Models\Config;
 use App\Models\InformationVb;
 use App\Models\MucLuc;
+use App\Models\Phong;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +30,21 @@ class InformationVbController extends Controller
         if (isset($request->name) && $request->name != '') {
             $vanban->where(function($query) use ($request) {
                 $query->where('so_kh_vb', 'like', '%' . $request->name . '%');
+            });
+        }
+        if (isset($request->phong) && $request->phong != '') {
+            $vanban->where(function ($query) use ($request) {
+                $query->where('config_id', 'like', '%' . $request->config_id . '%');
+            });
+        }
+        if (isset($request->phong) && $request->phong != '') {
+            $vanban->where(function ($query) use ($request) {
+                $query->where('ma_phong', 'like', '%' . $request->phong . '%');
+            });
+        }
+        if (isset($request->muc_luc) && $request->muc_luc != '') {
+            $vanban->where(function ($query) use ($request) {
+                $query->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
             });
         }
 
@@ -83,10 +99,14 @@ class InformationVbController extends Controller
         $vanbannew->ghi_chu = $request->ghi_chu;
         $vanbannew->profile_id = $profile->id;
         if ($request->file('duong_dan')) {
+            $coquan = Config::find($request->config_id);
+            $phong = Phong::find($request->ma_phong);
+            $mucluc = MucLuc::find($request->ma_mucluc);
+            $hoso = Profile::find($profile->id);
             $file = $request->file('duong_dan');
-            $fileName = time() . '-' . $file->getClientOriginalName();
+            $fileName = time() .'/'.$coquan->agency_code.'/'.$phong->ma_phong.'/'.$mucluc->ma_mucluc.'/'.$hoso->hop_so.'/'.$hoso->ho_so_so.'/'. $file->getClientOriginalName();
             $filePath = $file->storeAs('duong_dan', $fileName, 'public');
-            $vanbannew->duong_dan = 'storage/' . $filePath; // Lưu đường dẫn file
+            $vanbannew->duong_dan = $filePath; // Lưu đường dẫn file
         }
         $vanbannew->save();
 
@@ -138,10 +158,14 @@ class InformationVbController extends Controller
         $vanbannew->ghi_chu = $request->ghi_chu;
         $vanbannew->profile_id = $profile->id;
         if ($request->file('duong_dan')) {
+            $coquan = Config::find($request->config_id);
+            $phong = Phong::find($request->ma_phong);
+            $mucluc = MucLuc::find($request->ma_mucluc);
+            $hoso = Profile::find($profile->id);
             $file = $request->file('duong_dan');
-            $fileName = time() . '-' . $file->getClientOriginalName();
+            $fileName = time() .'/'.$coquan->agency_code.'/'.$phong->ma_phong.'/'.$mucluc->ma_mucluc.'/'.$hoso->hop_so.'/'.$hoso->ho_so_so.'/'. $file->getClientOriginalName();
             $filePath = $file->storeAs('duong_dan', $fileName, 'public');
-            $vanbannew->duong_dan = 'storage/' . $filePath; // Lưu đường dẫn file
+            $vanbannew->duong_dan =  $filePath;
         }
         $vanbannew->save();
 

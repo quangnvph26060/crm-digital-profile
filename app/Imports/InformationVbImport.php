@@ -9,6 +9,7 @@ use App\Models\Phong;
 use App\Models\Profile;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -25,7 +26,7 @@ class InformationVbImport implements ToModel, WithHeadingRow
         try {
 
             $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
-              dd(realpath($row['duong_dan']));
+            //   dd(realpath($row['duong_dan']));
             if($coquan){
                 $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
                 $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
@@ -33,7 +34,7 @@ class InformationVbImport implements ToModel, WithHeadingRow
                     $profile = Profile::where('config_id' , $coquan->id)->where('ma_muc_luc', $mucluc->id )
                     ->where('hop_so', $row['hop_so']) ->where('ho_so_so', $row['ho_so_so'])->first();
                     if($profile){
-                        $vanban = InformationVb::where('so_kh_vb',$row['so_va_ki_hieu_van_ban'])->where('profile_id', $profile->id)->first();
+                        $vanban = InformationVb::where('so_kh_vb',$row['so_va_ki_hieu_van_ban'])->where('ma_phong', $phong->id )->where('profile_id', $profile->id)->first();
 
                         if(!$vanban){
                             $vanbannew = new InformationVb();
@@ -49,7 +50,21 @@ class InformationVbImport implements ToModel, WithHeadingRow
                             $vanbannew->noi_dung = $row['trich_yeu_noi_dung_van_ban'];
                             $vanbannew->ghi_chu = $row['ghi_chu'];
                             $vanbannew->profile_id = $profile->id;
-                            $vanbannew->duong_dan = $row['duong_dan'];
+                            // $vanbannew->duong_dan = $row['duong_dan'];
+
+                            $localPath = $row['duong_dan'];
+                            if (file_exists($localPath)) {
+                                // Tạo tên file duy nhất
+                                $fileName = time() .'/'.$row['ma_co_quan'].'/'.$row['ma_phong'].'/'.$row['ma_muc_luc'].'/'.$row['hop_so'].'/'.$row['ho_so_so']. '-' . basename($localPath);
+
+                                // Lưu file vào storage
+                                $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($localPath), $fileName);
+
+                                // Lưu đường dẫn vào cơ sở dữ liệu
+
+                                $vanbannew->duong_dan =  $filePath; // Lưu đường dẫn file
+
+                            }
 
                             $vanbannew->save();
                         }else{

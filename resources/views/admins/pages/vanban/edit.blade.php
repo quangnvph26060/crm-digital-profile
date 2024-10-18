@@ -501,7 +501,8 @@ function previewPDF(event) {
 
 // Nếu có file PDF đã lưu từ trước (ví dụ: khi tải lại trang với file đã được lưu)
 document.addEventListener("DOMContentLoaded", function() {
-    const pdfPath = `{{ asset($vanban->duong_dan) }}`;
+    const pdfPath = `{{ asset('storage/' . $vanban->duong_dan) }}`;
+
     const pdfPreview = document.getElementById('pdf-preview');
     const previewContainer = document.getElementById('pdf-preview-container');
 
