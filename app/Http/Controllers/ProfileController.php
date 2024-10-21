@@ -64,9 +64,9 @@ class ProfileController extends Controller
 
 
         return view("admins.pages.profiles.index", [
-            "profiles" => $profiles,
-            "title"  => $title,
-            "inputs" => $inputs,
+            "profiles"      => $profiles,
+            "title"         => $title,
+            "inputs"        => $inputs,
             "phongdata" => $phongdata,
             "muclucdata" => $muclucdata,
             "configdata" => $configdata,
