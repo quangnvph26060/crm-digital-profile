@@ -137,6 +137,12 @@
                                 <span data-key="t-chat">From văn bản</span>
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('admin.form_template.index') }}">
+                                <span data-key="t-chat">From Template</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 {{-- @endif --}}
