@@ -15,24 +15,18 @@ class InformationVb extends Model
     protected $table = 'information_vb';
 
     // Các trường có thể được gán giá trị hàng loạt
-    protected $fillable = [
-        'config_id',
-        'ma_phong',
-        'ma_mucluc',
-        'hop_so',
-        'ho_so_so',
-        'so_kh_vb',
-        'time_vb',
-        'tac_gia',
-        'author',
-        'noi_dung',
-        'to_so',
-        'ghi_chu',
-        'duong_dan',
-        'filepdf',
-        'profile_id',
-        'status'
-    ];
+    protected $fillable = [];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->fillable = require __DIR__ . '/array_vanban.php';
+
+        if (!is_array($this->fillable)) {
+            $this->fillable = [];
+        }
+    }
 
     public function config()
     {

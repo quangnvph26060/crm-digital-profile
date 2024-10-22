@@ -204,6 +204,19 @@
                                                     </div>
                                                 @enderror
                                             </div>
+                                            <div class="col-lg-12 "
+                                                style="display: flex !important;flex-direction: column;">
+
+                                                <label for="example-text-input" class="form-label">Trạng thái
+                                                    <span class="text text-danger">*</spanclass=></label>
+                                                <select name="status" id="status-select"
+                                                    class="form-control ">
+                                                    <option  value="">Chọn trạng thái</option>
+                                                    <option {{ $vanban->status == 'active' ? 'selected' : '' }} value="active">Hoạt động</option>
+                                                    <option {{ $vanban->status == 'unactive' ? 'selected' : '' }} value="unactive" >Không hoạt động</option>
+                                                </select>
+
+                                            </div>
 
                                             <div class="col-lg-12 mt-3 " style="display: flex !important;flex-direction: column;">
 

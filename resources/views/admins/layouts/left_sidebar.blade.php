@@ -38,6 +38,11 @@
                                     <span data-key="t-chat">Danh sách</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.vanban.addcolumn') }}">
+                                    <span data-key="t-chat">Quản lý trường : Văn bản</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>
