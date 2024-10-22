@@ -133,7 +133,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.mucluc.index') }}">
+                            <a href="{{ route('admin.form.index') }}">
                                 <span data-key="t-chat">From văn bản</span>
                             </a>
                         </li>
