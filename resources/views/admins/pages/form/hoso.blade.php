@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.vanban.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.profile.storeTemplates') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -45,7 +45,7 @@
                                                 <div class=" col-lg-12 mb-3">
                                                     <div class=" col-lg-12 mb-3">
                                                         <label for="example-text-input" class="form-label">Tiêu đề Form<span class="text text-danger">*</span></label>
-                                                        <select name="" id="" class="form-control">
+                                                        <select name="title_form" id="" class="form-control">
                                                             <option value="">Chọn Templates</option>
                                                             @foreach($templates as $item)
                                                                 <option value="{{$item->id}}" {{$item->id == $templateActive->id ? "selected":""}}>{{$item->name}}</option>
@@ -60,7 +60,7 @@
 
                                                         <label for="example-text-input" class="form-label">Form <span
                                                                 class="text text-danger">*</span></label>
-                                                        <textarea name="content_form" id="content" class="content-main" cols="30" rows="5" placeholder="Form"
+                                                        <textarea name="content_form" id="content" class="content-main" cols="30" rows="20" placeholder="Form"
                                                             style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ $templateActive->template_form }}</textarea>
                                                         @error('content_form')
                                                             <div class="invalid-feedback d-block">
@@ -95,82 +95,96 @@
         </div> <!-- container-fluid -->
     </div>
     <script>
-        CKEDITOR.replace('content', {
-            toolbar: [{
-                    name: 'document',
-                    items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']
-                },
-                {
-                    name: 'clipboard',
-                    items: ['Undo', 'Redo']
-                },
-                {
-                    name: 'editing',
-                    items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt']
-                },
-                {
-                    name: 'forms',
-                    items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button',
-                        'ImageButton', 'HiddenField'
-                    ]
-                },
-                '/',
-                {
-                    name: 'basicstyles',
-                    items: ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'Strike',
-                        'RemoveFormat'
-                    ]
-                },
-                {
-                    name: 'paragraph',
-                    items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote',
-                        'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',
-                        '-', 'BidiLtr', 'BidiRtl', 'Language'
-                    ]
-                },
-                {
-                    name: 'links',
-                    items: ['Link', 'Unlink', 'Anchor']
-                },
-                {
-                    name: 'insert',
-                    items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak',
-                        'Iframe'
-                    ]
-                },
-                '/',
-                {
-                    name: 'styles',
-                    items: ['Styles', 'Format', 'Font', 'FontSize']
-                },
-                {
-                    name: 'colors',
-                    items: ['TextColor', 'BGColor']
-                },
-                {
-                    name: 'tools',
-                    items: ['Maximize', 'ShowBlocks', '-']
-                },
-                {
-                    name: 'about',
-                    items: ['About']
-                }
-            ],
-            extraPlugins: 'font,colorbutton,justify',
-            fontSize_sizes: '11px;12px;13px;14px;15px;16px;18px;20px;22px;24px;26px;28px;30px;32px;34px;36px',
-        });
-        // Lấy thẻ textarea theo id
-        // Lấy tất cả các phần tử có các lớp CSS tương ứng
-       
-        // const textarea = document.getElementById('content');
-        // const previewFrame = document.getElementById('previewFrame');
-
-        // textarea.addEventListener('input', function() {
-        //     const content = textarea.value;
-        //     console.log(content);
-
-        //     const iframeDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-        //     iframeDoc.body.innerHTML = content;
+        // CKEDITOR.replace('content', {
+        //     toolbar: [{
+        //             name: 'document',
+        //             items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']
+        //         },
+        //         {
+        //             name: 'clipboard',
+        //             items: ['Undo', 'Redo']
+        //         },
+        //         {
+        //             name: 'editing',
+        //             items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt']
+        //         },
+        //         {
+        //             name: 'forms',
+        //             items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button',
+        //                 'ImageButton', 'HiddenField'
+        //             ]
+        //         },
+        //         '/',
+        //         {
+        //             name: 'basicstyles',
+        //             items: ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'Strike',
+        //                 'RemoveFormat'
+        //             ]
+        //         },
+        //         {
+        //             name: 'paragraph',
+        //             items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote',
+        //                 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',
+        //                 '-', 'BidiLtr', 'BidiRtl', 'Language'
+        //             ]
+        //         },
+        //         {
+        //             name: 'links',
+        //             items: ['Link', 'Unlink', 'Anchor']
+        //         },
+        //         {
+        //             name: 'insert',
+        //             items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak',
+        //                 'Iframe'
+        //             ]
+        //         },
+        //         '/',
+        //         {
+        //             name: 'styles',
+        //             items: ['Styles', 'Format', 'Font', 'FontSize']
+        //         },
+        //         {
+        //             name: 'colors',
+        //             items: ['TextColor', 'BGColor']
+        //         },
+        //         {
+        //             name: 'tools',
+        //             items: ['Maximize', 'ShowBlocks', '-']
+        //         },
+        //         {
+        //             name: 'about',
+        //             items: ['About']
+        //         }
+        //     ],
+        //     extraPlugins: 'font,colorbutton,justify',
+        //     fontSize_sizes: '11px;12px;13px;14px;15px;16px;18px;20px;22px;24px;26px;28px;30px;32px;34px;36px',
         // });
+      //  Lấy thẻ textarea theo id
+     //   Lấy tất cả các phần tử có các lớp CSS tương ứng
+       
+     const textarea = document.getElementById('content');
+    const previewFrame = document.getElementById('previewFrame');
+
+    function updatePreview() {
+        const content = textarea.value;
+        const iframeDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(content);
+        iframeDoc.close();
+
+        // Bao gồm các tài nguyên CSS từ Bootstrap vào iframe
+        const head = iframeDoc.head;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'; // Đường dẫn đến CSS của Bootstrap
+        head.appendChild(link);
+    }
+
+    textarea.addEventListener('input', function() {
+        updatePreview();
+    });
+
+    // Initialize preview on page load
+    updatePreview();
     </script>
 @endsection

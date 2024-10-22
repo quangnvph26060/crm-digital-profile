@@ -98,7 +98,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     });
 
     Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('', [ProfileController::class, 'index'])->name('index');
+        Route::get('/', [ProfileController::class, 'index'])->name('index');
         Route::get('/add-config', [ProfileController::class, 'add'])->name('add');
         Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
         Route::get('/detail-config/{id}', [ProfileController::class, 'detail'])->name('detail');
@@ -108,7 +108,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/update-config/{id}', [ProfileController::class, 'update'])->name('update');
         Route::post('/export', [ProfileController::class, 'export'])->name('export');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
-        Route::get('', [HoSoController::class, 'index'])->name('index');
+        Route::get('/template-hoso', [HoSoController::class, 'indexTemplate'])->name('indexTemplate');
+        Route::post('/template-hoso', [HoSoController::class, 'storeTemplate'])->name('storeTemplates');
     });
 
     Route::prefix('vanban')->name('vanban.')->group(function () {
