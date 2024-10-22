@@ -8,21 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
+
     protected $table = "profiles";
-    protected $fillable = [
-        'config_id',
-        'ma_muc_luc',
-        'ma_phong',
-        'hop_so',
-        'ho_so_so',
-        'tieu_de_ho_so',
-        'ngay_thang',
-        'ngay_bat_dau',
-        'ngay_ket_thuc',
-        'so_to',
-        'thbq',
-        'ghi_chu',
-    ];
+
+    protected $fillable = [];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->fillable = require 'fillable_fields_profile.php';
+    }
 
     // Định nghĩa rules cho validation (nếu cần)
     public static $rules = [

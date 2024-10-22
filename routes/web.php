@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ReceiptController;
 use App\Http\Controllers\Admin\ZaloController;
 use App\Http\Controllers\Admin\ZnsMessageController;
 use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\CustomColumnController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MucLucController;
 use App\Http\Controllers\PhongController;
@@ -54,6 +55,13 @@ Route::group(["prefix" => "cronjob"], function () {
     Route::get("/set-kpi", "CronjobController@setKpiAuto");
 });
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'middleware' => 'is-login-admin'], function () {
+
+    Route::prefix('column')->name('column.')->group(function () {
+        Route::get('', [CustomColumnController::class, 'index'])->name('index');
+        Route::post('/add', [CustomColumnController::class, 'store'])->name('store');
+        Route::delete('/delete/{column}', [CustomColumnController::class, 'delete'])->name('delete');
+        // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
+    });
     //config
     Route::prefix('config')->name('config.')->group(function () {
         Route::get('', [ConfigController::class, 'index'])->name('index');
