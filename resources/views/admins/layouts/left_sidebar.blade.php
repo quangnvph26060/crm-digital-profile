@@ -128,7 +128,7 @@
                         </li>
 
                         <li>
-                            <a href="{{ route('admin.mucluc.index') }}">
+                            <a href="{{ route('admin.profile.index') }}">
                                 <span data-key="t-chat">From hồ sơ</span>
                             </a>
                         </li>

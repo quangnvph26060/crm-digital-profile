@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ZnsMessageController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\CustomColumnController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\HoSoController;
 use App\Http\Controllers\MucLucController;
 use App\Http\Controllers\PhongController;
 use App\Http\Controllers\ProfileController;
@@ -106,6 +107,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/update-config/{id}', [ProfileController::class, 'update'])->name('update');
         Route::post('/export', [ProfileController::class, 'export'])->name('export');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
+        Route::get('', [HoSoController::class, 'index'])->name('index');
     });
 
     Route::prefix('vanban')->name('vanban.')->group(function () {
@@ -125,8 +127,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('', [VanbanFormController::class, 'index'])->name('index');
 
     });
-
-
 
 
     Route::prefix('receipt')->name('receipt.')->group(function () {
