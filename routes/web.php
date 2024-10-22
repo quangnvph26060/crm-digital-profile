@@ -14,6 +14,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MucLucController;
 use App\Http\Controllers\PhongController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VanbanFormController;
 use App\Models\Receipt;
 use Illuminate\Support\Facades\Route;
 
@@ -119,6 +120,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');
     });
+
+    Route::prefix('form')->name('form.')->group(function () {
+        Route::get('', [VanbanFormController::class, 'index'])->name('index');
+
+    });
+
+
+
 
     Route::prefix('receipt')->name('receipt.')->group(function () {
         Route::get('', [ReceiptController::class, 'index'])->name('index');

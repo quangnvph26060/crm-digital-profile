@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('libs/assets/images/favicon.ico') }}">
-
+    <script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
     <!-- plugin css -->
     <link href="{{ asset('libs/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}"
         rel="stylesheet" type="text/css" />
