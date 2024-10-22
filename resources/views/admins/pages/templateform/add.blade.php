@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="card-body p-4">
-                        <form action="{{ route('admin.vanban.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.form_template.store.template') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-lg-12">
@@ -43,12 +43,12 @@
                                     <div>
                                         <div class="row">
                                             <div class=" col-lg-12 mb-3">
-                                                <label for="example-text-input" class="form-label">Tiêu đề Form
+                                                <label for="example-text-input" class="form-label">Tên Form
                                                     <span class="text text-danger">*</span></label>
-                                                <input value="{{ old('title_form') }}"
-                                                    class="form-control {{ $errors->has('title_form') ? 'is-invalid' : '' }}"
-                                                    name="title_form" type="text" id="example-text-input">
-                                                @error('title_form')
+                                                <input value="{{ old('name') }}"
+                                                    class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                                    name="name" type="text" id="example-text-input">
+                                                @error('name')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
                                                 </div>
@@ -59,18 +59,19 @@
                                                 <div class="col-lg-6 "
                                                     style="display: flex !important;flex-direction: column;">
 
-                                                    <label for="example-text-input" class="form-label">Form <span
-                                                            class="text text-danger">*</span></label>
-                                                    <textarea name="content_form" id="content" cols="30" rows="5"
-                                                        placeholder="Form"
-                                                        style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ old('content_form') }}</textarea>
-                                                    @error('content_form')
+                                                    <label for="example-text-input" class="form-label">Template Form
+                                                        <span class="text text-danger">*</span></label>
+                                                    <textarea name="template_form" id="content" cols="30" rows="5"
+                                                        placeholder="template_form"
+                                                        style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ old('template_form') }}</textarea>
+                                                    @error('template_form')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
                                                     </div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-lg-6 " style="display: flex !important;flex-direction: column;">
+                                                <div class="col-lg-6 "
+                                                    style="display: flex !important;flex-direction: column;">
                                                     <div id="preview" style=" padding: 10px;">
                                                         <!-- Kết quả sẽ hiển thị ở đây -->
                                                     </div>
@@ -78,6 +79,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-lg-12 mt-3" style="display: flex !important;flex-direction: column;">
+
+                                    <label for="example-text-input" class="form-label">Trạng thái <span
+                                            class="text text-danger">*</span></label>
+                                    <select name="status" id="status-select" class="form-control ">
+                                        <option value="active">Hoạt động</option>
+                                        <option value="unactive" selected>Không hoạt động</option>
+                                    </select>
+
                                 </div>
 
                                 <div class="col-lg-12 mt-4">
@@ -172,7 +183,7 @@
 </script>
 
 <script>
-   // Lắng nghe sự thay đổi trong textarea
+    // Lắng nghe sự thay đổi trong textarea
 document.getElementById('content').addEventListener('input', function () {
     // Lấy nội dung HTML từ textarea
     const content = this.value;
@@ -192,18 +203,5 @@ document.getElementById('content').addEventListener('input', function () {
 });
 
 </script>
-{{--
-<script>
-    CKEDITOR.disableAutoInline = true;
-    CKEDITOR.inline('content');
 
-    const textarea = document.getElementById('content');
-    const previewFrame = document.getElementById('previewFrame');
-
-    CKEDITOR.instances.content.on('change', function() {
-        const htmlContent = CKEDITOR.instances.content.getData();
-        const encodedHtmlContent = encodeURIComponent(htmlContent);
-        previewFrame.src = 'data:text/html;charset=utf-8,' + encodedHtmlContent;
-    });
-</script> --}}
 @endsection

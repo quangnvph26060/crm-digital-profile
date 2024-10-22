@@ -15,6 +15,7 @@ use App\Http\Controllers\HoSoController;
 use App\Http\Controllers\MucLucController;
 use App\Http\Controllers\PhongController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TemplateFormController;
 use App\Http\Controllers\VanbanFormController;
 use App\Models\Receipt;
 use Illuminate\Support\Facades\Route;
@@ -126,6 +127,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::prefix('form')->name('form.')->group(function () {
         Route::get('', [VanbanFormController::class, 'index'])->name('index');
 
+    });
+
+    Route::prefix('form_template')->name('form_template.')->group(function () {
+        Route::get('', [TemplateFormController::class, 'index'])->name('index');
+        Route::get('add', [TemplateFormController::class, 'create'])->name('add.template');
+        Route::post('store', [TemplateFormController::class,'store'])->name('store.template');
+        Route::get('edit/{id}', [TemplateFormController::class,'edit'])->name('edit.template');
+        Route::post('update/{id}', [TemplateFormController::class,'update'])->name('update.template');
+        Route::delete('/delete/{id}', [TemplateFormController::class, 'destroy'])->name('delete.template');
+        Route::put('/status/{id}', [TemplateFormController::class, 'updatestatus'])->name('updatestatus.template');
     });
 
 
