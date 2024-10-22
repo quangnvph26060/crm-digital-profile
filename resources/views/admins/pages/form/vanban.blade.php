@@ -43,16 +43,13 @@
                                     <div>
                                         <div class="row">
                                             <div class=" col-lg-12 mb-3">
-                                                <label for="example-text-input" class="form-label">Tiêu đề Form
-                                                    <span class="text text-danger">*</span></label>
-                                                <input value="{{ old('title_form') }}"
-                                                    class="form-control {{ $errors->has('title_form') ? 'is-invalid' : '' }}"
-                                                    name="title_form" type="text" id="example-text-input">
-                                                @error('title_form')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
+                                                    <label for="example-text-input" class="form-label">Tiêu đề Form<span class="text text-danger">*</span></label>
+                                                    <select name="" id="" class="form-control">
+                                                        <option value="">Chọn Templates</option>
+                                                        @foreach($templates as $item)
+                                                            <option value="{{$item->id}}" {{$item->id == $templateActive->id ? "selected":""}}>{{$item->name}}</option>
+                                                        @endforeach
+                                                    </select>
                                             </div>
 
                                             <div class="row">
@@ -60,15 +57,10 @@
                                                     style="display: flex !important;flex-direction: column;">
 
                                                     <label for="example-text-input" class="form-label">Form <span
-                                                            class="text text-danger">*</span></label>
+                                                            class="text text-danger">*</span></label> 
                                                     <textarea name="content_form" id="content" cols="30" rows="5"
                                                         placeholder="Form"
-                                                        style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ old('content_form') }}</textarea>
-                                                    @error('content_form')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                    @enderror
+                                                        style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ $templateActive->template_form }}</textarea>
                                                 </div>
                                                 <div class="col-lg-6 " style="display: flex !important;flex-direction: column;">
                                                     <div id="preview" style=" padding: 10px;">
