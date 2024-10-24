@@ -162,6 +162,7 @@ class InformationVbController extends Controller
                 }
             }
         }
+        $vanbannew->profile_id = $profile->id;
         $vanbannew->save();
         return back()->with('success', 'Thêm văn bản thành công');
     }
@@ -183,10 +184,10 @@ class InformationVbController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        // dd($request->all());
         $vanbannew = InformationVb::find($id);
 
-        $vanban = InformationVb::where('ma_phong', $request->ma_phong)
+        $vanban = InformationVb::where('id','!=', $id)->where('ma_phong', $request->ma_phong)
             ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
             ->where('ho_so_so', $request->ho_so_so)
             ->where('so_kh_vb', $request->so_kh_vb)->first();
@@ -219,6 +220,7 @@ class InformationVbController extends Controller
                 }
             }
         }
+        $vanbannew->profile_id = $profile->id;
         $vanbannew->save();
             return back()->with('success', 'Sửa văn bản thành công');
     }

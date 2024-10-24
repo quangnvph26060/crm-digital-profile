@@ -36,14 +36,95 @@
                         <form action="{{ route('admin.vanban.update', ['id' => $vanban->id]) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
+
                             <div class="row">
                                 <div class="col-lg-12">
                                     @include('globals.alert')
                                 </div>
-                                <div class="row">
+                                <div class="col-lg-12">
                                     <div class="row">
-                                        @include('admins/pages/vanban/form-add')
+                                        <div class="col-lg-12">
+                                            <div class="row mb-3">
+                                                <div class="col-lg-4 mb-3">
+                                                    <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
+                                                            class="text text-danger">*</span></label>
+                                                    <select
+                                                        class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }}"
+                                                        name="config_id" id="agency_code-select">
+                                                        <option value="">Chọn mã cơ quan</option>
+                                                        @foreach ($macoquan as $item)
+                                                        <option value="{{ $item->id }}" {{ (isset($vanban) && $vanban->
+                                                            config_id == $item->id) ? 'selected'
+                                                            : '' }}>
+                                                            {{ $item->agency_name }} - {{ $item->agency_code }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('config_id')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-lg-4 mb-3">
+                                                    <label for="ma-phong-select" class="form-label">Mã phông <span
+                                                            class="text text-danger">*</span></label>
+                                                    <select
+                                                        class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }}"
+                                                        name="ma_phong" id="ma-phong-select">
+                                                        <option value="">Chọn mã phông</option>
+                                                        {{-- Thêm các tùy chọn cho mã phông nếu có --}}
+                                                    </select>
+                                                    @error('ma_phong')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-lg-4 mb-3">
+                                                    <label for="muc-luc-select" class="form-label">Mã mục lục <span
+                                                            class="text text-danger">*</span></label>
+                                                    <select
+                                                        class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}"
+                                                        name="ma_mucluc" id="muc-luc-select">
+                                                        <option value="">Chọn mã mục lục</option>
+                                                        {{-- Thêm các tùy chọn cho mã mục lục nếu có --}}
+                                                    </select>
+                                                    @error('ma_mucluc')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-lg-6">
+                                                    <label for="hop_so" class="form-label">Hộp số <span
+                                                            class="text-danger">*</span></label>
+                                                    <select name="hop_so" id="hop_so-select"
+                                                        class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
+                                                        <option value="">Chọn hộp số</option>
+                                                        {{-- Thêm các tùy chọn cho hộp số nếu có --}}
+                                                    </select>
+                                                    @error('hop_so')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label for="ho_so_so" class="form-label">Hồ sơ số <span
+                                                            class="text-danger">*</span></label>
+                                                    <select name="ho_so_so" id="ho_so_so-select"
+                                                        class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
+                                                        <option value="">Chọn hồ sơ số</option>
+                                                        {{-- Thêm các tùy chọn cho hồ sơ số nếu có --}}
+                                                    </select>
+                                                    @error('ho_so_so')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            @include('admins/pages/vanban/form-add')
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mt-4">
+                                    <div>
+                                        <button type="submit" class="btn btn-primary w-md">Xác nhận</button>
                                     </div>
                                 </div>
                                 {{-- <div class="col-lg-6">
