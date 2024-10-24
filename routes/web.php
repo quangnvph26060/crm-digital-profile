@@ -16,6 +16,7 @@ use App\Http\Controllers\MucLucController;
 use App\Http\Controllers\PhongController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TemplateFormController;
+use App\Http\Controllers\VanBanController;
 use App\Http\Controllers\VanbanFormController;
 use App\Models\Receipt;
 use Illuminate\Support\Facades\Route;
@@ -123,11 +124,24 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/add-column', [InformationVbController::class, 'addcolumn'])->name('column');
         Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');
+
+        Route::get('/template-vanban', [VanBanController::class, 'indexTemplate'])->name('indexTemplate');
+        Route::post('/template-vanban', [VanBanController::class, 'storeTemplate'])->name('storeTemplates');
     });
 
-    Route::prefix('form')->name('form.')->group(function () {
-        Route::get('', [VanbanFormController::class, 'index'])->name('index');
+    // Route::prefix('form')->name('form.')->group(function () {
+    //     Route::get('', [VanbanFormController::class, 'index'])->name('index');
 
+    // });
+
+    Route::prefix('form_template_vanban')->name('form_template_vanban.')->group(function () {
+        Route::get('', [VanbanFormController::class, 'index'])->name('index');
+        Route::get('add', [VanbanFormController::class, 'create'])->name('add.template');
+        Route::post('store', [VanbanFormController::class,'store'])->name('store.template');
+        Route::get('edit/{id}', [VanbanFormController::class,'edit'])->name('edit.template');
+        Route::post('update/{id}', [VanbanFormController::class,'update'])->name('update.template');
+        Route::delete('/delete/{id}', [VanbanFormController::class, 'destroy'])->name('delete.template');
+        Route::put('/status/{id}', [VanbanFormController::class, 'updatestatus'])->name('updatestatus.template');
     });
 
     Route::prefix('form_template')->name('form_template.')->group(function () {
