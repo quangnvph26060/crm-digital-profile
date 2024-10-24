@@ -22,11 +22,8 @@ class InformationVbImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-
         try {
-
             $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
-            //   dd(realpath($row['duong_dan']));
             if($coquan){
                 $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
                 $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
@@ -80,12 +77,6 @@ class InformationVbImport implements ToModel, WithHeadingRow
             }else{
                 Log::info('k có 0');
             }
-
-
-
-
-            //  Log::info($row);
-            // $profile = Profile::where('')
 
 
         } catch (\Exception $e) {

@@ -99,12 +99,20 @@ class VanbanFormController extends Controller
             return back()->withErrors(['name' => 'Tên template form này đã tồn tại.'])->withInput();
         }
 
-        if ($request->has('status')) {
+        // if ($request->has('status')) {
+        //     TemplateFormVanBan::where('status', 'active')
+        //         ->where('id', '!=', $id)
+        //         ->update(['status' => 'unactive']);
+        //     $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
+
+        //     File::put($bladeFilePath, $request->template_form);
+        // }
+
+        if ($request->status === 'active') {
             TemplateFormVanBan::where('status', 'active')
                 ->where('id', '!=', $id)
                 ->update(['status' => 'unactive']);
             $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
-
             File::put($bladeFilePath, $request->template_form);
         }
 
