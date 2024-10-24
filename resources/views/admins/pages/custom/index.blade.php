@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-12 d-flex justify-content-between mt-3 mb-3">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        {{-- <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4> --}}
+                        <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4>
                     </div>
                     {{-- <div class="" style="float: right">
                     <a class="btn btn-success" href="{{ route('admin.config.add') }}">
@@ -21,19 +21,19 @@
 
             <!-- end page title -->
 
+          <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                           
-                                <h2>Thêm Cột Mới</h2>
                                 <form action="{{ route('admin.column.store') }}" method="post" class="">
                                     @csrf
-                                    <div class="form-group col-lg-5">
+                                    <div class="form-group ">
                                         <label for="column_name">Tên Cột</label>
-                                        <input type="text" class="form-control" id="column_name" name="column_name" placeholder="Ví dụ: Mô Tả" required>
+                                        <input type="text" class="form-control" id="column_name" name="column_name" placeholder="Ví dụ: Mô Tả (mo_ta)" required>
                                     </div>
-                                    <div class="form-group col-lg-5">
+                                    <div class="form-group ">
                                         <label for="column_type">Kiểu Dữ Liệu</label>
                                         <select class="form-control" id="column_type" name="column_type" required>
                                             <option value="string">Chuỗi (string)</option>
@@ -46,67 +46,40 @@
                                         <button type="submit" class="btn btn-primary mt-2 mb-2">Thêm Cột</button>
                                     </div>
                                 </form>
-                           
-                          
                         </div>
-                        <div class="card-body">
-                            @include('globals.alert')
-                            <div class="table-rep-plugin">
-                                <div class="table-responsive mb-0" data-pattern="priority-columns">
-                                    <table id="tech-companies-1" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>STT</th>
-                                                {{-- <th>Mã Cơ quan</th>
-                                                <th>Mã Phông</th>
-                                                <th>Mã mục lục</th> --}}
-
-
-                                                <th>Tên cột</th>
-                                                @if (auth('admin')->user()->level === 2)
-                                                    <th>Hành động</th>
-                                                @endif
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @foreach ($columns as $key => $item)
-                                                <tr>
-                                                    <td>
-                                                        {{ $key + 1 }}
-                                                    </td>
-
-                                                
-                                                    <td>
-                                                        {{ $item }}
-                                                    </td>
-
-
-                                                    <td class="d-flex gap-1">
-                                                        @if (auth('admin')->user()->level === 2)
-                                                            <form method="post"
-                                                                action="{{ route('admin.column.delete', $item) }}">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Xóa</button>
-                                                            </form>
-                                                        @endif
-
-                                                    </td>
-
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                        <div class="container mt-5">
+                            <h1>Danh sách cột trong bảng</h1>
+                            <div class="row mt-3">
+                                @foreach($columnData as $column)
+                                <div class="col-md-2 mb-3">
+                                    <div class="column-box">
+                                        <div style="display: flex; justify-content: startss">
+                                            <p>{{ $column['name'] }}</p>
+                                            <span class="">( {{ $column['type'] }} )</span>
+                                        </div>
+                                        <div>
+                                            {{-- <a href="" class="btn btn-warning btn-sm" style="margin-right: 10px">Sửa</a> --}}
+                                            <form action="{{ route('admin.column.deleteColumn', $column['name']) }}" method="POST"
+                                                style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-
+                                @if(($loop->index + 1) % 6 == 0)
                             </div>
-
+                            <div class="row mt-3">
+                                @endif
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                     <!-- end card -->
                 </div> <!-- end col -->
-            </div> <!-- end row -->
+            </div>
+          </div>
 
         </div> <!-- container-fluid -->
     </div>

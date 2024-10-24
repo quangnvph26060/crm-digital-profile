@@ -13,9 +13,20 @@ class CustomColumnController extends Controller
 {
     public function index()
     {
-        $columns = Profile::first()->getFillable();
-        $title = 'Add cột mới';
-        return view('admins/pages/custom/index', compact('title', 'columns'));
+        $columns = Schema::getColumnListing('profiles');
+
+        $columnData = [];
+        foreach ($columns as $column) {
+            // Lấy kiểu dữ liệu của cột
+            $columnType = Schema::getColumnType('profiles', $column);
+
+            $columnData[] = [
+                'name' => $column,
+                'type' => $columnType,
+            ];
+        }
+        $title = 'Thêm trường hồ sơ';
+        return view('admins/pages/custom/index', compact('title', 'columnData'));
     }
 
 
@@ -50,7 +61,7 @@ class CustomColumnController extends Controller
         $fillableFields[] = $cleanColumnName;
         File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
 
-        return 'Cột đã được thêm thành công và mảng fillable đã được cập nhật.';
+        return back()->with('success', 'Cột đã được thêm thành công!');
     } else {
         return "Cột $columnName đã tồn tại.";
     }
@@ -68,8 +79,9 @@ class CustomColumnController extends Controller
         return $fillableFields;
     }
 
-    public function delete($column)
+    public function deleteColumn($column)
     {
+      
         Schema::table('profiles', function ($table) use ($column) {
             $table->dropColumn($column);
         });

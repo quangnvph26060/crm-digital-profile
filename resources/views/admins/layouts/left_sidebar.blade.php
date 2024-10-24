@@ -27,6 +27,11 @@
                                 <span data-key="t-chat">Danh sách</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.column.index') }}">
+                                <span data-key="t-chat">Quản lý trường: hồ sơ</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -104,14 +109,10 @@
                         <span data-key="t-apps">Cấu hình Form</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li>
-                            <a href="{{ route('admin.column.index') }}">
-                                <span data-key="t-chat">Set Column</span>
-                            </a>
-                        </li>
+                      
 
                         <li>
-                            <a href="{{ route('admin.profile.indexTemplate') }}">
+                            <a href="{{ route('admin.profile.showTemplate') }}">
                                 <span data-key="t-chat">From hồ sơ</span>
                             </a>
                         </li>
@@ -121,11 +122,11 @@
                             </a>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('admin.form_template.index') }}">
                                 <span data-key="t-chat">From Template</span>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 {{-- @endif --}}

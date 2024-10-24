@@ -63,7 +63,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::prefix('column')->name('column.')->group(function () {
         Route::get('', [CustomColumnController::class, 'index'])->name('index');
         Route::post('/add', [CustomColumnController::class, 'store'])->name('store');
-        Route::delete('/delete/{column}', [CustomColumnController::class, 'delete'])->name('delete');
+        Route::delete('/delete/{column}', [CustomColumnController::class, 'deleteColumn'])->name('deleteColumn');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
     //config
@@ -104,13 +104,19 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
         Route::get('/detail-config/{id}', [ProfileController::class, 'detail'])->name('detail');
         Route::get('/get-agency-code', [ProfileController::class, 'getAgencyCode'])->name('get-agency-code');
-        Route::post('/add-config', [ProfileController::class, 'store'])->name('store');
-        Route::delete('delete/{id}', [ProfileController::class, 'delete'])->name('delete');
+        Route::post('/add-config', [ProfileController::class, 'storeProfile'])->name('storeProfile');
+        Route::delete('deleteHoso/{id}', [ProfileController::class, 'deleteHoso'])->name('delete.hoso');
         Route::post('/update-config/{id}', [ProfileController::class, 'update'])->name('update');
         Route::post('/export', [ProfileController::class, 'export'])->name('export');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
+
+        Route::get('/form-hoso', [HoSoController::class, 'showTemplate'])->name('showTemplate');
+        Route::get('/add-form-hoso', [HoSoController::class, 'showAddFormHoSo'])->name('showAddFormHoSo');
         Route::get('/template-hoso', [HoSoController::class, 'indexTemplate'])->name('indexTemplate');
         Route::post('/template-hoso', [HoSoController::class, 'storeTemplate'])->name('storeTemplates');
+        Route::post('/ho-so', [HoSoController::class, 'store'])->name('store');
+        Route::put('/status/{id}', [HoSoController::class, 'updatestatus'])->name('updatestatus');
+        Route::delete('/delete/{id}', [HoSoController::class, 'destroy'])->name('delete.template');
     });
 
     Route::prefix('vanban')->name('vanban.')->group(function () {

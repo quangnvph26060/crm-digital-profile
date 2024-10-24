@@ -109,9 +109,9 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProfileRequest $request)
+    public function storeProfile(Request $request)
     {
-
+      //  dd($request->all());
         DB::beginTransaction();
 
         try {
@@ -292,9 +292,15 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function deleteHoso($id)
     {
-    //   $vanban = InformationVb::where('')
+        $vanban = Profile::find($id);
+        if ($vanban) {
+            $vanban->delete();
+            return back()->with('success', 'Xóa văn bản thành công');
+        } else {
+            return back()->with('error', 'Văn bản không tồn tại');
+        }
     }
     public function import(Request $request)
     {

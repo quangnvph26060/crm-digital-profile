@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.profile.store') }}" method="POST">
+                            <form action="{{ route('admin.profile.storeProfile') }}" method="POST">
                                 @csrf  
                                 @include('admins/pages/profiles/form-add')
                             </form>
