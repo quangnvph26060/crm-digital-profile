@@ -13,4 +13,5 @@ return array (
   10 => 'thbq',
   11 => 'mo_ta',
   12 => 'ghi_chu',
+  13 => 'demo_quang',
 );

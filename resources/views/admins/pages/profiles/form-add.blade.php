@@ -9,12 +9,12 @@
                     <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
                             class="text text-danger">*</span></label>
                     <select
-                        class="form-select {{ $errors->has('ma_coquan') ? 'is-invalid' : '' }}"
-                        name="ma_coquan" id="agency_code-select">
+                        class="form-select {{ $errors->has('config_id ') ? 'is-invalid' : '' }}"
+                        name="config_id" id="agency_code-select">
                         <option value="">Chọn mã cơ quan</option>
                         @foreach ($macoquan as $item)
                             <option value="{{ $item->id }}"
-                                {{ old('ma_coquan') == $item->id ? 'selected' : '' }}>
+                                {{(isset($profile) ?  $profile->config_id :  old('config_id') == $item->id) == $item->id ? 'selected' : '' }}>
                                 {{ $item->agency_name }} -
                                 {{ $item->agency_code }}</option>
                         @endforeach
@@ -43,29 +43,28 @@
                     <label for="agency_code-select" class="form-label">Mã mục lục <span
                             class="text text-danger">*</span></label>
                     <select
-                        class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}"
-                        name="ma_mucluc" id="agency_code-select">
+                        class="form-select {{ $errors->has('ma_muc_luc') ? 'is-invalid' : '' }}"
+                        name="ma_muc_luc" id="agency_code-select">
                         <option value="">Chọn mã mục lục</option>
                         @foreach ($mamucluc as $item)
                             <option value="{{ $item->id }}"
-                                {{ old('ma_mucluc') == $item->id ? 'selected' : '' }}>
+                                {{(isset($profile) ?  $profile->ma_muc_luc :  old('ma_muc_luc') == $item->id) ? 'selected' : '' }}>
                                 {{ $item->ten_mucluc }}
                             </option>
                         @endforeach
                     </select>
-                    @error('ma_mucluc')
+                    @error('ma_muc_luc')
                         <div class="invalid-feedback d-block">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-3">
                     <label for="example-text-input" class="form-label">Hộp số<span
                             class="text text-danger">*</span></label>
-                    <input value="{{   isset($profile) ?  $profile->hop_so : old('hop_so') }}"
+                    <input value="{{isset($profile) ?  $profile->hop_so : old('hop_so') }}"
                         class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}"
                         name="hop_so" type="text" id="example-text-input"
                         placeholder="Hộp số">
@@ -75,11 +74,10 @@
                         </div>
                     @enderror
                 </div>
-
                 <div class="col-lg-3">
                     <label for="example-text-input" class="form-label">Hồ sơ số<span
                             class="text text-danger">*</span></label>
-                    <input value="{{    isset($profile) ?  $profile->ho_so_so : old('ho_so_so') }}"
+                    <input value="{{ isset($profile) ?  $profile->ho_so_so : old('ho_so_so') }}"
                         class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}"
                         name="ho_so_so" type="text" id="example-text-input"
                         placeholder="Hồ sơ số">
@@ -89,7 +87,6 @@
                         </div>
                     @enderror
                 </div>
-
                 <div class="col-lg-3">
                     <label for="example-text-input" class="form-label">Số tờ <span
                             class="text text-danger">*</span></label>
@@ -103,11 +100,10 @@
                         </div>
                     @enderror
                 </div>
-
                 <div class="col-lg-3">
                     <label for="example-text-input" class="form-label"> THBQ <span
                             class="text text-danger">*</span></label>
-                    <input value="{{ isset($profile) ?  $profile->thbq : old('thbq')   }}"
+                    <input value="{{isset($profile) ?  $profile->thbq :  old('thbq') }}"
                         class="form-control {{ $errors->has('thbq') ? 'is-invalid' : '' }}"
                         name="thbq" type="text" id="example-text-input"
                         placeholder="THBQ">
@@ -118,11 +114,10 @@
                     @enderror
                 </div>
             </div>
-
             <div class="mb-3">
                 <label for="example-text-input" class="form-label">Tiêu đề hồ sơ <span
                         class="text text-danger">*</span></label>
-                <input value="{{ isset($profile) ?  $profile->tieu_de_ho_so :    old('tieu_de_ho_so') }}"
+                <input value="{{ isset($profile) ?  $profile->tieu_de_ho_so : old('tieu_de_ho_so') }}"
                     class="form-control {{ $errors->has('tieu_de_ho_so') ? 'is-invalid' : '' }}"
                     name="tieu_de_ho_so" type="text" id="example-text-input"
                     placeholder="Tiêu đề hồ sơ ">
@@ -132,15 +127,14 @@
                     </div>
                 @enderror
             </div>
-
             <div class="row">
                 <div class="col-lg-6 mb-3">
                     <label for="date_start-text-input" class="form-label">Ngày bắt đầu
                         <span class="text text-danger">*</span></label>
-                    <input value="{{ isset($profile) ?  $profile->date_start : old('date_start') }}"
-                        class="form-control {{ $errors->has('date_start') ? 'is-invalid' : '' }}"
-                        name="date_start" type="date" id="date_start-text-input">
-                    @error('date_start')
+                    <input value="{{ isset($profile) ?  date('Y-m-d', strtotime($profile->ngay_bat_dau)) : old('ngay_bat_dau') }}"
+                        class="form-control {{ $errors->has('ngay_bat_dau') ? 'is-invalid' : '' }}"
+                        name="ngay_bat_dau" type="date" id="date_start-text-input">
+                    @error('ngay_bat_dau')
                         <div class="invalid-feedback d-block">
                             {{ $message }}
                         </div>
@@ -149,10 +143,23 @@
                 <div class=" col-lg-6 mb-3">
                     <label for="date_end-text-input" class="form-label">Ngày kết thúc
                         <span class="text text-danger">*</span></label>
-                    <input value="{{ isset($profile) ?  $profile->date_end :  old('date_end') }}"
-                        class="form-control {{ $errors->has('date_end') ? 'is-invalid' : '' }}"
-                        name="date_end" type="date" id="date_end-text-input">
-                    @error('date_end')
+                    <input value="{{ isset($profile) ?  date('Y-m-d', strtotime($profile->ngay_ket_thuc)) : old('ngay_ket_thuc') }}"
+                        class="form-control {{ $errors->has('ngay_ket_thuc') ? 'is-invalid' : '' }}"
+                        name="ngay_ket_thuc" type="date" id="date_end-text-input">
+                    @error('ngay_ket_thuc')
+                        <div class="invalid-feedback d-block">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+                <div class="col-lg-3">
+                    <label for="example-text-input" class="form-label"> demo quang<span
+                            class="text text-danger">*</span></label>
+                    <input value="{{ isset($profile) ?  $profile->demo_quang : old('demo_quang')   }}"
+                        class="form-control {{ $errors->has('thbq') ? 'is-invalid' : '' }}"
+                        name="demo_quang" type="text" id="example-text-input"
+                        placeholder="THBQ">
+                    @error('thbq')
                         <div class="invalid-feedback d-block">
                             {{ $message }}
                         </div>
@@ -166,7 +173,7 @@
                     Ghi chú <span class="text text-danger">*</span>
                 </p>
                 <textarea name="ghi_chu" id="" cols="30" rows="5" placeholder="Ghi chú"
-                    style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{isset($profile) ?   $profile->ghi_chu : ""}}</textarea>
+                    style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{isset($profile) ?  $profile->ghi_chu: old('ghi_chu') }}</textarea>
                 @error('ghi_chu')
                     <div class="invalid-feedback d-block">
                         {{ $message }}
