@@ -66,7 +66,7 @@
                         </li>
                     </ul>
                 </li>
-              
+
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024">
@@ -116,7 +116,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.form.index') }}">
+                            <a href="{{ route('admin.form_template_vanban.index') }}">
                                 <span data-key="t-chat">From văn bản</span>
                             </a>
                         </li>

@@ -39,7 +39,12 @@
                                     <div class="col-lg-12">
                                         @include('globals.alert')
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
+                                       <div class="row">
+                                            @include('admins/pages/vanban/form-add')
+                                       </div>
+                                    </div>
+                                    {{-- <div class="col-lg-6">
                                         <div>
                                             <div class="row">
                                                 <div class="mb-3">
@@ -96,11 +101,7 @@
                                                         name="ma_phong" id="ma-phong-select">
                                                         <option value="">Chọn mã phông</option>
                                                     </select>
-                                                    {{-- @error('ma_phong')
-                                                        <div class="invalid-feedback d-block">
-                                                            {{ $message }}
-                                                        </div>
-                                                    @enderror --}}
+
                                                 </div>
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="muc-luc-select" class="form-label">Mã mục lục <span
@@ -109,10 +110,7 @@
                                                         class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}"
                                                         name="ma_mucluc" id="muc-luc-select">
                                                         <option value="">Chọn mã mục lục</option>
-                                                        {{-- @foreach ($mamucluc as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->ten_mucluc }}
-                                                            </option>
-                                                        @endforeach --}}
+
                                                     </select>
                                                     @error('ma_mucluc')
                                                         <div class="invalid-feedback d-block">
@@ -128,10 +126,7 @@
                                                     <select name="hop_so" id="hop_so-select"
                                                         class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
                                                         <option value="">Chọn hộp số</option>
-                                                        <!-- Thêm tùy chọn mặc định -->
-                                                        <!-- Thêm các tùy chọn cho hộp số ở đây -->
 
-                                                        <!-- Thêm các tùy chọn khác nếu cần -->
                                                     </select>
                                                     @error('hop_so')
                                                         <div class="invalid-feedback d-block">
@@ -145,10 +140,7 @@
                                                     <select name="ho_so_so" id="ho_so_so-select"
                                                         class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
                                                         <option value="">Chọn hồ sơ số</option>
-                                                        <!-- Thêm tùy chọn mặc định -->
-                                                        <!-- Thêm các tùy chọn cho hồ sơ số ở đây -->
 
-                                                        <!-- Thêm các tùy chọn kshác nếu cần -->
                                                     </select>
                                                     @error('ho_so_so')
                                                         <div class="invalid-feedback d-block">
@@ -239,7 +231,7 @@
                                                     <option value="active">Hoạt động</option>
                                                     <option value="unactive" selected>Không hoạt động</option>
                                                 </select>
-                                                
+
                                             </div>
                                             <div class="col-lg-12 mt-3 "
                                                 style="display: flex !important;flex-direction: column;">
@@ -248,21 +240,17 @@
                                                         class="text text-danger">*</span></label>
                                                 <textarea name="ghi_chu" id="" cols="30" rows="5" placeholder="Ghi chú"
                                                     style="border-radius: 5px;border:1px solid var(--bs-input-border); padding:10px">{{ old('ghi_chu') }}</textarea>
-                                                {{-- @error('ghi_chu')
-                                                    <div class="invalid-feedback d-block">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror --}}
+
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-12 mt-4">
+                                    </div> --}}
+                                    {{-- <div class="col-lg-12 mt-4">
                                         <div>
                                             <button type="submit" class="btn btn-primary w-md">
                                                 Xác nhận
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </form>
                         </div>
