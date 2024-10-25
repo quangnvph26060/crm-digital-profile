@@ -1,21 +1,11 @@
-<div class="mb-3">
-            <label for="example-text-input" class="form-label">Sao chep<span
-                    class="text text-danger">*</span></label>
-            <input value="{{ isset($vanban) ? $vanban->sao_chep: old('sao_chep') }}"
-                class="form-control {{ $errors->has('sao_chep') ? 'is-invalid' : '' }}" name="sao_chep" type="text"
-                id="example-text-input" placeholder="Số và ký hiệu văn bản">
-            @error('sao_chep')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="row">
+<div class="row">
             <div class="col-lg-6 mb-3">
                 <label for="example-text-input" class="form-label">Ngày tháng văn bản <span
                         class="text text-danger">*</span></label>
-                <input value="{{ isset($vanban) ? $vanban->time_vb : old('time_vb') }}"
-                    class="form-control {{ $errors->has('time_vb') ? 'is-invalid' : '' }}" name="time_vb" type="date"
+                <input value="{{ isset($vanban) ? $vanban->ngay_thang_van_ban : old('ngay_thang_van_ban') }}"
+                    class="form-control {{ $errors->has('ngay_thang_van_ban') ? 'is-invalid' : '' }}" name="ngay_thang_van_ban" type="date"
                     id="example-text-input">
-                @error('time_vb')
+                @error('ngay_thang_van_ban')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
@@ -34,19 +24,19 @@
             <div class="mb-3">
                 <label for="example-text-input" class="form-label">Tác giả văn bản <span
                         class="text text-danger">*</span></label>
-                <input value="{{ isset($vanban) ? $vanban->tac_gia : old('tac_gia') }}"
-                    class="form-control {{ $errors->has('tac_gia') ? 'is-invalid' : '' }}" name="tac_gia" type="text"
+                <input value="{{ isset($vanban) ? $vanban->tac_gia_van_ban : old('tac_gia_van_ban') }}"
+                    class="form-control {{ $errors->has('tac_gia_van_ban') ? 'is-invalid' : '' }}" name="tac_gia_van_ban" type="text"
                     id="example-text-input" placeholder="Tác giả văn bản">
-                @error('tac_gia')
+                @error('tac_gia_van_ban')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
         </div>
         <div class="col-lg-12" style="display: flex !important;flex-direction: column;">
             <label for="example-text-input" class="form-label">Nội dung <span class="text text-danger">*</span></label>
-            <textarea name="noi_dung" id="content" cols="30" rows="5" placeholder="Ghi chú"
-                style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ isset($vanban) ? $vanban->noi_dung : old('noi_dung') }}</textarea>
-            @error('noi_dung')
+            <textarea name="trich_yeu_noi_dung_van_ban" id="content" cols="30" rows="5" placeholder="Ghi chú"
+                style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ isset($vanban) ? $vanban->trich_yeu_noi_dung_van_ban : old('trich_yeu_noi_dung_van_ban') }}</textarea>
+            @error('trich_yeu_noi_dung_van_ban')
             <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
         </div>
