@@ -129,6 +129,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::delete('delete/{id}', [InformationVbController::class, 'delete'])->name('delete');
         Route::post('/update-vanban/{id}', [InformationVbController::class, 'update'])->name('update');
         Route::post('/import-vanban', [InformationVbController::class, 'importExcel'])->name('import');
+        Route::get('/export-vanban', [InformationVbController::class, 'exportExcel'])->name('export');
         Route::get('/add-column', [InformationVbController::class, 'addcolumn'])->name('column');
         Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');

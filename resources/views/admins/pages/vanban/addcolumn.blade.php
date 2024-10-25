@@ -33,6 +33,12 @@
                     <div class="card-body p-4">
                         <form action="{{ route('admin.vanban.addcolumn') }}" method="POST" class="container mt-4">
                             @csrf
+
+                            <div class="mb-3">
+                                <label  for="comment" class="form-label">Nội dung cột</label>
+                                <input type="text" class="form-control" name="comment" id="comment">
+                            </div>
+
                             <div class="mb-3">
                                 <label for="column_name" class="form-label">Tên cột:</label>
                                 <input type="text" class="form-control" name="column_name" id="column_name" required>
@@ -48,6 +54,7 @@
                                 </select>
                             </div>
 
+
                             <button type="submit" class="btn btn-primary">Thêm cột</button>
                         </form>
 
@@ -62,8 +69,12 @@
                 @foreach($columnData as $column)
                 <div class="col-md-2 mb-3">
                     <div class="column-box">
-                        <div style="display: flex; justify-content: startss">
-                            <p>{{ $column['name'] }}</p>
+                        <div>
+                            {{ $column['comment'] }} <br>
+                        </div>
+                        <div style="display: flex; justify-content: starts">
+
+                            <p style="margin: 0px">{{ $column['name'] }}</p>
                             <span class="">( {{ $column['type'] }} )</span>
                         </div>
                         <div>
