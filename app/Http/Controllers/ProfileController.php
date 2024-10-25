@@ -14,6 +14,7 @@ use App\Models\Config;
 use App\Models\InformationVb;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Svg\Tag\Rect;
 
 class ProfileController extends Controller
 {
@@ -111,15 +112,15 @@ class ProfileController extends Controller
      */
     public function storeProfile(Request $request)
     {
-      //  dd($request->all());
         DB::beginTransaction();
-
+      
         try {
-           
-            $macoquan = $this->checkExistence(Config::class, $request->ma_coquan, 'Không tìm thấy mã cơ quan.');
+            $data = $request->except('_token');
+           //   dd($data);
+            $macoquan = $this->checkExistence(Config::class, $request->config_id , 'Không tìm thấy mã cơ quan.');
 
             $maphong = Phong::where('id', $request->ma_phong)
-                ->where('coquan_id', $request->ma_coquan)
+                ->where('coquan_id', $request->config_id)
                 ->first();
 
             if (!$maphong) {
@@ -128,7 +129,7 @@ class ProfileController extends Controller
             }
 
             $result_profile = Profile::where('hop_so', $request->hop_so)
-                ->where('config_id', $request->ma_coquan)
+                ->where('config_id', $request->config_id)
                 ->where('ma_phong', $request->ma_phong)
                 ->where('ma_muc_luc', $request->ma_mucluc)
                 ->where('ho_so_so', $request->ho_so_so)
@@ -138,26 +139,20 @@ class ProfileController extends Controller
                 DB::rollback();
                 return back()->with('error', 'Đã có hồ sơ trong hộp này');
             }
-
-            $profile = new Profile();
-            $profile->config_id = $request->ma_coquan;
-            $profile->ma_muc_luc = $request->ma_mucluc;
-            $profile->ma_phong = $request->ma_phong;
-            $profile->hop_so = $request->hop_so;
-            $profile->ho_so_so = $request->ho_so_so;
-            $profile->tieu_de_ho_so = $request->tieu_de_ho_so;
-            $profile->ngay_bat_dau = $request->date_start;
-            $profile->ngay_ket_thuc = $request->date_end;
-            $profile->so_to = $request->so_to;
-            $profile->thbq = $request->thbq;
-            $profile->ghi_chu = $request->ghi_chu;
-            $profile->save();
+            $fillableFields = (new Profile)->getFillable();
+        
+            $data['config_id'] = $request->config_id;
+            Profile::unguard(); // Bỏ qua fillable để tạo bản ghi
+            Profile::create($data);
+            Profile::reguard();
+          
+           
 
             DB::commit();
             return back()->with('success', 'Thêm hồ sơ thành công');
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->with('error', 'Đã xảy ra lỗi khi thêm hồ sơ');
+            return back()->with('error', 'Đã xảy ra lỗi khi thêm hồ sơ: ' . $e->getMessage() . ' (Dòng ' . $e->getLine() . ')');
         }
     }
 
@@ -271,7 +266,7 @@ class ProfileController extends Controller
         $profile = $this->checkExistence(Profile::class, $id, 'Không tìm thấy thông tin hồ sơ.');
 
         $profile->update([
-            'config_id ' => $request->ma_coquan,
+            'config_id ' => $request->config_id,
             'ma_phong' => $request->ma_phong,
             'ma_muc_luc' => $request->ma_mucluc,
             'hop_so'   => $request->hop_so,

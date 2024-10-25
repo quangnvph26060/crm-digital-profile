@@ -129,4 +129,48 @@ class HoSoController extends Controller
         $template->delete();
         return back()->with('success', 'Template form đã được xóa thành công.');
     }
+
+    public function editHoSo($id)
+    {
+        $template = TemplateFormHoSo::find($id);
+        // dd($template);
+        if (!$template) {
+            return redirect()->route('admin.templateform_hoso.index')->with('error', 'Không tìm thấy template form này.');
+        }
+
+        $title = "Sửa template form";
+        return view("admins.pages.templateform_hoso.edit", ["title" => $title, "template" => $template]);
+    }
+
+    public function updateHoSo(Request $request, $id){
+      //  dd($request->all());
+        $templateForm = TemplateFormHoSo::findOrFail($id);
+
+        $existingTemplate = TemplateFormHoSo::where('name', $request->name)
+            ->where('id', '!=', $id)
+            ->first();
+
+        if ($existingTemplate) {
+            return back()->withErrors(['name' => 'Tên template form này đã tồn tại.'])->withInput();
+        }
+
+        $flag = true;
+        if ($request->status == Status::ENABLE) {
+            TemplateFormHoSo::where('status', 'active')->update(['status' => 'unactive']);
+            $bladeFilePath = resource_path('views/admins/pages/profiles/form-add.blade.php');
+            $flag = false;
+            File::put($bladeFilePath, $request->template_form);
+        }
+        if(!$flag){
+            $is_active = 'active';
+        }else{
+            $is_active = 'unactive';
+        }
+        $templateForm->update([
+            'name' => $request->name,
+            'template_form' => $request->template_form,
+            'status' => $is_active,
+        ]);
+        return back()->with('success', 'Template form đã được sửa thành công.');
+    }
 }
