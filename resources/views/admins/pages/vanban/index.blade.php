@@ -1,6 +1,12 @@
 @extends('admins.layouts.index')
 @section('title', $title)
 @section('content')
+<style>
+    .table th, .table td {
+    min-width: 160px; /* Đặt độ rộng tối thiểu cho cột */
+}
+
+</style>
 <div class="page-content">
     <div class="container-fluid">
 
@@ -85,17 +91,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                 <!-- Nút Export -->
+                                <a href="{{ route('admin.vanban.export') }}" class="btn btn-success">Xuất Excel</a>
 
-
-
-                                    <!-- Nút Export -->
-                                    <button type="button" class="btn btn-success">
-                                        Export
-                                    </button>
-                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    {{-- <div class="card-body">
                         @include('globals.alert')
                         <div class="table-rep-plugin">
                             <div class="table-responsive mb-0" data-pattern="priority-columns">
@@ -107,17 +108,13 @@
                                     <thead>
                                         <tr>
                                             <th>STT</th>
-                                            {{-- <th>Mã Cơ quan</th>
-                                            <th>Mã Phông</th>
-                                            <th>Mã mục lục</th>
-                                            <th>Hộp số</th>
-                                            <th>Hồ sơ số</th> --}}
+
                                             <th>Số và ký hiệu văn bản</th>
                                             <th>Ngày tháng văn bản</th>
                                             <th>Tác giả</th>
                                             <th>Nội dung văn bản</th>
                                             <th>Tờ số</th>
-                                            {{-- <th>Đường dẫn</th> --}}
+
                                             <th>Ghi chú</th>
                                             @if (auth('admin')->user()->level === 2)
                                             <th>Hành động</th>
@@ -129,9 +126,9 @@
                                         @if ($currentProfileId != $item->profile_id || $currentPhong != $item->maPhong)
                                         @php
                                             $currentProfileId = $item->profile_id;
-                                            $currentPhong = $item->maPhong;  // Cập nhật mã phòng hiện tại
+                                            $currentPhong = $item->maPhong;
                                         @endphp
-                                        <!-- Hiển thị tiêu đề hồ sơ khi profile_id hoặc maPhong->ten_phong thay đổi -->
+
                                         <tr>
                                             <td colspan="14">
                                                 <strong>Phông: {{ $item->maPhong->ten_phong }}/Mục lục: {{ $item->maMucLuc->ten_mucluc }}/Hộp số: {{ $item->hop_so }}/Hồ sơ số: {{ $item->ho_so_so }}/Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
@@ -140,19 +137,13 @@
                                     @endif
                                         <tr>
                                             <td>{{$loop->index + 1 }}</td>
-                                            {{-- <td>{{ $item->config->agency_code }}</td>
-                                            <td> {{ $item->maPhong->ten_phong ?? ''}} - {{ $item->maPhong->ma_phong ??
-                                                '' }}</td>
-                                            <td>{{ $item->maMucLuc->ten_mucluc }} - {{ $item->maMucLuc->ma_mucluc }}
-                                            </td>
-                                            <td>{{ $item->hop_so }}</td>
-                                            <td>{{ $item->ho_so_so }}</td> --}}
+
                                             <td>{{ $item->so_kh_vb }}</td>
                                             <td>{{ $item->time_vb }}</td>
                                             <td>{{ $item->tac_gia }}</td>
                                             <td>{!! $item->noi_dung !!}</td>
                                             <td>{{ $item->to_so }}</td>
-                                            {{-- <td>{{ $item->duong_dan }}</td> --}}
+
                                             <td>{{ $item->ghi_chu }}</td>
                                             <td class="d-flex gap-1">
                                                 @if (auth('admin')->user()->level === 2)
@@ -185,7 +176,66 @@
                             {{ $vanban->links() }}
                         </div>
 
+                    </div> --}}
+
+                    <div class="card-body" style="overflow-x: auto; max-width: 100%;">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
+                                    @foreach($vanban->first()->getAttributes() as $column => $value)
+
+                                        @if (!in_array($column, ['config_id', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']))
+                                            <th>{{ $columnComments[$column] ?? $column }}</th>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $currentProfileId = null;
+                                    $currentPhong = null;
+                                @endphp
+                                @forelse ($vanban as $index => $item)
+                                    @if ($currentProfileId != $item->profile_id || $currentPhong != $item->maPhong)
+                                        @php
+                                            $currentProfileId = $item->profile_id;
+                                            $currentPhong = $item->maPhong;
+                                        @endphp
+
+                                        <tr>
+                                            <td colspan="{{ count($item->getAttributes()) - count(['config_id', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']) }}">
+                                                <strong>Phông: {{ $item->maPhong->ten_phong }}/Mục lục: {{ $item->maMucLuc->ten_mucluc }}/Hộp số: {{ $item->hop_so }}/Hồ sơ số: {{ $item->ho_so_so }}/Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
+                                            </td>
+                                        </tr>
+                                    @endif
+
+                                    <tr>
+                                        @foreach($item->getAttributes() as $column => $value)
+                                        {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
+                                        @if (!in_array($column, ['config_id', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']))
+                                            <td>
+                                                @if ($column === 'status') {{-- Kiểm tra cột status --}}
+                                                    {!! $value === 'active' ? 'Công khai' : 'Không công khai' !!}
+                                                @else
+                                                    {!! $value !!}
+                                                @endif
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="{{ count($item->getAttributes()) - count(['config_id', 'ma_mucluc', 'hop_so_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at']) }}">Không có dữ liệu</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
+
+                   <div class="mt-4" style="margin: 0px auto">
+                    {{ $vanban->links() }}
+                   </div>
                 </div>
                 <!-- end card -->
             </div> <!-- end col -->

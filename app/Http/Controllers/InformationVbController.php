@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VanBanExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileRequest;
 use App\Http\Requests\InformationRequest;
@@ -21,47 +22,99 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class InformationVbController extends Controller
 {
-    //
+
+    // public function index(Request $request)
+    // {
+    //     $inputs = $request->all();
+
+    //     $vanban = InformationVb::query();
+    //     $title = "Danh sách văn bản";
+
+    //     // Áp dụng các bộ lọc
+    //     if (isset($request->name) && $request->name != '') {
+    //         $vanban->where('so_va_ki_hieu_van_ban', 'like', '%' . $request->name . '%');
+    //     }
+    //     if (isset($request->phong) && $request->phong != '') {
+    //         $vanban->where('config_id', 'like', '%' . $request->config_id . '%');
+    //     }
+    //     if (isset($request->phong) && $request->phong != '') {
+    //         $vanban->where('ma_phong', 'like', '%' . $request->phong . '%');
+    //     }
+    //     if (isset($request->muc_luc) && $request->muc_luc != '') {
+    //         $vanban->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
+    //     }
+
+    //     // Thêm phân trang ở đây
+    //     $perPage = 10; // Số lượng bản ghi trên mỗi trang
+    //     $vanban = $vanban->orderBy('profile_id', 'asc')->paginate($perPage);
+
+    //     // Lấy ghi chú cho các cột
+    //     $columnComments = $this->getColumnComments('information_vb');
+
+    //     return view("admins.pages.vanban.index", [
+    //         "vanban" => $vanban,
+    //         "title"  => $title,
+    //         "inputs" => $inputs,
+    //         "columnComments" => $columnComments, // Chuyển ghi chú đến view
+    //     ]);
+    // }
+
+    // Thêm phương thức để lấy ghi chú cột
+
     public function index(Request $request)
     {
-        // dd(InformationVb::get());
         $inputs = $request->all();
 
         $vanban = InformationVb::query();
-
         $title = "Danh sách văn bản";
+
+        // Áp dụng các bộ lọc
         if (isset($request->name) && $request->name != '') {
-            $vanban->where(function ($query) use ($request) {
-                $query->where('so_kh_vb', 'like', '%' . $request->name . '%');
-            });
-        }
-        if (isset($request->phong) && $request->phong != '') {
-            $vanban->where(function ($query) use ($request) {
-                $query->where('config_id', 'like', '%' . $request->config_id . '%');
-            });
-        }
-        if (isset($request->phong) && $request->phong != '') {
-            $vanban->where(function ($query) use ($request) {
-                $query->where('ma_phong', 'like', '%' . $request->phong . '%');
-            });
-        }
-        if (isset($request->muc_luc) && $request->muc_luc != '') {
-            $vanban->where(function ($query) use ($request) {
-                $query->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
-            });
+            $vanban->where('so_va_ki_hieu_van_ban', 'like', '%' . $request->name . '%');
         }
 
+        // Sửa biến $request->config_id thành $request->phong
+        if (isset($request->phong) && $request->phong != '') {
+            $vanban->where('config_id', 'like', '%' . $request->phong . '%');
+        }
+
+        // Tìm kiếm theo mã phòng
+        if (isset($request->ma_phong) && $request->ma_phong != '') {
+            $vanban->where('ma_phong', 'like', '%' . $request->ma_phong . '%');
+        }
+
+        // Tìm kiếm theo mục lục
+        if (isset($request->muc_luc) && $request->muc_luc != '') {
+            $vanban->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
+        }
+
+          $vanban = $vanban->orderBy('created_at', 'desc');
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $vanban = $vanban->orderBy('profile_id', 'asc')->paginate($perPage);
 
+        // Lấy ghi chú cho các cột
+        $columnComments = $this->getColumnComments('information_vb');
 
         return view("admins.pages.vanban.index", [
             "vanban" => $vanban,
             "title"  => $title,
             "inputs" => $inputs,
+            "columnComments" => $columnComments, // Chuyển ghi chú đến view
         ]);
     }
+    private function getColumnComments($tableName)
+    {
+        $columns = Schema::getColumnListing($tableName);
+        $comments = [];
+
+        foreach ($columns as $column) {
+            $comments[$column] = DB::select("SHOW FULL COLUMNS FROM `$tableName` WHERE Field = ?", [$column])[0]->Comment ?? '';
+        }
+
+        return $comments;
+    }
+
 
     public function add()
     {
@@ -81,7 +134,7 @@ class InformationVbController extends Controller
     //     $vanban = InformationVb::where('ma_phong', $request->ma_phong)
     //         ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
     //         ->where('ho_so_so', $request->ho_so_so)
-    //         ->where('so_kh_vb', $request->so_kh_vb)->first();
+    //         ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
 
     //     if ($vanban) {
     //         return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
@@ -101,7 +154,7 @@ class InformationVbController extends Controller
     //     $vanbannew->ma_mucluc = $request->ma_mucluc;
     //     $vanbannew->hop_so = $request->hop_so;
     //     $vanbannew->ho_so_so = $request->ho_so_so;
-    //     $vanbannew->so_kh_vb = $request->so_kh_vb;
+    //     $vanbannew->so_va_ki_hieu_van_ban = $request->so_va_ki_hieu_van_ban;
     //     $vanbannew->time_vb = $request->time_vb;
     //     $vanbannew->to_so = $request->to_so;
     //     $vanbannew->tac_gia = $request->tac_gia;
@@ -132,7 +185,7 @@ class InformationVbController extends Controller
         $vanban = InformationVb::where('ma_phong', $request->ma_phong)
             ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
             ->where('ho_so_so', $request->ho_so_so)
-            ->where('so_kh_vb', $request->so_kh_vb)->first();
+            ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
 
         if ($vanban) {
             return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
@@ -190,7 +243,7 @@ class InformationVbController extends Controller
         $vanban = InformationVb::where('id','!=', $id)->where('ma_phong', $request->ma_phong)
             ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
             ->where('ho_so_so', $request->ho_so_so)
-            ->where('so_kh_vb', $request->so_kh_vb)->first();
+            ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
 
         if ($vanban) {
             return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
@@ -231,7 +284,7 @@ class InformationVbController extends Controller
     //     $vanban = InformationVb::where('id', '!=', $id)->where('ma_phong', $request->ma_phong)
     //         ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
     //         ->where('ho_so_so', $request->ho_so_so)
-    //         ->where('so_kh_vb', $request->so_kh_vb)->first();
+    //         ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
     //     if ($vanban) {
     //         return back()->with('error', 'Văn bản này đã tồn tại .');
     //     }
@@ -248,7 +301,7 @@ class InformationVbController extends Controller
     //     $vanbannew->ma_mucluc = $request->ma_mucluc;
     //     $vanbannew->hop_so = $request->hop_so;
     //     $vanbannew->ho_so_so = $request->ho_so_so;
-    //     $vanbannew->so_kh_vb = $request->so_kh_vb;
+    //     $vanbannew->so_va_ki_hieu_van_ban = $request->so_va_ki_hieu_van_ban;
     //     $vanbannew->time_vb = $request->time_vb;
     //     $vanbannew->to_so = $request->to_so;
     //     $vanbannew->tac_gia = $request->tac_gia;
@@ -290,10 +343,14 @@ class InformationVbController extends Controller
             Excel::import(new InformationVbImport, $request->file('importexcel'));
         } catch (\Exception $e) {
             Log::info($e->getMessage());
-            return response()->json(['error' => 'Đã xảy ra lỗi khi nhập dữ liệu từ file Excel'], 500);
-        }
 
-        return response()->json(['success' => 'Dữ liệu đã được nhập thành công'], 200);
+            return back()->with('error', 'Đã xảy ra lỗi khi nhập dữ liệu từ file Excel');
+        }
+        return back()->with('success', 'Dữ liệu đã được nhập thành công');
+    }
+
+    public function exportExcel(){
+        return Excel::download(new VanBanExport, 'vanban.xlsx');
     }
 
     public function PhongByConfigID(Request $request)
@@ -332,9 +389,17 @@ class InformationVbController extends Controller
             // Lấy kiểu dữ liệu của cột
             $columnType = Schema::getColumnType('information_vb', $column);
 
+            // Lấy ghi chú cho cột từ thông tin schema
+            $comment = DB::table('information_schema.columns')
+                ->where('table_schema', env('DB_DATABASE')) // Lấy database từ file .env
+                ->where('table_name', 'information_vb')
+                ->where('column_name', $column)
+                ->value('column_comment');
+
             $columnData[] = [
                 'name' => $column,
                 'type' => $columnType,
+                'comment' => $comment, // Thêm ghi chú
             ];
         }
 
@@ -342,11 +407,13 @@ class InformationVbController extends Controller
     }
 
 
+
     public function storecolumn(Request $request)
     {
         $request->validate([
             'column_name' => 'required|string|max:255',
             'data_type' => 'required|in:varchar,int,text',
+            'comment' => 'nullable|string|max:255',
         ]);
 
         $tableName = 'information_vb';
@@ -366,11 +433,16 @@ class InformationVbController extends Controller
         }
 
         $columnName = $request->column_name;
+        $comment = $request->comment;
+
 
         try {
             DB::statement("ALTER TABLE `$tableName` ADD `$columnName` $columnType NULL");
 
-            // Cập nhật model
+            if (!empty($comment)) {
+                DB::statement("ALTER TABLE `$tableName` MODIFY `$columnName` $columnType NULL COMMENT '$comment'");
+            }
+
             $this->updateArrayVanBan($columnName);
 
             return back()->with('success', 'Cột đã được thêm thành công!');
@@ -378,6 +450,7 @@ class InformationVbController extends Controller
             return back()->withErrors(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()]);
         }
     }
+
 
     // Hàm để cập nhật $fillable trong model
     private function updateArrayVanBan($columnName)
