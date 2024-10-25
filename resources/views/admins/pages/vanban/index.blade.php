@@ -182,13 +182,18 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
-                                    @foreach($vanban->first()->getAttributes() as $column => $value)
 
-                                        @if (!in_array($column, ['config_id', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']))
+                                    {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
+                                    @if(empty($vanban))
+                                        @foreach($vanban->first()->getAttributes() as $column => $value)
+
+                                        @if (!in_array($column, ['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']))
                                             <th>{{ $columnComments[$column] ?? $column }}</th>
                                         @endif
-                                    @endforeach
+                                        @endforeach
+                                    @endif
+
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -204,7 +209,7 @@
                                         @endphp
 
                                         <tr>
-                                            <td colspan="{{ count($item->getAttributes()) - count(['config_id', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']) }}">
+                                            <td colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']) }}">
                                                 <strong>Phông: {{ $item->maPhong->ten_phong }}/Mục lục: {{ $item->maMucLuc->ten_mucluc }}/Hộp số: {{ $item->hop_so }}/Hồ sơ số: {{ $item->ho_so_so }}/Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
                                             </td>
                                         </tr>
@@ -213,20 +218,21 @@
                                     <tr>
                                         @foreach($item->getAttributes() as $column => $value)
                                         {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
-                                        @if (!in_array($column, ['config_id', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']))
-                                            <td>
-                                                @if ($column === 'status') {{-- Kiểm tra cột status --}}
-                                                    {!! $value === 'active' ? 'Công khai' : 'Không công khai' !!}
-                                                @else
-                                                    {!! $value !!}
-                                                @endif
-                                            </td>
-                                        @endif
-                                    @endforeach
+                                            @if (!in_array($column, ['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id']))
+                                                <td>
+                                                    @if ($column === 'status') {{-- Kiểm tra cột status --}}
+                                                        {!! $value === 'active' ? 'Công khai' : 'Không công khai' !!}
+                                                    @else
+                                                        {!! $value !!}
+                                                    @endif
+                                                </td>
+                                            @endif
+                                        @endforeach
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="{{ count($item->getAttributes()) - count(['config_id', 'ma_mucluc', 'hop_so_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at']) }}">Không có dữ liệu</td>
+                                      <p>  Chưa có dữ liệu</p>
+                                        {{-- <td colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at']) }}">Không có dữ liệu</td> --}}
                                     </tr>
                                 @endforelse
                             </tbody>
