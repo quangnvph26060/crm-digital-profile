@@ -110,6 +110,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/export', [ProfileController::class, 'export'])->name('export');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
 
+        Route::post('/update-form-hoso/{id}', [HoSoController::class, 'updateHoSo'])->name('updateHoSo');
+        Route::get('/edit-form-hoso/{id}', [HoSoController::class, 'editHoSo'])->name('editHoSo');
         Route::get('/form-hoso', [HoSoController::class, 'showTemplate'])->name('showTemplate');
         Route::get('/add-form-hoso', [HoSoController::class, 'showAddFormHoSo'])->name('showAddFormHoSo');
         Route::get('/template-hoso', [HoSoController::class, 'indexTemplate'])->name('indexTemplate');

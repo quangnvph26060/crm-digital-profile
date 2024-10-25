@@ -24,7 +24,7 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'ma_coquan' => 'required',
+            'config_id' => 'required',
             'ma_mucluc' => 'required',
             'ma_phong' => 'required',
             'hop_so' => 'required',
@@ -44,7 +44,7 @@ class ProfileRequest extends FormRequest
     public function attributes()
     {
         return [
-            'ma_coquan' => 'Mã cơ quan',
+            'config_id' => 'Mã cơ quan',
             'ma_phong' => 'Mã phông',
             'ma_mucluc' => 'Mã mục lục',
             'hop_so' => 'Hộp số',
