@@ -10,32 +10,48 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ProfileExport implements FromCollection, WithHeadings, WithMapping
+class ProfileExport implements FromCollection, WithHeadings
 {
     use Exportable;
 
-   public function map($row): array
-{ 
-    $sortedData = [];
-    
-    $tableColumns = collect($row)->keys()->all();
-
-    foreach ($tableColumns as $column) {
-        $sortedData[] = $row->$column;
-    }
-
-    return $sortedData;
-}
-
-public function headings(): array
-{
-    $tableColumns = DB::getSchemaBuilder()->getColumnListing('profiles'); 
-
-    return $tableColumns;
-}
-
     public function collection()
     {
-        return  Profile::select('*')->selectRaw('null as updated_at, null as created_at')->get();
+        $profiles = Profile::with('config')->get();
+
+        $profiles->transform(function ($profile) {
+            $profile->config_id = $profile->config->agency_code;
+            $profile->ngay_bat_dau = date('d/m/Y', strtotime($profile->ngay_bat_dau)) . ' - ' . date('d/m/Y', strtotime($profile->ngay_ket_thuc));
+            unset($profile->ngay_ket_thuc); 
+            return $profile;
+        });
+
+        return $profiles->makeHidden(['id', 'created_at', 'updated_at']);
+    }
+
+    public function headings(): array
+    {
+        // Lấy thông tin các cột trong bảng
+        $columns = DB::select("SHOW FULL COLUMNS FROM profiles");
+    
+        // Các cột cần bỏ qua
+        $excludedColumns = ['id', 'created_at', 'updated_at'];
+    
+        $headings = [];
+        $seenHeadings = []; // Mảng để lưu trữ các tiêu đề đã xuất hiện
+    
+        foreach ($columns as $column) {
+            // Bỏ qua các cột không cần thiết
+            if (!in_array($column->Field, $excludedColumns)) {
+                $heading = $column->Comment ?: $column->Field;
+                
+                // Kiểm tra xem tiêu đề đã xuất hiện chưa
+                if (!in_array($heading, $seenHeadings)) {
+                    $headings[] = $heading;
+                    $seenHeadings[] = $heading; // Đánh dấu tiêu đề đã xuất hiện
+                }
+            }
+        }
+    
+        return $headings;
     }
 }
