@@ -11,7 +11,6 @@ return array (
   8 => 'ngay_ket_thuc',
   9 => 'so_to',
   10 => 'thbq',
-  11 => 'mo_ta',
-  12 => 'ghi_chu',
-  13 => 'demo_quang',
+  11 => 'ghi_chu',
+  12 => 'demo_quang',
 );

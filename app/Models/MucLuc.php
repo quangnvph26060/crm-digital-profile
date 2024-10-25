@@ -9,6 +9,7 @@ class MucLuc extends Model
 {
     use HasFactory;
     protected $table = "mucluc";
+    protected $hidden = ['created_at', 'updated_at'];
     protected $fillable = [
         
         'ten_mucluc',

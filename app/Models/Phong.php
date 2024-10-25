@@ -10,6 +10,7 @@ class Phong extends Model
 {
     use HasFactory;  
     protected $table = "phong";
+    protected $hidden = ['created_at', 'updated_at'];
     protected $fillable = [
         'ten_phong',
         'ma_phong',

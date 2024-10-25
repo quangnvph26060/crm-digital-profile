@@ -3,30 +3,39 @@
 namespace App\Exports;
 
 use App\Models\Profile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ProfileExport implements FromCollection
+class ProfileExport implements FromCollection, WithHeadings, WithMapping
 {
+    use Exportable;
 
-    public function map($row): array
-    {
-        return [
-            'Mã cơ quan' => $row->config_id,
-            'Mã mục lục' => $row->ma_muc_luc,
-            'Hộp số' => $row->hop_so,
-        ];
+   public function map($row): array
+{ 
+    $sortedData = [];
+    
+    $tableColumns = collect($row)->keys()->all();
+
+    foreach ($tableColumns as $column) {
+        $sortedData[] = $row->$column;
     }
-    public function headings(): array
-    {
-        return [
-            'Mã cơ quan 1',
-            'Mã mục lục 1',
-            'Hộp số 1',
-         
-        ];
-    }
+
+    return $sortedData;
+}
+
+public function headings(): array
+{
+    $tableColumns = DB::getSchemaBuilder()->getColumnListing('profiles'); 
+
+    return $tableColumns;
+}
+
     public function collection()
     {
-        return Profile::all();
+        return  Profile::select('*')->selectRaw('null as updated_at, null as created_at')->get();
     }
 }

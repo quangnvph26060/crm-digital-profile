@@ -73,6 +73,7 @@ class ProfileController extends Controller
             "configdata" => $configdata,
         ]);
     }
+
     public function add()
     {
         $title   = "Thêm mới hồ sơ";
@@ -131,7 +132,7 @@ class ProfileController extends Controller
             $result_profile = Profile::where('hop_so', $request->hop_so)
                 ->where('config_id', $request->config_id)
                 ->where('ma_phong', $request->ma_phong)
-                ->where('ma_muc_luc', $request->ma_mucluc)
+                ->where('ma_muc_luc', $request->ma_muc_luc)
                 ->where('ho_so_so', $request->ho_so_so)
                 ->first();
 
@@ -179,6 +180,7 @@ class ProfileController extends Controller
 
     public function edit($id)
     {
+       
         $profiles = Profile::query();
         if (isset($request->name) && $request->name != '') {
             $profiles->where(function ($query) use ($request) {
@@ -190,9 +192,9 @@ class ProfileController extends Controller
                 $query->where('ma_phong', 'like', '%' . $request->phong . '%');
             });
         }
-        if (isset($request->muc_luc) && $request->muc_luc != '') {
+        if (isset($request->ma_muc_luc) && $request->ma_muc_luc != '') {
             $profiles->where(function ($query) use ($request) {
-                $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
+                $query->where('ma_muc_luc', 'like', '%' . $request->ma_muc_luc . '%');
             });
         }
         // Thêm phân trang ở đây
@@ -264,20 +266,13 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $profile = $this->checkExistence(Profile::class, $id, 'Không tìm thấy thông tin hồ sơ.');
-
-        $profile->update([
-            'config_id ' => $request->config_id,
-            'ma_phong' => $request->ma_phong,
-            'ma_muc_luc' => $request->ma_mucluc,
-            'hop_so'   => $request->hop_so,
-            'so_to' => $request->so_to,
-            'ho_so_so' => $request->ho_so_so,
-            'thbq' => $request->thbq,
-            'tieu_de_ho_so' => $request->tieu_de_ho_so,
-            'ghi_chu' => $request->ghi_chu,
-            'ngay_bat_dau' => $request->date_start,
-            'ngay_ket_thuc' => $request->date_end,
-        ]);
+        $data = $request->except('_token');
+        $fillableFields = (new Profile)->getFillable();
+        
+        $data['config_id'] = $request->config_id;
+      
+        $profile->update($data);
+       
         return back()->with('success', 'Chỉnh sửa thành công');
     }
 
