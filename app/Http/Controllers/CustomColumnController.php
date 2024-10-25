@@ -41,30 +41,30 @@ class CustomColumnController extends Controller
     }
     public function addColumnAndUpdateFillable($columnName, $columnType)
     {
-       // Chuyển đổi tên cột sang dạng slug không dấu với dấu gạch dưới
-    $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName)));
+        // Chuyển đổi tên cột sang dạng slug không dấu với dấu gạch dưới
+        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName)));
 
-    if (!Schema::hasColumn('profiles', $cleanColumnName)) {
-        Schema::table('profiles', function (Blueprint $table) use ($cleanColumnName, $columnType) {
-            $table->$columnType($cleanColumnName)->nullable();
-        });
+        if (!Schema::hasColumn('profiles', $cleanColumnName)) {
+            Schema::table('profiles', function (Blueprint $table) use ($cleanColumnName, $columnType, $columnName) {
+                $table->$columnType($cleanColumnName)->nullable()->comment($columnName);
+            });
 
-        // Cập nhật thuộc tính fillable của model Profile
-        $profile = new Profile();
-        $fillable = $profile->getFillable();
-        $fillable[] = $cleanColumnName;
-        $profile->fillable($fillable);
+            // Cập nhật thuộc tính fillable của model Profile
+            $profile = new Profile();
+            $fillable = $profile->getFillable();
+            $fillable[] = $cleanColumnName;
+            $profile->fillable($fillable);
 
-        // Đọc và cập nhật mảng fillable_fields_profile.php
-        $fillableFields = include app_path('Models/fillable_fields_profile.php');
-        $fillableFields = array_values(array_unique($fillableFields)); // Loại bỏ các key và giữ các giá trị duy nhất
-        $fillableFields[] = $cleanColumnName;
-        File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
+            // Đọc và cập nhật mảng fillable_fields_profile.php
+            $fillableFields = include app_path('Models/fillable_fields_profile.php');
+            $fillableFields = array_values(array_unique($fillableFields)); // Loại bỏ các key và giữ các giá trị duy nhất
+            $fillableFields[] = $cleanColumnName;
+            File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
 
-        return back()->with('success', 'Cột đã được thêm thành công!');
-    } else {
-        return "Cột $columnName đã tồn tại.";
-    }
+            return back()->with('success', 'Cột đã được thêm thành công!');
+        } else {
+            return back()->with('success', 'Cột đã tồn tại!');
+        }
     }
 
     // Hàm để cập nhật mảng fillable từ file new_columns.php
@@ -81,24 +81,24 @@ class CustomColumnController extends Controller
 
     public function deleteColumn($column)
     {
-      
+
         Schema::table('profiles', function ($table) use ($column) {
             $table->dropColumn($column);
         });
-    
+
         // Đọc mảng fillable từ file fillable_fields_profile.php
         $fillableFields = include app_path('Models/fillable_fields_profile.php');
-    
+
         // Xóa cột đã bị xóa khỏi mảng fillable
         $key = array_search($column, $fillableFields);
         if ($key !== false) {
             unset($fillableFields[$key]);
         }
-    
+
         // Ghi lại mảng fillable mới vào file fillable_fields_profile.php
         $fillableFields = array_values($fillableFields); // Đảm bảo mảng không có key
         File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
-    
+
         return redirect()->back()->with('success', 'Cột đã được xóa thành công.');
     }
 }

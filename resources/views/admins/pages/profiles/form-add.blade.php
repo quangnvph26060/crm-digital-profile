@@ -152,19 +152,7 @@
                         </div>
                     @enderror
                 </div>
-                <div class="col-lg-3">
-                    <label for="example-text-input" class="form-label"> demo quang<span
-                            class="text text-danger">*</span></label>
-                    <input value="{{ isset($profile) ?  $profile->demo_quang : old('demo_quang')   }}"
-                        class="form-control {{ $errors->has('thbq') ? 'is-invalid' : '' }}"
-                        name="demo_quang" type="text" id="example-text-input"
-                        placeholder="THBQ">
-                    @error('thbq')
-                        <div class="invalid-feedback d-block">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
+            
             </div>
             <div class="col-lg-12 "
                 style="display: flex !important;flex-direction: column;">
