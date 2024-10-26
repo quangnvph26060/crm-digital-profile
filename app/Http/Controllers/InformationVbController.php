@@ -180,6 +180,7 @@ class InformationVbController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
+        // dd($data);
         $vanbannew = new InformationVb();
 
         $vanban = InformationVb::where('ma_phong', $request->ma_phong)
@@ -204,7 +205,7 @@ class InformationVbController extends Controller
             $vanbannew->$key  = $value;
             if (isset($request->duong_dan)) {
                 if ($key === "duong_dan") {
-                    $coquan = Config::find($request->config_id);
+                    $coquan = Config::find($request->ma_co_quan);
                     $phong = Phong::find($request->ma_phong);
                     $mucluc = MucLuc::find($request->ma_mucluc);
                     $hoso = Profile::find($profile->id);

@@ -48,11 +48,10 @@
                                                             class="text text-danger">*</span></label>
                                                     <select
                                                         class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }}"
-                                                        name="config_id" id="agency_code-select">
+                                                        name="ma_co_quan" id="agency_code-select">
                                                         <option value="">Chọn mã cơ quan</option>
                                                         @foreach ($macoquan as $item)
-                                                        <option value="{{ $item->id }}" {{ (isset($vanban) && $vanban->
-                                                            config_id == $item->id) ? 'selected'
+                                                        <option value="{{ $item->id }}" {{ (isset($vanban) && $vanban->ma_co_quan == $item->id) ? 'selected'
                                                             : '' }}>
                                                             {{ $item->agency_name }} - {{ $item->agency_code }}
                                                         </option>
@@ -111,6 +110,18 @@
                                                         {{-- Thêm các tùy chọn cho hồ sơ số nếu có --}}
                                                     </select>
                                                     @error('ho_so_so')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="mb-3">
+                                                    <label for="example-text-input" class="form-label">Số và ký hiệu văn bản<span
+                                                            class="text text-danger">*</span></label>
+                                                    <input value="{{ isset($vanban) ? $vanban->so_va_ki_hieu_van_ban : old('so_va_ki_hieu_van_ban') }}"
+                                                        class="form-control {{ $errors->has('so_va_ki_hieu_van_ban') ? 'is-invalid' : '' }}" name="so_va_ki_hieu_van_ban" type="text"
+                                                        id="example-text-input" placeholder="Số và ký hiệu văn bản">
+                                                    @error('so_va_ki_hieu_van_ban')
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
