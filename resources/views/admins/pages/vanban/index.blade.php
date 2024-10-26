@@ -177,8 +177,11 @@
                         </div>
 
                     </div> --}}
-
+                   <div class="mt-4">
+                    @include('globals.alert')
+                   </div>
                     <div class="card-body" style="overflow-x: auto; max-width: 100%;">
+
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
