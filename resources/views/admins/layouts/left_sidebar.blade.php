@@ -65,7 +65,7 @@
                         <ul class="sub-menu" aria-expanded="false">
 
                         <li>
-                            <a href="{{ route('admin.vanban.index') }}">
+                            <a href="{{ route('admin.admin.list') }}">
                                 <span data-key="t-chat">Danh sách</span>
                             </a>
                         </li>
