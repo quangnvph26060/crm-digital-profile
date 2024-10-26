@@ -343,16 +343,22 @@ class InformationVbController extends Controller
         try {
 
             Excel::import(new InformationVbImport, $request->file('importexcel'));
+            return back()->with('success', 'Dữ liệu đã được nhập thành công');
         } catch (\Exception $e) {
             Log::info($e->getMessage());
 
             return back()->with('error', 'Đã xảy ra lỗi khi nhập dữ liệu từ file Excel');
         }
-        return back()->with('success', 'Dữ liệu đã được nhập thành công');
+
     }
 
     public function exportExcel(){
-        return Excel::download(new VanBanExport, 'vanban.xlsx');
+        $fileDownload = Excel::download(new VanBanExport, 'vanban.xlsx');
+
+        session()->flash('success', 'Dữ liệu đã được nhập thành công');
+
+        return $fileDownload;
+
     }
 
     public function PhongByConfigID(Request $request)

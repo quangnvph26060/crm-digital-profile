@@ -23,13 +23,14 @@ class InformationVbImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        // dd($row);
+        //  dd($row);
 
         try {
             $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
             if ($coquan) {
                 $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
                 $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
+                // dd($phong);
                 if ($phong && $mucluc) {
                     $profile = Profile::where('config_id', $coquan->id)->where('ma_muc_luc', $mucluc->id)
                         ->where('hop_so', $row['hop_so'])->where('ho_so_so', $row['ho_so_so'])->first();
@@ -37,6 +38,7 @@ class InformationVbImport implements ToModel, WithHeadingRow
                         $vanban = InformationVb::where('so_va_ki_hieu_van_ban', $row['so_va_ki_hieu_van_ban'])->where('ma_phong', $phong->id)->where('profile_id', $profile->id)->first();
                         // dd($vanban);
                         if (!$vanban) {
+
                             $vanbannew = new InformationVb();
                             $vanbannew->ma_co_quan = $coquan->id;
                             $vanbannew->ma_phong = $phong->id;
@@ -46,27 +48,28 @@ class InformationVbImport implements ToModel, WithHeadingRow
                             $vanbannew->so_va_ki_hieu_van_ban = $row['so_va_ki_hieu_van_ban'];
                             $vanbannew->profile_id = $profile->id;
                             foreach ($row as $key => $value) {
+
                                 if (!Schema::hasColumn('information_vb', $key) || $key == 'ma_co_quan' || $key == 'ma_phong'||$key == 'ma_mucluc'||$key == 'hop_so'||$key == 'ho_so_so'||$key == 'so_va_ki_hieu_van_ban' ) {
                                     continue;
                                 }
                                 $vanbannew->$key = $value;
-
+                                // Log::info($key);
                                 if (isset($vanbannew->ngay_thang_van_ban) && $row['ngay_thang_van_ban']) {
                                     $vanbannew->ngay_thang_van_ban = \Carbon\Carbon::createFromFormat('d/m/Y', $row['ngay_thang_van_ban'])->format('Y-m-d');
                                 }
-                                // $localPath = $row['duong_dan'];
-                                // if (file_exists($localPath)) {
-                                //     // Tạo tên file duy nhất
-                                //     $fileName = time() . '/' . $row['ma_co_quan'] . '/' . $row['ma_phong'] . '/' . $row['ma_muc_luc'] . '/' . $row['hop_so'] . '/' . $row['ho_so_so'] . '-' . basename($localPath);
+                                $localPath = $row['duong_dan'];
+                                if (file_exists($localPath)) {
+                                    // Tạo tên file duy nhất
+                                    $fileName = time() . '/' . $row['ma_co_quan'] . '/' . $row['ma_phong'] . '/' . $row['ma_muc_luc'] . '/' . $row['hop_so'] . '/' . $row['ho_so_so'] . '-' . basename($localPath);
 
-                                //     // Lưu file vào storage
-                                //     $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($localPath), $fileName);
+                                    // Lưu file vào storage
+                                    $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($localPath), $fileName);
 
-                                //     // Lưu đường dẫn vào cơ sở dữ liệu
+                                    // Lưu đường dẫn vào cơ sở dữ liệu
 
-                                //     $vanbannew->duong_dan =  $filePath; // Lưu đường dẫn file
+                                    $vanbannew->duong_dan =  $filePath; // Lưu đường dẫn file
 
-                                // }
+                                }
                             }
                             $vanbannew->save();
                         } else {
