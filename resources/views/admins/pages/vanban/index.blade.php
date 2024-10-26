@@ -182,9 +182,9 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-
+                                    {{-- @dd($vanban); --}}
                                     {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
-                                    @if(isset($vanban) && empty($vanban))
+                                    @if($vanban && $vanban->first() )
                                         @foreach($vanban->first()->getAttributes() as $column => $value)
 
                                         @if (!in_array($column, ['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan']))
