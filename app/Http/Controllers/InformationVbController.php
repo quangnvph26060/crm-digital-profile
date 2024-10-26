@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
@@ -414,7 +415,6 @@ class InformationVbController extends Controller
         $request->validate([
             'column_name' => 'required|string|max:255',
             'data_type' => 'required|in:varchar,int,text',
-            'comment' => 'nullable|string|max:255',
         ]);
 
         $tableName = 'information_vb';
@@ -433,8 +433,9 @@ class InformationVbController extends Controller
                 return back()->withErrors(['data_type' => 'Kiểu dữ liệu không hợp lệ.']);
         }
 
-        $columnName = $request->column_name;
-        $comment = $request->comment;
+        // $columnName = $request->column_name;
+        $comment = $request->column_name;
+        $columnName = str_replace('-', '_', Str::slug($comment));
 
 
         try {
