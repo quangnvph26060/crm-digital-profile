@@ -355,7 +355,7 @@ class InformationVbController extends Controller
     public function exportExcel(){
         $fileDownload = Excel::download(new VanBanExport, 'vanban.xlsx');
 
-        session()->flash('success', 'Dữ liệu đã được nhập thành công');
+        session()->flash('success', 'Dữ liệu đã xuất thành công');
 
         return $fileDownload;
 
