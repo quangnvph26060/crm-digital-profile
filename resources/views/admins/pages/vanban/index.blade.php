@@ -184,7 +184,7 @@
                                 <tr>
 
                                     {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
-                                    @if(!empty($vanban))
+                                    @if(isset($vanban) && empty($vanban))
                                         @foreach($vanban->first()->getAttributes() as $column => $value)
 
                                         @if (!in_array($column, ['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan']))
