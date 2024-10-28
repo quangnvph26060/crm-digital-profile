@@ -236,15 +236,16 @@
                                                         <td>{{ $item->maMucLuc->ten_mucluc }} - {{ $item->maMucLuc->ma_mucluc }}</td> --}}
                                                             {{-- <td>{{ $item->hop_so }}</td>
                                                             <td>{{ $item->ho_so_so }}</td> --}}
-                                                        <td>{{ $item->so_kh_vb }}</td>
-                                                        <td>{{ $item->time_vb	 }}</td>
-                                                        <td>{{ $item->tac_gia }}</td>
-                                                        <td>{!! $item->noi_dung !!}</td>
+                                                        <td>{{ $item->so_va_ki_hieu_van_ban }}</td>
+                                                        <td>{{ $item->ngay_thang_van_ban	 }}</td>
+                                                        <td>{{ $item->tac_gia_van_ban }}</td>
+                                                        <td>{!! $item->trich_yeu_noi_dung_van_ban !!}</td>
                                                         <td>{{ $item->to_so }}</td>
                                                         {{-- <td>{{ $item->duong_dan }}</td> --}}
                                                         <td>{{ $item->ghi_chu }}</td>
                                                         <td>
-                                                            {!! $item->getStatus !!}
+                                                        
+                                                            {!! $item->getStatus() !!}
                                                         </td>
                                                         <td class="d-flex gap-1">
                                                             @if (auth('admin')->user()->level === 2)

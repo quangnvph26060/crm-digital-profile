@@ -42,29 +42,21 @@ class InformationVb extends Model
     {
         return $this->belongsTo(MucLuc::class, 'ma_mucluc');
     }
-    public function getStatus() : Attribute
+    public function getStatus() : string
     {
-        return new Attribute(
-            function () {
-                $html = '';
-
+       
                 if ($this->status == Status::ENABLE) {
-                    $html = '<span class="badge badge--primary">Hoạt động</span>';
-                    //Featured
+                    return '<span class="badge badge--primary">Hoạt động</span>';
                 } else {
-                    $html = '<span><span class="badge badge--dark">Không hoạt động</span></span>';
-                }   //Unfeatured
+                    return '<span><span class="badge badge--dark">Không hoạt động</span></span>';
+                } //Unfeatured
 
-            });
-          }
+         
+    }
 
 
     public function profile()
     {
         return $this->belongsTo(Profile::class, 'profile_id');
     }
-
-
-
-
 }
