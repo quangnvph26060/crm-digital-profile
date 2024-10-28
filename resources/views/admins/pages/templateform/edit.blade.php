@@ -45,7 +45,7 @@
                                             <div class=" col-lg-12 mb-3">
                                                 <label for="example-text-input" class="form-label">Tên Form
                                                     <span class="text text-danger">*</span></label>
-                                                <input value="{{ $template->name }}"
+                                                <input value="{{ $template->name }}" required
                                                     class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
                                                     name="name" type="text" id="example-text-input">
                                                 @error('name')
@@ -61,9 +61,9 @@
 
                                                     <label for="example-text-input" class="form-label">Template Form
                                                         <span class="text text-danger">*</span></label>
-                                                    <textarea name="template_form" id="content" cols="30" rows="5"
+                                                    <textarea name="template_form" id="content" cols="30" rows="5" required
                                                         placeholder="template_form"
-                                                        style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ $template->template_form }}</textarea>
+                                                       class="form_template">{{ $template->template_form }}</textarea>
                                                     @error('template_form')
                                                     <div class="invalid-feedback d-block">
                                                         {{ $message }}
@@ -109,6 +109,11 @@
 
     </div> <!-- container-fluid -->
 </div>
+<style scoped>
+    .form_template{
+        border-radius: 5px;border:1px solid var(--bs-input-border);
+    }
+</style>
 <script>
     CKEDITOR.replace('content', {
             toolbar: [{

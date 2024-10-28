@@ -38,7 +38,7 @@ class TemplateFormRequest extends FormRequest
 
     public function attributes(){
         return [
-            'name' => 'Ten Form',
+            'name' => 'Tên Form',
             'template_form' => 'Template Form',
         ];
     }

@@ -45,9 +45,9 @@
                                             <div class=" col-lg-12 mb-3">
                                                 <label for="example-text-input" class="form-label">Tên Form
                                                     <span class="text text-danger">*</span></label>
-                                                <input value="{{ old('name') }}"
+                                                <input value="{{ old('name') }}" required
                                                     class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                                                    name="name" type="text" id="example-text-input">
+                                                    name="name" type="text" placeholder="Tên Form" id="example-text-input">
                                                 @error('name')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
@@ -61,8 +61,8 @@
 
                                                     <label for="example-text-input" class="form-label">Template Form
                                                         <span class="text text-danger">*</span></label>
-                                                    <textarea name="template_form" id="content" cols="30" rows="5"
-                                                        placeholder="template_form"
+                                                    <textarea name="template_form" id="content" cols="30" rows="5" required
+                                                        placeholder="template_form" class="form_template"
                                                         style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ old('template_form') }}</textarea>
                                                     @error('template_form')
                                                     <div class="invalid-feedback d-block">
@@ -203,5 +203,9 @@ document.getElementById('content').addEventListener('input', function () {
 });
 
 </script>
-
+<style scoped>
+    .form_template{
+        border-radius: 5px;border:1px solid var(--bs-input-border);
+    }
+</style>
 @endsection

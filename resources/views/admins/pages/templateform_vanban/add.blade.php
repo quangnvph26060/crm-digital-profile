@@ -54,8 +54,8 @@
                                                 <label for="example-text-input" class="form-label">Form <span
                                                         class="text text-danger">*</span></label>
                                                 <textarea name="template_form" id="content" class="content-main"
-                                                    cols="30" rows="20" placeholder="Form"
-                                                    style="border-radius: 5px;border:1px solid var(--bs-input-border); padding:10px"></textarea>
+                                                    cols="30" rows="20" placeholder="Form" readonly placeholder="Form"
+                                                    class="template_main"></textarea>
                                                 @error('template_form')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
@@ -93,7 +93,11 @@
 
     </div>
 </div>
-
+<style scoped>
+    .template_main{
+        border-radius: 5px;border:1px solid var(--bs-input-border); padding:10px
+    }
+</style>
 <script>
     const textarea = document.getElementById('content');
     const previewFrame = document.getElementById('previewFrame');

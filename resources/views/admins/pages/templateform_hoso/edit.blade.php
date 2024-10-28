@@ -36,11 +36,11 @@
                                     <div>
                                         <div class="row">
                                             <div class="col-lg-12 mb-3">
-                                                <label for="example-text-input" class="form-label">Tên Form <span
+                                                <label for="example-text-input" class="form-label">Tên Form<span
                                                         class="text text-danger">*</span></label>
                                                 <input value="{{$template->name}}"
                                                     class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                                                    name="name" type="text" id="example-text-input">
+                                                    name="name" type="text" id="example-text-input" required placeholder="Tên Form">
                                                 @error('name')
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                                 @enderror
@@ -53,9 +53,9 @@
 
                                                 <label for="example-text-input" class="form-label">Form <span
                                                         class="text text-danger">*</span></label>
-                                                <textarea name="template_form" id="content" class="content-main"
+                                                <textarea name="template_form" id="content" class="content-main" required placeholder="Form"
                                                     cols="30" rows="20" placeholder="Form"
-                                                    style="border-radius: 5px;border:1px solid var(--bs-input-border); padding:10px">{{$template->template_form}}</textarea>
+                                                    class="template_main">{{$template->template_form}}</textarea>
                                                 @error('template_form')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
@@ -93,7 +93,11 @@
 
     </div>
 </div>
-
+<style scoped>
+    .template_main{
+        border-radius: 5px;border:1px solid var(--bs-input-border); padding:10px
+    }
+</style>
 <script>
     const textarea = document.getElementById('content');
     const previewFrame = document.getElementById('previewFrame');
