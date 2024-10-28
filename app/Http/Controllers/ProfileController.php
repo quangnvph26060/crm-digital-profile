@@ -95,6 +95,11 @@ class ProfileController extends Controller
         $phongdata = Phong::select('ma_phong', 'ten_phong', 'id')->where('coquan_id', $request->id)->get();
         return response()->json(['status' => "success", 'data' => $phongdata]);
     }
+
+    public function MucLucDetailToPhong(Request $request){
+        $muclucdata = MucLuc::where('phong_id', $request->id)->get();
+        return response()->json(['status' => "success", 'data' => $muclucdata]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -114,7 +119,7 @@ class ProfileController extends Controller
     public function storeProfile(Request $request)
     {
         DB::beginTransaction();
-      
+
         try {
             $data = $request->except('_token');
            //   dd($data);
@@ -141,13 +146,13 @@ class ProfileController extends Controller
                 return back()->with('error', 'Đã có hồ sơ trong hộp này');
             }
             $fillableFields = (new Profile)->getFillable();
-        
+
             $data['config_id'] = $request->config_id;
             Profile::unguard(); // Bỏ qua fillable để tạo bản ghi
             Profile::create($data);
             Profile::reguard();
-          
-           
+
+
 
             DB::commit();
             return back()->with('success', 'Thêm hồ sơ thành công');
@@ -180,7 +185,7 @@ class ProfileController extends Controller
 
     public function edit($id)
     {
-       
+
         $profiles = Profile::query();
         if (isset($request->name) && $request->name != '') {
             $profiles->where(function ($query) use ($request) {
@@ -212,7 +217,7 @@ class ProfileController extends Controller
     {
         $vanban = InformationVb::query();
 
-      
+
         if (isset($request->name) && $request->name != '') {
             $vanban->where(function($query) use ($request) {
                 $query->where('so_kh_vb', 'like', '%' . $request->name . '%');
@@ -246,12 +251,12 @@ class ProfileController extends Controller
         $profile = Profile::find($id);
         $mamucluc = MucLuc::all();
         $title   = "Xem hồ sơ";
-        return view('admins.pages.profiles.detail', 
+        return view('admins.pages.profiles.detail',
         [
-            'title' => $title, 
-            'profile' => $profile, 
-            'macoquan' => $macoquan, 
-            'mamucluc' => $mamucluc, 
+            'title' => $title,
+            'profile' => $profile,
+            'macoquan' => $macoquan,
+            'mamucluc' => $mamucluc,
             'profiles' => $profiles,
             'vanban'=>$vanban
         ]);
@@ -268,11 +273,11 @@ class ProfileController extends Controller
         $profile = $this->checkExistence(Profile::class, $id, 'Không tìm thấy thông tin hồ sơ.');
         $data = $request->except('_token');
         $fillableFields = (new Profile)->getFillable();
-        
+
         $data['config_id'] = $request->config_id;
-      
+
         $profile->update($data);
-       
+
         return back()->with('success', 'Chỉnh sửa thành công');
     }
 

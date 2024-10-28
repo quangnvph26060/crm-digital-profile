@@ -37,6 +37,17 @@
                                     <div class="col-lg-6">
                                         <div>
                                             <div class="mb-3">
+                                                <label for="">Phông</label>
+                                                <select class="form-select" name="phong_id" id="phong_id">
+                                                    <option value="">Chọn Phông </option>
+                                                    @foreach ($phongdata as $item)
+                                                    <option value="{{ $item->id }}" {{ $item->id == $config->phong_id ? 'selected' : '' }} >
+                                                        {{ $item->ten_phong }} - Cơ quan : {{ $item->coquan->agency_code }}</option>
+                                                    @endforeach
+                                                    <!-- Thêm các tùy chọn phòng khác nếu cần -->
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
                                                 <label for="example-text-input" class="form-label">Tên mục lục <span
                                                         class="text text-danger">*</span></label>
                                                 <input value="{{ $config->ten_mucluc }}" required class="form-control"
@@ -64,7 +75,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                  
+
                                     <div class="col-lg-12">
                                         <div>
                                             <button type="submit" class="btn btn-primary w-md">
@@ -94,7 +105,7 @@
                     $('#agency-codes').empty();
                     data.forEach(function(item) {
                         $('#agency-codes').append('<option value="' + item.agency_code +'">');
-                            
+
                     });
                 });
             });

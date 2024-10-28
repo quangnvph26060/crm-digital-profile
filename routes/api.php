@@ -32,6 +32,7 @@ Route::get('/district', function () {
     ]);
 });
 Route::get('/phong-to-config', [ProfileController::class, 'PhongDetailToConfig'])->name('phong-to-config');
+Route::get('/mucluc-to-phong', [ProfileController::class, 'MucLucDetailToPhong'])->name('mucluc-to-phong');
 
 Route::get('/phong-by-config_id', [InformationVbController::class, 'PhongByConfigID'])->name('phong-by-config_id');
 Route::get('/mucluc-by-phong_id', [InformationVbController::class, 'MucLucByPhongID'])->name('mucluc-by-phong_id');
