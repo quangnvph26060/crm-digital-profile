@@ -4,7 +4,7 @@
 <style>
     .table th,
     .table td {
-        min-width: 160px;
+        min-width: 70px;
         /* Đặt độ rộng tối thiểu cho cột */
     }
 
