@@ -41,7 +41,25 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="row">
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="example-text-input" class="form-label">Đường dẫn <span class="text-danger">*</span></label>
+                                                <input value="{{ old('duong_dan') }}"
+                                                    class="form-control  {{ $errors->has('duong_dan') ? 'is-invalid' : '' }}" name="duong_dan" type="file"
+                                                    id="example-text-input" placeholder="Đường dẫn" accept="application/pdf" onchange="previewPDF(event)">
+                                                @error('duong_dan')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="mb-3" id="pdf-preview-container" style="display:none;">
+                                                <label class="form-label">Xem trước PDF:</label>
+                                                <iframe id="pdf-preview" style="width: 100%; height: 850px;" frameborder="0"></iframe>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
                                             <div class="row mb-3">
                                                 <div class="col-lg-4 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
