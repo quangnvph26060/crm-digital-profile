@@ -124,18 +124,18 @@
 
                         <li>
                             <a href="{{ route('admin.profile.showTemplate') }}">
-                                <span data-key="t-chat">From hồ sơ</span>
+                                <span data-key="t-chat">Form hồ sơ</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('admin.form_template_vanban.index') }}">
-                                <span data-key="t-chat">From văn bản</span>
+                                <span data-key="t-chat">Form văn bản</span>
                             </a>
                         </li>
 
                         {{-- <li>
                             <a href="{{ route('admin.form_template.index') }}">
-                                <span data-key="t-chat">From Template</span>
+                                <span data-key="t-chat">Form Template</span>
                             </a>
                         </li> --}}
                     </ul>

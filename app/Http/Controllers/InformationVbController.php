@@ -65,7 +65,9 @@ class InformationVbController extends Controller
     public function index(Request $request)
     {
         $inputs = $request->all();
-
+        $phongdata  = Phong::all();
+        $muclucdata = MucLuc::all();
+        $configdata = Config::all();
         $vanban = InformationVb::query();
         $title = "Danh sách văn bản";
 
@@ -75,8 +77,8 @@ class InformationVbController extends Controller
         }
 
         // Sửa biến $request->config_id thành $request->phong
-        if (isset($request->phong) && $request->phong != '') {
-            $vanban->where('config_id', 'like', '%' . $request->phong . '%');
+        if (isset($request->ma_co_quan) && $request->ma_co_quan != '') {
+            $vanban->where('ma_co_quan', 'like', '%' . $request->ma_co_quan . '%');
         }
 
         // Tìm kiếm theo mã phòng
@@ -102,6 +104,9 @@ class InformationVbController extends Controller
             "title"  => $title,
             "inputs" => $inputs,
             "columnComments" => $columnComments, // Chuyển ghi chú đến view
+            "phongdata" => $phongdata,
+            "muclucdata" => $muclucdata,
+            "configdata" => $configdata,
         ]);
     }
     private function getColumnComments($tableName)

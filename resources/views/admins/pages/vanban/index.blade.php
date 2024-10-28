@@ -61,7 +61,7 @@
                     <div class="card-header">
                         <form method="GET">
                             <div class="row">
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <div class="form-group">
                                         <label for="">Số và ký hiệu văn bản </label>
                                         <input value="{{ isset($inputs['name']) ? $inputs['name'] : '' }}"
@@ -69,12 +69,54 @@
                                             class="form-control">
                                     </div>
                                 </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Cơ quan</label>
+                                        <select class="form-select" name="ma_co_quan" id="coquan">
+                                            <option value="">Chọn cơ quan</option>
+                                            @foreach ($configdata as $item)
+                                            <option value="{{ $item->id }}" {{ isset($inputs['ma_co_quan']) ?
+                                                ($inputs['ma_co_quan']==$item->id ? 'selected' : '') : '' }}>
+                                                {{ $item->agency_name }}</option>
+                                            @endforeach
+                                            <!-- Thêm các tùy chọn phòng khác nếu cần -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Phông</label>
+                                        <select class="form-select" name="ma_phong" id="phong">
+                                            <option value="">Chọn Phông</option>
+                                            @foreach ($phongdata as $item)
+                                            <option value="{{ $item->id }}" {{ isset($inputs['ma_phong']) ?
+                                                ($inputs['ma_phong']==$item->id ? 'selected' : '') : '' }}>
+                                                {{ $item->ten_phong }}</option>
+                                            @endforeach
+                                            <!-- Thêm các tùy chọn phòng khác nếu cần -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Mục lục</label>
+                                        <select class="form-select" name="muc_luc" id="muc_luc">
+                                            <option value="">Chọn mục lục</option>
+                                            @foreach ($muclucdata as $item)
+                                            <option value="{{ $item->id }}" {{ isset($inputs['muc_luc']) ?
+                                                ($inputs['muc_luc']==$item->id ? 'selected' : '') : '' }}>
+                                                {{ $item->ten_mucluc }}</option>
+                                            @endforeach
+                                            <!-- Thêm các tùy chọn mục lục khác nếu cần -->
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="" style="opacity: 0">1</label> <br>
                                         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
                                             kiếm</button>
-                                        <a href="{{ url()->current() }}" class="btn btn-danger"><i
+                                        <a href="{{ url()->current() }}" class="btn btn-danger "  style="margin: 0px 10px"><i
                                                 class="fas fa-history"></i> Tải lại</a>
                                         @if (auth('admin')->user()->level === 2)
                                         <a class="btn btn-success" href="{{ route('admin.vanban.add') }}">
@@ -135,7 +177,7 @@
                                     </div>
                                 </div>
                                 <!-- Nút Export -->
-                                <a href="{{ route('admin.vanban.export') }}" class="btn btn-success">Xuất Excel</a>
+                                <a href="{{ route('admin.vanban.export') }}" class="btn btn-success">Export Excel</a>
 
                             </div>
                         </div>
