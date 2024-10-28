@@ -119,7 +119,7 @@
                                         <thead>
                                             <tr>
                                                 <th>STT</th>
-                                              
+
                                                 <th>Hộp số</th>
                                                 <th>Hồ sơ số</th>
                                                 <th>Tiêu đề hồ sơ</th>
@@ -139,7 +139,7 @@
                                                         {{ $key + 1 }}
                                                     </td>
 
-                                                  
+
                                                     <td>
                                                         {{ $item->hop_so }}
                                                     </td>
@@ -229,10 +229,10 @@
                                                             <th class="column-{{ $key }}">{{ $key }}
                                                             </th>
                                                         @endif
-                                                      
+
                                                     @empty
                                                         <option value="">Không có dữ liệu</option>
-                                                    @endforelse 
+                                                    @endforelse
                                                      <th class="">Thao tác</th>
                                                 @else
                                                     <option value="">Không có dữ liệu</option>
