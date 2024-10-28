@@ -125,6 +125,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('', [InformationVbController::class, 'index'])->name('index');
         Route::get('/add-vanban', [InformationVbController::class, 'add'])->name('add');
         Route::get('/edit-vanban/{id}', [InformationVbController::class, 'edit'])->name('edit');
+        Route::get('/view-vanban/{id}', [InformationVbController::class, 'view'])->name('view');
         Route::post('/add-vanban', [InformationVbController::class, 'store'])->name('store');
         Route::delete('delete/{id}', [InformationVbController::class, 'delete'])->name('delete');
         Route::post('/update-vanban/{id}', [InformationVbController::class, 'update'])->name('update');
