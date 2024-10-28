@@ -89,7 +89,7 @@ class InformationVbController extends Controller
             $vanban->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
         }
 
-          $vanban = $vanban->orderBy('created_at', 'desc');
+        $vanban = $vanban->orderBy('created_at', 'desc');
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $vanban = $vanban->orderBy('profile_id', 'asc')->paginate($perPage);
@@ -237,12 +237,29 @@ class InformationVbController extends Controller
         ]);
     }
 
+    public function view($id)
+    {
+
+        $title = "Thông tin chi tiết văn bản";
+
+        $macoquan = Config::all();
+        $mamucluc = MucLuc::all();
+        $vanban = InformationVb::find($id);
+        // dd($vanban);
+        return view("admins.pages.vanban.view", [
+            "title" => $title,
+            "vanban" => $vanban,
+            'macoquan' => $macoquan,
+            'mamucluc' => $mamucluc,
+        ]);
+    }
+
     public function update(Request $request, $id)
     {
         // dd($request->all());
         $vanbannew = InformationVb::find($id);
 
-        $vanban = InformationVb::where('id','!=', $id)->where('ma_phong', $request->ma_phong)
+        $vanban = InformationVb::where('id', '!=', $id)->where('ma_phong', $request->ma_phong)
             ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
             ->where('ho_so_so', $request->ho_so_so)
             ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
@@ -277,7 +294,7 @@ class InformationVbController extends Controller
         }
         $vanbannew->profile_id = $profile->id;
         $vanbannew->save();
-            return back()->with('success', 'Sửa văn bản thành công');
+        return back()->with('success', 'Sửa văn bản thành công');
     }
 
     // public function update(Request $request, $id)
@@ -349,16 +366,15 @@ class InformationVbController extends Controller
 
             return back()->with('error', 'Đã xảy ra lỗi khi nhập dữ liệu từ file Excel');
         }
-
     }
 
-    public function exportExcel(){
+    public function exportExcel()
+    {
         $fileDownload = Excel::download(new VanBanExport, 'vanban.xlsx');
 
         session()->flash('success', 'Dữ liệu đã xuất thành công');
 
         return $fileDownload;
-
     }
 
     public function PhongByConfigID(Request $request)
