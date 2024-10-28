@@ -17,7 +17,7 @@
                 </div> --}}
             </div>
         </div>
-       
+
         <!-- end page title -->
 
         <div class="row">
@@ -53,27 +53,34 @@
                                     <thead>
                                         <tr>
                                             <th>STT</th>
+                                            <th>Cơ quan </th>
+                                            <th>Phông </th>
                                             <th>Tên mục lục</th>
                                             <th>Mã mục lục</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       
+
                                         @foreach ($mucluc as $key => $item)
-                                          
+
                                             <tr>
                                                 <td>
                                                     {{$key + 1}}
                                                 </td>
-                                             
+                                                <td>
+                                                    {{  $item->maPhong->coquan->agency_code }}
+                                                </td>
+                                                <td>
+                                                    {{ $item->maPhong->ten_phong}}
+                                                </td>
                                                 <td>
                                                     {{ $item->ten_mucluc}}
                                                 </td>
                                                 <td>
                                                     {{ $item->ma_mucluc}}
                                                 </td>
-                                               
+
                                                 <td class="d-flex gap-1">
                                                     <a href="{{ route('admin.mucluc.edit', ['id' => $item->id]) }}" class="btn btn-warning">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 21h16M5.666 13.187A2.278 2.278 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.278 2.278 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001l-9.507 9.52Z"/></svg>
