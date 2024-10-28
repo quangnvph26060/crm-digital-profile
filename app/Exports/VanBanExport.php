@@ -41,7 +41,11 @@ class VanBanExport implements FromCollection, WithHeadings
                     $text = strip_tags($value);
                     $text = html_entity_decode($text);
                     $data[$key] = $text;
+                    if($key == 'duong_dan'){
+                        $data[$key] = asset('storage/'.$value);
+                    }
                 }
+
             }
 
             return $data;
