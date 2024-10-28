@@ -30,7 +30,7 @@ class InformationVb extends Model
 
     public function config()
     {
-        return $this->belongsTo(Config::class, 'config_id');
+        return $this->belongsTo(Config::class, 'ma_co_quan');
     }
 
     public function maPhong()

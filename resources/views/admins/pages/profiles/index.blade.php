@@ -119,7 +119,7 @@
                                         <thead>
                                             <tr>
                                                 <th>STT</th>
-                                              
+
                                                 <th>Hộp số</th>
                                                 <th>Hồ sơ số</th>
                                                 <th>Tiêu đề hồ sơ</th>
@@ -139,7 +139,7 @@
                                                         {{ $key + 1 }}
                                                     </td>
 
-                                                  
+
                                                     <td>
                                                         {{ $item->hop_so }}
                                                     </td>

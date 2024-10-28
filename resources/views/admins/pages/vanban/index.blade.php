@@ -5,6 +5,25 @@
     .table th, .table td {
     min-width: 160px; /* Đặt độ rộng tối thiểu cho cột */
 }
+.row-header {
+    border: none; /* Loại bỏ border cho hàng */
+    background-color: #f0f0f0; /* Thay đổi màu nền để dễ phân biệt */
+    font-weight: bold; /* Làm cho văn bản đậm */
+}
+
+.row-header td {
+    padding: 10px 0; /* Tùy chỉnh khoảng cách */
+}
+.row-header {
+    border: none; /* Loại bỏ border cho hàng */
+    background-color: #f0f0f0; /* Thay đổi màu nền để dễ phân biệt */
+    font-weight: bold; /* Làm cho văn bản đậm */
+}
+
+.row-header td {
+    padding: 10px 0; /* Tùy chỉnh khoảng cách */
+}
+
 
 </style>
 <div class="page-content">
@@ -213,9 +232,9 @@
                                             $currentPhong = $item->maPhong;
                                         @endphp
 
-                                        <tr>
-                                            <td colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan']) }}">
-                                                <strong>Phông: {{ $item->maPhong->ten_phong }}/Mục lục: {{ $item->maMucLuc->ten_mucluc }}/Hộp số: {{ $item->hop_so }}/Hồ sơ số: {{ $item->ho_so_so }}/Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
+                                        <tr class="row-header">
+                                            <td colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan']) + 1 }}">
+                                                <strong>Cơ quan : {{ $item->config->agency_code }} / Phông: {{ $item->maPhong->ten_phong }} / Mục lục: {{ $item->maMucLuc->ten_mucluc }} / Hộp số: {{ $item->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} / Hồ sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
                                             </td>
                                         </tr>
                                     @endif
