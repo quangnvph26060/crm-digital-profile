@@ -1,5 +1,8 @@
 @extends('admins.layouts.index')
 @section('title', $title)
+@section('css')
+    <link rel="stylesheet" href="{{ asset('admin/profiles.css') }}">
+@endsection
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -97,23 +100,26 @@
                                 <div class="row">
                                     <div class="col-lg-2">
 
-                                        <form action="{{ route('admin.profile.export') }}" method="POST">
+                                            <form action="{{ route('admin.profile.export') }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-plus"></i> Xuất Excel
+                                            <button type="submit" class="btn btn-primary">
+                                              Import Excel
                                             </button>
                                         </form>
                                     </div>
-                                    @if (auth('admin')->user()->level === 2)
-                                        <div class="col-lg-2">
-                                            <button class="btn btn-success" id="exportExcelBtn">
-                                                <input type="file" style="display: none">
-                                                <i class="fas fa-plus"></i> Nhập Excel
-                                            </button>
-                                        </div>
-                                    @endif
-
+                                   @if (auth('admin')->user()->level === 2)
+                                <div class="col-lg-2">
+                                    <button class="btn btn-success" id="exportExcelBtn">
+                                        <input type="file" style="display: none">
+                                         Export Excel
+                                    </button>
                                 </div>
+                                @endif
+
+                                   
+                                </div>
+                               
+
                             </div>
                         </div>
                         <div class="card-body">
@@ -298,129 +304,10 @@
 
         </div> <!-- container-fluid -->
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#column-select').on('change', function() {
-                var selectedColumns = $(this).val() || [];
+  
 
-                // Ẩn tất cả các cột trước khi hiển thị các cột đã chọn
-                $('#userTable th, #userTable td').addClass('hidden');
-
-                // Hiển thị các cột đã chọn
-                selectedColumns.forEach(function(column) {
-                    $('#userTable .column-' + column).removeClass('hidden');
-                });
-            });
-        });
-
-        $(document).ready(function() {
-            $('#exportExcelBtn').on('click', function() {
-                $('<input type="file">').change(function() {
-                    var selectedFile = this.files[0];
-                    console.log('File đã chọn:', selectedFile);
-
-
-                    var formData = new FormData();
-                    formData.append('file', selectedFile);
-                    var url = "{{ route('import') }}";
-
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            console.log('Kết quả:', response);
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Đã xảy ra lỗi khi gửi file.');
-                        }
-                    });
-                }).click();
-            });
-        });
-    </script>
-    <style scoped>
-        .hidden {
-            display: none;
-        }
-
-        /* Style cho checkbox */
-        input[type="checkbox"] {
-            display: none;
-        }
-
-        /* CSS cho dropdown chọn cột */
-        .select-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 200px;
-        }
-
-        .select-wrapper select {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            color: #333;
-            cursor: pointer;
-        }
-
-        .select-options {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-top: none;
-            border-radius: 0 0 5px 5px;
-            background-color: #fff;
-        }
-
-        .select-options.open {
-            display: block;
-        }
-
-        .select-options option {
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        .select-options option:hover {
-            background-color: #e9e9e9;
-        }
-
-        .select-options option:checked {
-            background-color: #a8dadc;
-            color: white;
-        }
-
-        /* Style cho label của checkbox */
-        .checkbox-label {
-            display: inline-block;
-            cursor: pointer;
-            padding: 5px 10px;
-            margin-right: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        /* Style khi checkbox được chọn */
-        input[type="checkbox"]:checked+.checkbox-label {
-            background-color: #3498db;
-            color: white;
-        }
-
-        .main-option {
-            flex-direction: column;
-            display: flex;
-        }
-    </style>
+   
+@endsection
+@section('scripts')
+    <script src="{{ asset('js/profiles.js') }}"></script>
 @endsection

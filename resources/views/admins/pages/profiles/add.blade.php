@@ -1,6 +1,8 @@
 @extends('admins.layouts.index')
 @section('title', $title)
+
 @section('content')
+
     <div class="page-content">
         <div class="container-fluid">
 

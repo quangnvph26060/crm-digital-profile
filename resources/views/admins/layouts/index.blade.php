@@ -24,7 +24,7 @@
     <!-- Icons Css -->
     <link href="{{ asset('libs/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
-    <link href="{{ asset('libs/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />]
+    <link href="{{ asset('libs/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     @yield('css')
 </head>

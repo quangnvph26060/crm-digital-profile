@@ -66,12 +66,14 @@
                                                  @if (auth('admin')->user()->level === 2)
                                                     <td  class="d-flex gap-1">
                                                         <a  href="{{ route('admin.admin.edit', ['id' => $userItem->id]) }}" class="btn btn-warning">
-                                                            Sửa
+                                                            <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
                                                         </a>
                                                         <form method="GET" action="{{ route('admin.admin.delete', ['id' => $userItem->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                             @csrf
                                                         
-                                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
+                                                            </button>
                                                         </form>
                                                     </td>  
                                                @endif
