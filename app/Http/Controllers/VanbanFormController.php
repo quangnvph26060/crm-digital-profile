@@ -62,8 +62,8 @@ class VanbanFormController extends Controller
         // dd($request->all());
         if ($request->status === 'active') {
             TemplateFormVanBan::where('status', 'active')->update(['status' => 'unactive']);
-            $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
-            File::put($bladeFilePath, $request->template_form);
+            // $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
+            // File::put($bladeFilePath, $request->template_form);
         }
         TemplateFormVanBan::create([
             'name' => $request->name,
@@ -112,8 +112,8 @@ class VanbanFormController extends Controller
             TemplateFormVanBan::where('status', 'active')
                 ->where('id', '!=', $id)
                 ->update(['status' => 'unactive']);
-            $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
-            File::put($bladeFilePath, $request->template_form);
+            // $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
+            // File::put($bladeFilePath, $request->template_form);
         }
 
         $templateForm->update([
@@ -143,9 +143,9 @@ class VanbanFormController extends Controller
             TemplateFormVanBan::where('id', '!=', $id)->update(['status' => 'unactive']);
 
             $templateForm->status = 'active';
-            $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
+            // $bladeFilePath = resource_path('views/admins/pages/vanban/form-add.blade.php');
 
-            File::put($bladeFilePath, $templateForm->template_form);
+            // File::put($bladeFilePath, $templateForm->template_form);
         } else {
 
             $templateForm->status = 'unactive';
