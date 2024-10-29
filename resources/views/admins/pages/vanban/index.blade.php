@@ -284,7 +284,7 @@
                         <div class="mt-4">
                             @include('globals.alert')
                         </div>
-                        <div class="card-body" style="overflow-x: auto; max-width: 100%;">
+                        <div class="card-body" style="overflow-x: auto; max-width: 100%; padding: 20px 0px;">
 
                             <table class="table table-bordered">
                                 <thead>
@@ -295,7 +295,7 @@
                                         @foreach($vanban->first()->getAttributes() as $column => $value)
 
                                         @if (!in_array($column, ['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so',
-                                        'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan']))
+                                        'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']))
                                         <th>{{ $columnComments[$column] ?? $column }}</th>
                                         @endif
 
@@ -319,8 +319,8 @@
                                     @endphp
 
                                     <tr class="row-header">
-                                        <td
-                                            colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan']) + 1 }}">
+                                        <td style="padding: 0px 10px"
+                                            colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']) + 1 }}">
                                             <strong>Cơ quan : {{ $item->config->agency_code }} / Phông: {{
                                                 $item->maPhong->ten_phong }} / Mục lục: {{ $item->maMucLuc->ten_mucluc
                                                 }} / Hộp số: {{ $item->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} / Hồ
@@ -333,7 +333,7 @@
                                         @foreach($item->getAttributes() as $column => $value)
                                         {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
                                         @if (!in_array($column, ['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so',
-                                        'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan']))
+                                        'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']))
                                         <td>
                                             @if ($column === 'status') {{-- Kiểm tra cột status --}}
                                             {!! $value === 'active' ? 'Công khai' : 'Không công khai' !!}
