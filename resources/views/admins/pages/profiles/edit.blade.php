@@ -162,7 +162,7 @@
                                             @php
                                                 use Illuminate\Support\Facades\Blade;
 
-                                                $template = $template_form_vanban->template_form;
+                                                $template = $template_form_hoso->template_form;
 
                                                 $compiled = Blade::compileString($template);
 
