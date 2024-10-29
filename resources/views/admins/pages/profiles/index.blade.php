@@ -1,126 +1,126 @@
 @extends('admins.layouts.index')
 @section('title', $title)
 @section('content')
-<div class="page-content">
-    <div class="container-fluid">
+    <div class="page-content">
+        <div class="container-fluid">
 
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12 d-flex justify-content-between mt-3 mb-3">
-                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4>
-                </div>
-                {{-- <div class="" style="float: right">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12 d-flex justify-content-between mt-3 mb-3">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4>
+                    </div>
+                    {{-- <div class="" style="float: right">
                     <a class="btn btn-success" href="{{ route('admin.config.add') }}">
                         <i class="fas fa-plus"></i> Thêm mới
                     </a>
                 </div> --}}
+                </div>
             </div>
-        </div>
 
-        <!-- end page title -->
+            <!-- end page title -->
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <form method="GET">
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label for="">Tiêu đề hồ sơ và Mã Cơ quan</label>
-                                        <input value="{{ isset($inputs['name']) ? $inputs['name'] : '' }}"
-                                            autocomplete="off" name="name" placeholder="Tìm kiếm..." type="text"
-                                            class="form-control">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <form method="GET">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="">Tiêu đề hồ sơ và Mã Cơ quan</label>
+                                            <input value="{{ isset($inputs['name']) ? $inputs['name'] : '' }}"
+                                                autocomplete="off" name="name" placeholder="Tìm kiếm..." type="text"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="">Cơ quan</label>
+                                            <select class="form-select" name="coquan" id="coquan">
+                                                <option value="">Chọn cơ quan</option>
+                                                @foreach ($configdata as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
+                                                        {{ $item->agency_name }}</option>
+                                                @endforeach
+                                                <!-- Thêm các tùy chọn phòng khác nếu cần -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="">Phông</label>
+                                            <select class="form-select" name="phong" id="phong">
+                                                <option value="">Chọn Phông</option>
+                                                @foreach ($phongdata as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ isset($inputs['phong']) ? ($inputs['phong'] == $item->id ? 'selected' : '') : '' }}>
+                                                        {{ $item->ten_phong }}</option>
+                                                @endforeach
+                                                <!-- Thêm các tùy chọn phòng khác nếu cần -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="">Mục lục</label>
+                                            <select class="form-select" name="muc_luc" id="muc_luc">
+                                                <option value="">Chọn mục lục</option>
+                                                @foreach ($muclucdata as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ isset($inputs['muc_luc']) ? ($inputs['muc_luc'] == $item->id ? 'selected' : '') : '' }}>
+                                                        {{ $item->ten_mucluc }}</option>
+                                                @endforeach
+                                                <!-- Thêm các tùy chọn mục lục khác nếu cần -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="" style="opacity: 0">1</label> <br>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
+                                                kiếm</button>
+                                            <a href="{{ url()->current() }}" class="btn btn-danger"><i
+                                                    class="fas fa-history"></i> Tải lại</a>
+                                            @if (auth('admin')->user()->level === 2)
+                                                <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
+                                                    <i class="fas fa-plus"></i> Thêm mới
+                                                </a>
+                                            @endif
+
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label for="">Cơ quan</label>
-                                        <select class="form-select" name="coquan" id="coquan">
-                                            <option value="">Chọn cơ quan</option>
-                                            @foreach ($configdata as $item)
-                                            <option value="{{ $item->id }}" {{ isset($inputs['coquan']) ?
-                                                ($inputs['coquan']==$item->id ? 'selected' : '') : '' }}>
-                                                {{ $item->agency_name }}</option>
-                                            @endforeach
-                                            <!-- Thêm các tùy chọn phòng khác nếu cần -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label for="">Phông</label>
-                                        <select class="form-select" name="phong" id="phong">
-                                            <option value="">Chọn Phông</option>
-                                            @foreach ($phongdata as $item)
-                                            <option value="{{ $item->id }}" {{ isset($inputs['phong']) ?
-                                                ($inputs['phong']==$item->id ? 'selected' : '') : '' }}>
-                                                {{ $item->ten_phong }}</option>
-                                            @endforeach
-                                            <!-- Thêm các tùy chọn phòng khác nếu cần -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label for="">Mục lục</label>
-                                        <select class="form-select" name="muc_luc" id="muc_luc">
-                                            <option value="">Chọn mục lục</option>
-                                            @foreach ($muclucdata as $item)
-                                            <option value="{{ $item->id }}" {{ isset($inputs['muc_luc']) ?
-                                                ($inputs['muc_luc']==$item->id ? 'selected' : '') : '' }}>
-                                                {{ $item->ten_mucluc }}</option>
-                                            @endforeach
-                                            <!-- Thêm các tùy chọn mục lục khác nếu cần -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label for="" style="opacity: 0">1</label> <br>
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
-                                            kiếm</button>
-                                        <a href="{{ url()->current() }}" class="btn btn-danger"><i
-                                                class="fas fa-history"></i> Tải lại</a>
-                                        @if (auth('admin')->user()->level === 2)
-                                        <a class="btn btn-success" href="{{ route('admin.profile.add') }}">
-                                            <i class="fas fa-plus"></i> Thêm mới
-                                        </a>
-                                        @endif
+                            </form>
+                            <div class="col-lg-6 mt-2">
+                                <div class="row">
+                                    <div class="col-lg-2">
 
+                                        <form action="{{ route('admin.profile.export') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-plus"></i> Xuất Excel
+                                            </button>
+                                        </form>
                                     </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="col-lg-6 mt-2">
-                            <div class="row">
-                                <div class="col-lg-2">
+                                    @if (auth('admin')->user()->level === 2)
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-success" id="exportExcelBtn">
+                                                <input type="file" style="display: none">
+                                                <i class="fas fa-plus"></i> Nhập Excel
+                                            </button>
+                                        </div>
+                                    @endif
 
-                                    <form action="{{ route('admin.profile.export') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fas fa-plus"></i> Xuất Excel
-                                        </button>
-                                    </form>
                                 </div>
-                                @if (auth('admin')->user()->level === 2)
-                                <div class="col-lg-2">
-                                    <button class="btn btn-success" id="exportExcelBtn">
-                                        <input type="file" style="display: none">
-                                        <i class="fas fa-plus"></i> Nhập Excel
-                                    </button>
-                                </div>
-                                @endif
-
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        @include('globals.alert')
-                        <div class="table-rep-plugin">
-                            <div class="table-responsive mb-0" data-pattern="priority-columns">
-                                {{-- <table id="" class="table table-striped">
+                        <div class="card-body">
+                            @include('globals.alert')
+                            <div class="table-rep-plugin">
+                                <div class="table-responsive mb-0" data-pattern="priority-columns">
+                                    {{-- <table id="" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>STT</th>
@@ -207,103 +207,100 @@
                                         @endforeach
                                     </tbody>
                                 </table> --}}
-                                <div class="main-option">
-                                    <label for="column-select">Chọn cột để hiển thị:</label>
-                                    <select name="column-select" id="column-select" multiple class="form-control">
-                                        @if ($profiles && $profiles->first())
-                                        @forelse ($profiles->first()->getAttributes() as $key => $value)
-                                        @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !==
-                                        'config_id' && $key !== 'ma_muc_luc')
-                                        <option value="{{ $key }}">{{ $key }}</option>
-                                        @endif
-                                        @empty
-                                        <option value="">Không có dữ liệu</option>
-                                        @endforelse
-                                        @else
-                                        <option value="">Không có dữ liệu</option>
-                                        @endif
-                                    </select>
-                                </div>
-                                <!-- Bảng dữ liệu -->
-                                <table id="userTable" class="table table-striped">
-                                    <thead>
-                                        <tr>
+                                    <div class="main-option">
+                                        <label for="column-select">Chọn cột để hiển thị:</label>
+                                        <select name="column-select" id="column-select" multiple class="form-control">
                                             @if ($profiles && $profiles->first())
-                                            @forelse ($profiles->first()->getAttributes() as $key => $value)
-                                            @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key
-                                            !== 'config_id' && $key !== 'ma_muc_luc')
-                                            <th class="column-{{ $key }}">{{ $key }}
-                                            </th>
-                                            @endif
-
-                                            @empty
-                                            <option value="">Không có dữ liệu</option>
-                                            @endforelse
-                                            <th class="">Thao tác</th>
+                                                @forelse ($profiles->first()->getAttributes() as $key => $value)
+                                                    @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
+                                                        <option value="{{ $key }}">{{ $columnComments[$key] ?? $key }}</option>
+                                                    @endif
+                                                @empty
+                                                    <option value="">Không có dữ liệu</option>
+                                                @endforelse
                                             @else
-                                            <option value="">Không có dữ liệu</option>
+                                                <option value="">Không có dữ liệu</option>
                                             @endif
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ($profiles && $profiles->first())
-                                        @forelse ($profiles as $user)
-                                        <tr>
-
-                                            @foreach ($user->getAttributes() as $key => $value)
-                                            @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key
-                                            !== 'config_id' && $key !== 'ma_muc_luc')
-                                            <td class="column-{{ $key }}">{{ $value }}
-                                            </td>
-                                            @endif
-                                            @endforeach
-                                            <td class="d-flex gap-1">
-                                                @if (auth('admin')->user()->level === 2)
-                                                <a href="{{ route('admin.profile.edit', ['id' => $user->id]) }}"
-                                                    class="btn btn-warning">
-                                                    <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
-                                                </a>
-                                                <form method="post"
-                                                    action="{{ route('admin.profile.delete.hoso', ['id' => $user->id]) }}"
-                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">
-                                                        <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
-                                                    </button>
-                                                </form>
+                                        </select>
+                                    </div>
+                                    <!-- Bảng dữ liệu -->
+                                    <table id="userTable" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                @if ($profiles && $profiles->first())
+                                                    @forelse ($profiles->first()->getAttributes() as $key => $value)
+                                                        @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
+                                                           <th  class="column-{{ $key }}"> {{ $columnComments[$key] ?? $key }}</th>
+                                                        @endif
+                                                    @empty
+                                                        <option value="">Không có dữ liệu</option>
+                                                    @endforelse
+                                                    <th class="">Thao tác</th>
+                                                @else
+                                                    <option value="">Không có dữ liệu</option>
                                                 @endif
-                                                <a href="{{ route('admin.profile.detail', ['id' => $user->id]) }}"
-                                                    class="btn btn-primary">
-                                                    <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <p>không có dữ liệu</p>
-                                        @endforelse
-                                        @else
-                                        <option value="">Không có dữ liệu</option>
-                                        @endif
-                                    </tbody>
-                                </table>
 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if ($profiles && $profiles->first())
+                                                @forelse ($profiles as $user)
+                                                    <tr>
+
+                                                        @foreach ($user->getAttributes() as $key => $value)
+                                                            @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
+                                                                <td class="column-{{ $key }}">{{ $value }}
+                                                                </td>
+                                                            @endif
+                                                        @endforeach
+                                                        <td class="d-flex gap-1">
+                                                            @if (auth('admin')->user()->level === 2)
+                                                                <a href="{{ route('admin.profile.edit', ['id' => $user->id]) }}"
+                                                                    class="btn btn-warning">
+                                                                    <img src="{{ asset('svg/detail.svg') }}"
+                                                                        alt="SVG Image">
+                                                                </a>
+                                                                <form method="post"
+                                                                    action="{{ route('admin.profile.delete.hoso', ['id' => $user->id]) }}"
+                                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger">
+                                                                        <img src="{{ asset('svg/delete.svg') }}"
+                                                                            alt="SVG Image">
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                            <a href="{{ route('admin.profile.detail', ['id' => $user->id]) }}"
+                                                                class="btn btn-primary">
+                                                                <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <p>không có dữ liệu</p>
+                                                @endforelse
+                                            @else
+                                                <option value="">Không có dữ liệu</option>
+                                            @endif
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                {{ $profiles->links() }}
                             </div>
-                            {{ $profiles->links() }}
+
                         </div>
-
                     </div>
-                </div>
-                <!-- end card -->
-            </div> <!-- end col -->
-        </div> <!-- end row -->
+                    <!-- end card -->
+                </div> <!-- end col -->
+            </div> <!-- end row -->
 
-    </div> <!-- container-fluid -->
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
+        </div> <!-- container-fluid -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
             $('#column-select').on('change', function() {
                 var selectedColumns = $(this).val() || [];
 
@@ -345,85 +342,85 @@
                 }).click();
             });
         });
-</script>
-<style scoped>
-    .hidden {
-        display: none;
-    }
+    </script>
+    <style scoped>
+        .hidden {
+            display: none;
+        }
 
-    /* Style cho checkbox */
-    input[type="checkbox"] {
-        display: none;
-    }
+        /* Style cho checkbox */
+        input[type="checkbox"] {
+            display: none;
+        }
 
-    /* CSS cho dropdown chọn cột */
-    .select-wrapper {
-        position: relative;
-        display: inline-block;
-        width: 200px;
-    }
+        /* CSS cho dropdown chọn cột */
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+        }
 
-    .select-wrapper select {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        color: #333;
-        cursor: pointer;
-    }
+        .select-wrapper select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: #333;
+            cursor: pointer;
+        }
 
-    .select-options {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        border: 1px solid #ccc;
-        border-top: none;
-        border-radius: 0 0 5px 5px;
-        background-color: #fff;
-    }
+        .select-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background-color: #fff;
+        }
 
-    .select-options.open {
-        display: block;
-    }
+        .select-options.open {
+            display: block;
+        }
 
-    .select-options option {
-        padding: 10px;
-        cursor: pointer;
-    }
+        .select-options option {
+            padding: 10px;
+            cursor: pointer;
+        }
 
-    .select-options option:hover {
-        background-color: #e9e9e9;
-    }
+        .select-options option:hover {
+            background-color: #e9e9e9;
+        }
 
-    .select-options option:checked {
-        background-color: #a8dadc;
-        color: white;
-    }
+        .select-options option:checked {
+            background-color: #a8dadc;
+            color: white;
+        }
 
-    /* Style cho label của checkbox */
-    .checkbox-label {
-        display: inline-block;
-        cursor: pointer;
-        padding: 5px 10px;
-        margin-right: 10px;
-        background-color: #f4f4f4;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
+        /* Style cho label của checkbox */
+        .checkbox-label {
+            display: inline-block;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-    /* Style khi checkbox được chọn */
-    input[type="checkbox"]:checked+.checkbox-label {
-        background-color: #3498db;
-        color: white;
-    }
+        /* Style khi checkbox được chọn */
+        input[type="checkbox"]:checked+.checkbox-label {
+            background-color: #3498db;
+            color: white;
+        }
 
-    .main-option {
-        flex-direction: column;
-        display: flex;
-    }
-</style>
+        .main-option {
+            flex-direction: column;
+            display: flex;
+        }
+    </style>
 @endsection

@@ -146,7 +146,7 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 mt-3">
                                                 <label for="example-text-input" class="form-label">Tiêu đề hồ sơ <span
                                                         class="text text-danger">*</span></label>
                                                 <input value="{{ isset($profile) ?  $profile->tieu_de_ho_so : old('tieu_de_ho_so') }}"

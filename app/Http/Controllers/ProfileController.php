@@ -15,6 +15,7 @@ use App\Models\InformationVb;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Svg\Tag\Rect;
+use Illuminate\Support\Facades\Schema;
 
 class ProfileController extends Controller
 {
@@ -63,9 +64,11 @@ class ProfileController extends Controller
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $profiles = $profiles->paginate($perPage);
 
+        $columnComments = $this->getColumnComments('profiles');
 
         return view("admins.pages.profiles.index", [
             "profiles"      => $profiles,
+            "columnComments" => $columnComments,
             "title"         => $title,
             "inputs"        => $inputs,
             "phongdata" => $phongdata,
@@ -74,6 +77,17 @@ class ProfileController extends Controller
         ]);
     }
 
+    private function getColumnComments($tableName)
+    {
+        $columns = Schema::getColumnListing($tableName);
+        $comments = [];
+
+        foreach ($columns as $column) {
+            $comments[$column] = DB::select("SHOW FULL COLUMNS FROM `$tableName` WHERE Field = ?", [$column])[0]->Comment ?? '';
+        }
+
+        return $comments;
+    }
     public function add()
     {
         $title   = "Thêm mới hồ sơ";
