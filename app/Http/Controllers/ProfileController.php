@@ -172,7 +172,8 @@ class ProfileController extends Controller
             return back()->with('success', 'Thêm hồ sơ thành công');
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->with('error', 'Đã xảy ra lỗi khi thêm hồ sơ: ' . $e->getMessage() . ' (Dòng ' . $e->getLine() . ')');
+            return back()->with('error', 'Thêm hồ sơ không thành công');
+            // return back()->with('error', 'Đã xảy ra lỗi khi thêm hồ sơ: ' . $e->getMessage() . ' (Dòng ' . $e->getLine() . ')');
         }
     }
 

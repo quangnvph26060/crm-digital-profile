@@ -89,10 +89,10 @@ class HoSoController extends Controller
         $findTemplate->save();
 
         // Đường dẫn đến tệp Blade cần cập nhật
-        $bladeFilePath = resource_path('views/admins/pages/profiles/form-add.blade.php');
+      //  $bladeFilePath = resource_path('views/admins/pages/profiles/form-add.blade.php');
 
         // Cập nhật nội dung tệp Blade
-        File::put($bladeFilePath, $request->content_form);
+     //   File::put($bladeFilePath, $request->content_form);
         return back()->with('success', 'Chỉnh sửa thành công');
     }
 
