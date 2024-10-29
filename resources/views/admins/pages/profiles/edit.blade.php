@@ -160,6 +160,10 @@
                                                 @enderror
                                             </div>
                                             @php
+
+<<<<<<< HEAD
+                                                $template = $template_form_hoso->template_form;
+=======
                                             use Illuminate\Support\Facades\Blade;
                                         
                                             $template = $template_form_hoso->template_form;
@@ -170,6 +174,8 @@
                                             
                                             eval('?>'.$compiled);
                                         @endphp
+>>>>>>> 2053323a0aa1409ee660ecba52149e6d8bf3c954
+
                                         </div>
                                     </div>
                                     <div class="col-lg-12 mt-4">

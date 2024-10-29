@@ -146,7 +146,15 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            @include('admins/pages/vanban/form-add')
+                                            @php
+                                            use Illuminate\Support\Facades\Blade;
+
+                                            $template = $template_form_vanban->template_form;
+
+                                            $compiled = Blade::compileString($template);
+
+                                            eval('?>'.$compiled);
+                                        @endphp
                                         </div>
 
                                     </div>
