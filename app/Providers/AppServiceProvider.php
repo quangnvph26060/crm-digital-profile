@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Notification;
+use App\Models\TemplateFormHoSo;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Pagination\Paginator;
@@ -48,6 +49,11 @@ class AppServiceProvider extends ServiceProvider
                                      ->where('status', 0)
                                      ->get();
         View::share("notifications", $notifications);
+
+
+        $template_form_hoso = TemplateFormHoSo::where('status', 'active')->first();
+        
+        View::share("template_form_hoso", $template_form_hoso);
         // $setting = DB::table('smtps')->first();
 
         // if (!empty($setting)) {
