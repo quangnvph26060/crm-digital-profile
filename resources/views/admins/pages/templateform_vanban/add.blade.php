@@ -54,7 +54,7 @@
                                                 <label for="example-text-input" class="form-label">Form <span
                                                         class="text text-danger">*</span></label>
                                                 <textarea name="template_form" id="content" class="content-main"
-                                                    cols="30" rows="20" placeholder="Form" readonly placeholder="Form"
+                                                    cols="30" rows="20" placeholder="Form" required placeholder="Form"
                                                     class="template_main"></textarea>
                                                 @error('template_form')
                                                 <div class="invalid-feedback d-block">
