@@ -185,46 +185,54 @@ class InformationVbController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->except('_token');
-        // dd($data);
-        $vanbannew = new InformationVb();
+        DB::beginTransaction();
 
-        $vanban = InformationVb::where('ma_phong', $request->ma_phong)
-            ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
-            ->where('ho_so_so', $request->ho_so_so)
-            ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
+        try {
+            $data = $request->except('_token');
+            // dd($data);
+            $vanbannew = new InformationVb();
 
-        if ($vanban) {
-            return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
-        }
+            $vanban = InformationVb::where('ma_phong', $request->ma_phong)
+                ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
+                ->where('ho_so_so', $request->ho_so_so)
+                ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
 
-        $profile = Profile::where('ma_phong', $request->ma_phong)
-            ->where('ma_muc_luc', $request->ma_mucluc)
-            ->where('hop_so', $request->hop_so)
-            ->first();
+            if ($vanban) {
+                return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
+            }
 
-        if (!$profile) {
-            return back()->with('error', 'Hồ sơ không tồn tại.');
-        }
+            $profile = Profile::where('ma_phong', $request->ma_phong)
+                ->where('ma_muc_luc', $request->ma_mucluc)
+                ->where('hop_so', $request->hop_so)
+                ->first();
 
-        foreach ($data as $key => $value) {
-            $vanbannew->$key  = $value;
-            if (isset($request->duong_dan)) {
-                if ($key === "duong_dan") {
-                    $coquan = Config::find($request->ma_co_quan);
-                    $phong = Phong::find($request->ma_phong);
-                    $mucluc = MucLuc::find($request->ma_mucluc);
-                    $hoso = Profile::find($profile->id);
-                    $file = $request->file('duong_dan');
-                    $fileName = time() . '/' . $coquan->agency_code . '/' . $phong->ma_phong . '/' . $mucluc->ma_mucluc . '/' . $hoso->hop_so . '/' . $hoso->ho_so_so . '/' . $file->getClientOriginalName();
-                    $filePath = $file->storeAs('duong_dan', $fileName, 'public');
-                    $vanbannew->duong_dan = $filePath; // Lưu đường dẫn file
+            if (!$profile) {
+                return back()->with('error', 'Hồ sơ không tồn tại.');
+            }
+
+            foreach ($data as $key => $value) {
+                $vanbannew->$key  = $value;
+                if (isset($request->duong_dan)) {
+                    if ($key === "duong_dan") {
+                        $coquan = Config::find($request->ma_co_quan);
+                        $phong = Phong::find($request->ma_phong);
+                        $mucluc = MucLuc::find($request->ma_mucluc);
+                        $hoso = Profile::find($profile->id);
+                        $file = $request->file('duong_dan');
+                        $fileName = time() . '/' . $coquan->agency_code . '/' . $phong->ma_phong . '/' . $mucluc->ma_mucluc . '/' . $hoso->hop_so . '/' . $hoso->ho_so_so . '/' . $file->getClientOriginalName();
+                        $filePath = $file->storeAs('duong_dan', $fileName, 'public');
+                        $vanbannew->duong_dan = $filePath; // Lưu đường dẫn file
+                    }
                 }
             }
+            $vanbannew->profile_id = $profile->id;
+            $vanbannew->save();
+            return back()->with('success', 'Thêm văn bản thành công');
+        } catch (\Exception $e) {
+            DB::rollback();
+            // return back()->with('error', 'Đã xảy ra lỗi khi thêm hồ sơ: ' . $e->getMessage() . ' (Dòng ' . $e->getLine() . ')');
+            return back()->with('error', 'Thêm văn bản thất bại');
         }
-        $vanbannew->profile_id = $profile->id;
-        $vanbannew->save();
-        return back()->with('success', 'Thêm văn bản thành công');
     }
     public function edit($id)
     {
@@ -262,44 +270,51 @@ class InformationVbController extends Controller
     public function update(Request $request, $id)
     {
         //  dd($request->all());
-        $vanbannew = InformationVb::find($id);
+        DB::beginTransaction();
 
-        $vanban = InformationVb::where('id', '!=', $id)->where('ma_phong', $request->ma_phong)
-            ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
-            ->where('ho_so_so', $request->ho_so_so)
-            ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
+        try {
+            $vanbannew = InformationVb::find($id);
 
-        if ($vanban) {
-            return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
-        }
+            $vanban = InformationVb::where('id', '!=', $id)->where('ma_phong', $request->ma_phong)
+                ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
+                ->where('ho_so_so', $request->ho_so_so)
+                ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
 
-        $profile = Profile::where('ma_phong', $request->ma_phong)
-            ->where('ma_muc_luc', $request->ma_mucluc)
-            ->where('hop_so', $request->hop_so)
-            ->first();
+            if ($vanban) {
+                return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
+            }
 
-        if (!$profile) {
-            return back()->with('error', 'Hồ sơ không tồn tại.');
-        }
-        $data = $request->except('_token');
-        foreach ($data as $key => $value) {
-            $vanbannew->$key  = $value;
-            if (isset($request->duong_dan)) {
-                if ($key === "duong_dan") {
-                    $coquan = Config::find($request->ma_co_quan);
-                    $phong = Phong::find($request->ma_phong);
-                    $mucluc = MucLuc::find($request->ma_mucluc);
-                    $hoso = Profile::find($profile->id);
-                    $file = $request->file('duong_dan');
-                    $fileName = time() . '/' . $coquan->agency_code . '/' . $phong->ma_phong . '/' . $mucluc->ma_mucluc . '/' . $hoso->hop_so . '/' . $hoso->ho_so_so . '/' . $file->getClientOriginalName();
-                    $filePath = $file->storeAs('duong_dan', $fileName, 'public');
-                    $vanbannew->duong_dan = $filePath; // Lưu đường dẫn file
+            $profile = Profile::where('ma_phong', $request->ma_phong)
+                ->where('ma_muc_luc', $request->ma_mucluc)
+                ->where('hop_so', $request->hop_so)
+                ->first();
+
+            if (!$profile) {
+                return back()->with('error', 'Hồ sơ không tồn tại.');
+            }
+            $data = $request->except('_token');
+            foreach ($data as $key => $value) {
+                $vanbannew->$key  = $value;
+                if (isset($request->duong_dan)) {
+                    if ($key === "duong_dan") {
+                        $coquan = Config::find($request->ma_co_quan);
+                        $phong = Phong::find($request->ma_phong);
+                        $mucluc = MucLuc::find($request->ma_mucluc);
+                        $hoso = Profile::find($profile->id);
+                        $file = $request->file('duong_dan');
+                        $fileName = time() . '/' . $coquan->agency_code . '/' . $phong->ma_phong . '/' . $mucluc->ma_mucluc . '/' . $hoso->hop_so . '/' . $hoso->ho_so_so . '/' . $file->getClientOriginalName();
+                        $filePath = $file->storeAs('duong_dan', $fileName, 'public');
+                        $vanbannew->duong_dan = $filePath; // Lưu đường dẫn file
+                    }
                 }
             }
+            $vanbannew->profile_id = $profile->id;
+            $vanbannew->save();
+            return back()->with('success', 'Sửa văn bản thành công');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Cập nhật văn bản thất bại');
         }
-        $vanbannew->profile_id = $profile->id;
-        $vanbannew->save();
-        return back()->with('success', 'Sửa văn bản thành công');
     }
 
     // public function update(Request $request, $id)
