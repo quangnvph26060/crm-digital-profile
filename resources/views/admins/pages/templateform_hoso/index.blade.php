@@ -75,7 +75,7 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label for="">Tên Form và Template Form </label>
-                                        <input value="{{isset($inputs['name_form']) ? $inputs['name_form'] : ''}}" autocomplete="off" name="name_form" placeholder="Tên Form và Template Form ss" type="text" class="form-control">
+                                        <input value="{{isset($inputs['name_form']) ? $inputs['name_form'] : ''}}" autocomplete="off" name="name_form" placeholder="Tên Form và Template Form" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">

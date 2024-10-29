@@ -28,8 +28,8 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label for="">Tên cơ quan và Mã cơ quan </label>
-                                        <input value="{{isset($inputs['name']) ? $inputs['name'] : ''}}" autocomplete="off" name="name" placeholder="Tên cơ quan và mã cơ quan" type="text" class="form-control">
+                                        <label for="">Tên mục lục và mã mục lục </label>
+                                        <input value="{{isset($inputs['name']) ? $inputs['name'] : ''}}" autocomplete="off" name="name" placeholder="Tên mục lục và mã mục lục" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">

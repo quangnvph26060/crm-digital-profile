@@ -100,7 +100,7 @@
                                     <form action="{{ route('admin.profile.export') }}" method="POST">
                                         @csrf
                                         <button type="submit" class="btn btn-success">
-                                            <i class="fas fa-plus"></i> Xuất Excel
+                                            <i class="fas fa-plus"></i> Import Excel
                                         </button>
                                     </form>
                                 </div>
@@ -108,7 +108,7 @@
                                 <div class="col-lg-2">
                                     <button class="btn btn-success" id="exportExcelBtn">
                                         <input type="file" style="display: none">
-                                        <i class="fas fa-plus"></i> Nhập Excel
+                                        <i class="fas fa-plus"></i> Export Excel
                                     </button>
                                 </div>
                                 @endif
