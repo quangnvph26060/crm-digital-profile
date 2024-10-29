@@ -160,14 +160,18 @@
                                                 @enderror
                                             </div>
                                             @php
-                                                use Illuminate\Support\Facades\Blade;
 
-                                                $template = $template_form_vanban->template_form;
+                                            use Illuminate\Support\Facades\Blade;
+                                        
+                                            $template = $template_form_hoso->template_form;
+                                        
+                                            
+                                            $compiled = Blade::compileString($template);
+                                        
+                                            
+                                            eval('?>'.$compiled);
+                                        @endphp
 
-                                                $compiled = Blade::compileString($template);
-
-                                                eval('?>'.$compiled);
-                                            @endphp
                                         </div>
                                     </div>
                                     <div class="col-lg-12 mt-4">
