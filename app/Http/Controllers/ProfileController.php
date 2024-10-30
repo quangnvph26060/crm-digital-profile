@@ -224,7 +224,7 @@ class ProfileController extends Controller
         $macoquan = Config::all();
         $profile = Profile::find($id);
         $mamucluc = MucLuc::all();
-        $title   = "Xem hồ sơ";
+        $title   = "Sửa hồ sơ";
 
         return view('admins.pages.profiles.edit', ['title' => $title, 'profile' => $profile, 'macoquan' => $macoquan, 'mamucluc' => $mamucluc, 'profiles' => $profiles]);
     }

@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Thông tin cơ quan</h4>
+                            <h4 class="card-title">Thông tin phông</h4>
                         </div>
 
                         <div class="card-body p-4">

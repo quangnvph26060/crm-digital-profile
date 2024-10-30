@@ -1,6 +1,7 @@
 @extends('admins.layouts.index')
 @section('title', $title)
 @section('content')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <style>
     .cke_notifications_area {
         display: none;
@@ -63,11 +64,11 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="row mb-3">
-                                                <div class="col-lg-4 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
                                                             class="text text-danger">*</span></label>
                                                     <select
-                                                        class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }}"
+                                                        class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }} select2"
                                                         name="ma_co_quan" id="agency_code-select">
                                                         <option value="">Chọn mã cơ quan</option>
                                                         @foreach ($macoquan as $item)
@@ -81,11 +82,11 @@
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-lg-4 mb-3">
+                                                <div class="col-lg-6 mb-3">
                                                     <label for="ma-phong-select" class="form-label">Mã phông <span
                                                             class="text text-danger">*</span></label>
                                                     <select
-                                                        class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }}"
+                                                        class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }} select2"
                                                         name="ma_phong" id="ma-phong-select">
                                                         <option value="">Chọn mã phông</option>
                                                         {{-- Thêm các tùy chọn cho mã phông nếu có --}}
@@ -94,11 +95,11 @@
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-lg-4 mb-3">
+                                                <div class="col-lg-6 mb-3">
                                                     <label for="muc-luc-select" class="form-label">Mã mục lục <span
                                                             class="text text-danger">*</span></label>
                                                     <select
-                                                        class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}"
+                                                        class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }} select2"
                                                         name="ma_mucluc" id="muc-luc-select">
                                                         <option value="">Chọn mã mục lục</option>
                                                         {{-- Thêm các tùy chọn cho mã mục lục nếu có --}}
@@ -113,7 +114,7 @@
                                                     <label for="hop_so" class="form-label">Hộp số <span
                                                             class="text-danger">*</span></label>
                                                     <select name="hop_so" id="hop_so-select"
-                                                        class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
+                                                        class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }} select2">
                                                         <option value="">Chọn hộp số</option>
                                                         {{-- Thêm các tùy chọn cho hộp số nếu có --}}
                                                     </select>
@@ -125,7 +126,7 @@
                                                     <label for="ho_so_so" class="form-label">Hồ sơ số <span
                                                             class="text-danger">*</span></label>
                                                     <select name="ho_so_so" id="ho_so_so-select"
-                                                        class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
+                                                        class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }} select2" >
                                                         <option value="">Chọn hồ sơ số</option>
                                                         {{-- Thêm các tùy chọn cho hồ sơ số nếu có --}}
                                                     </select>
@@ -164,221 +165,7 @@
                                         <button type="submit" class="btn btn-primary w-md">Xác nhận</button>
                                     </div>
                                 </div>
-                                {{-- <div class="col-lg-6">
-                                    <div>
-                                        <div class="row">
-                                            <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Đường dẫn <span
-                                                        class="text-danger">*</span></label>
 
-                                                <input value=""
-                                                    class="form-control {{ $errors->has('duong_dan') ? 'is-invalid' : '' }}"
-                                                    name="duong_dan" type="file" id="example-text-input"
-                                                    placeholder="Đường dẫn" accept="application/pdf"
-                                                    onchange="previewPDF(event)">
-                                                @error('duong_dan')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-
-
-                                            <div class="mb-3" id="pdf-preview-container"
-                                                style="{{ $vanban->duong_dan ? 'display:block;' : 'display:none;' }}">
-                                                <label class="form-label">Xem trước PDF đã lưu:</label>
-                                                <iframe id="pdf-preview" src="{{ asset($vanban->duong_dan) }}"
-                                                    style="width: 100%; height: 850px;" frameborder="0"></iframe>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div>
-                                        <div class="row mb-3">
-                                            <div class="col-lg-4 mb-3">
-                                                <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
-                                                        class="text text-danger">*</span></label>
-                                                <select
-                                                    class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }}"
-                                                    name="config_id" id="agency_code-select">
-                                                    <option value="">Chọn mã cơ quan</option>
-                                                    @foreach ($macoquan as $item)
-                                                    <option {{ $vanban->config_id == $item->id ? 'selected' : '' }}
-                                                        value="{{ $item->id }}">{{ $item->agency_name }} -
-                                                        {{ $item->agency_code }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('config_id')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-lg-4 mb-3">
-                                                <label for="ma-phong-select" class="form-label">Mã phông <span
-                                                        class="text text-danger">*</span></label>
-                                                <select
-                                                    class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }}"
-                                                    name="ma_phong" id="ma-phong-select">
-                                                    <option value="">Chọn mã phông</option>
-                                                </select>
-                                                @error('ma_phong')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-lg-4 mb-3">
-                                                <label for="agency_code-select" class="form-label">Mã mục lục <span
-                                                        class="text text-danger">*</span></label>
-                                                <select
-                                                    class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}"
-                                                    name="ma_mucluc" id="muc-luc-select">
-                                                    <option value="">Chọn mã mục lục</option>
-
-                                                </select>
-                                                @error('ma_mucluc')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <div class="col-lg-6">
-                                                <label for="hop_so" class="form-label">Hộp số <span
-                                                        class="text-danger">*</span></label>
-                                                <select name="hop_so" id="hop_so-select"
-                                                    class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
-                                                    <option value="">Chọn hộp số</option>
-
-                                                </select>
-                                                @error('hop_so')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="ho_so_so" class="form-label">Hồ sơ số <span
-                                                        class="text-danger">*</span></label>
-                                                <select name="ho_so_so" id="ho_so_so-select"
-                                                    class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
-                                                    <option value="">Chọn hồ sơ số</option>
-
-                                                </select>
-                                                @error('ho_so_so')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="example-text-input" class="form-label">Số và ký hiệu văn bản
-                                                <span class="text text-danger">*</span></label>
-                                            <input value="{{ $vanban->so_kh_vb }}"
-                                                class="form-control {{ $errors->has('so_kh_vb') ? 'is-invalid' : '' }}"
-                                                name="so_kh_vb" type="text" id="example-text-input"
-                                                placeholder="Số và ký hiệu văn bản  ">
-                                            @error('so_kh_vb')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-                                        <div class="row">
-                                            <div class=" col-lg-6 mb-3">
-                                                <label for="example-text-input" class="form-label">Ngày tháng văn bản
-                                                    <span class="text text-danger">*</span></label>
-                                                <input value="{{ $vanban->time_vb }}"
-                                                    class="form-control {{ $errors->has('time_vb') ? 'is-invalid' : '' }}"
-                                                    name="time_vb" type="date" id="example-text-input">
-                                                @error('time_vb')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            <div class=" col-lg-6 mb-3">
-                                                <label for="example-text-input" class="form-label">Tờ số <span
-                                                        class="text text-danger">*</span></label>
-                                                <input value="{{ $vanban->to_so }}"
-                                                    class="form-control {{ $errors->has('to_so') ? 'is-invalid' : '' }}"
-                                                    name="to_so" type="text" id="example-text-input"
-                                                    placeholder="Tờ số : 01-02">
-                                                @error('to_so')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Tác giả văn bản <span
-                                                        class="text text-danger">*</span></label>
-                                                <input value="{{ $vanban->tac_gia }}"
-                                                    class="form-control {{ $errors->has('tac_gia') ? 'is-invalid' : '' }}"
-                                                    name="tac_gia" type="text" id="example-text-input"
-                                                    placeholder="Tác giải văm bản">
-                                                @error('tac_gia')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-
-                                        </div>
-                                        <div class="col-lg-12 "
-                                            style="display: flex !important;flex-direction: column;">
-
-                                            <label for="example-text-input" class="form-label">Nội dung <span
-                                                    class="text text-danger">*</span></label>
-                                            <textarea name="noi_dung" id="content" cols="30" rows="5"
-                                                placeholder="Ghi chú"
-                                                style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ $vanban->noi_dung }}</textarea>
-                                            @error('noi_dung')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-lg-12 "
-                                            style="display: flex !important;flex-direction: column;">
-
-                                            <label for="example-text-input" class="form-label">Trạng thái
-                                                <span class="text text-danger">*</spanclass=></label>
-                                            <select name="status" id="status-select" class="form-control ">
-                                                <option value="">Chọn trạng thái</option>
-                                                <option {{ $vanban->status == 'active' ? 'selected' : '' }}
-                                                    value="active">Hoạt động</option>
-                                                <option {{ $vanban->status == 'unactive' ? 'selected' : '' }}
-                                                    value="unactive" >Không hoạt động</option>
-                                            </select>
-
-                                        </div>
-
-                                        <div class="col-lg-12 mt-3 "
-                                            style="display: flex !important;flex-direction: column;">
-
-                                            <label for="example-text-input" class="form-label">Ghi chú <span
-                                                    class="text text-danger">*</span></label>
-                                            <textarea name="ghi_chu" id="" cols="30" rows="5" placeholder="Ghi chú"
-                                                style="border-radius: 5px;border:1px solid var(--bs-input-border); padding:10px">{{ $vanban->ghi_chu }}</textarea>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 mt-4">
-                                    <div>
-                                        <button type="submit" class="btn btn-primary w-md">
-                                            Xác nhận
-                                        </button>
-                                    </div>
-                                </div> --}}
                             </div>
                         </form>
                     </div>
@@ -390,22 +177,35 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
+
+    var $jq = jQuery.noConflict();
+    $jq(document).ready(function() {
+
+        $jq('.select2').select2({
+            width: '100%',
+            // allowClear: true
+        });
+    });
+</script>
+<script>
+    $jq(document).ready(function() {
     // Sự kiện thay đổi cho Agency Code (thẻ cha)
-    $('#agency_code-select').on('change', function() {
-        var selectedValue = $(this).val();
+    $jq('#agency_code-select').on('change', function() {
+        var selectedValue = $jq(this).val();
         loadMaPhong(selectedValue, null); // Khi chọn lại thẻ cha, reset các giá trị con
     });
 
     // Hàm load Ma Phong khi có Agency Code
     function loadMaPhong(selectedValue, selectedMaPhong) {
-        var selectElementMaPhong = $('#ma-phong-select');
-        var selectElementMucLuc = $('#muc-luc-select');
-        var selectElementHopSo = $('#hop_so-select');
-        var selectElementHoSoSo = $('#ho_so_so-select');
+        var selectElementMaPhong = $jq('#ma-phong-select');
+        var selectElementMucLuc = $jq('#muc-luc-select');
+        var selectElementHopSo = $jq('#hop_so-select');
+        var selectElementHoSoSo = $jq('#ho_so_so-select');
 
         // Reset tất cả các select box
         selectElementMaPhong.find('option').remove().append('<option value="">Chọn mã phòng</option>');
@@ -435,7 +235,7 @@
 
                         // Gắn sự kiện change cho Ma Phong sau khi đổ dữ liệu
                         selectElementMaPhong.off('change').on('change', function() {
-                            var selectedMaPhong = $(this).val();
+                            var selectedMaPhong = $jq(this).val();
                             loadMucLuc(selectedValue, selectedMaPhong, null); // Reset Mục Lục khi thay đổi Ma Phong
                         });
 
@@ -459,9 +259,9 @@
 
     // Hàm load Muc Luc khi có Ma Phong
     function loadMucLuc(selectedValue, selectedMaPhong, selectedMucLuc) {
-        var selectElementMucLuc = $('#muc-luc-select');
-        var selectElementHopSo = $('#hop_so-select');
-        var selectElementHoSoSo = $('#ho_so_so-select');
+        var selectElementMucLuc = $jq('#muc-luc-select');
+        var selectElementHopSo = $jq('#hop_so-select');
+        var selectElementHoSoSo = $jq('#ho_so_so-select');
 
         // Reset tất cả các select box con
         selectElementMucLuc.find('option').remove().append('<option value="">Mục lục</option>');
@@ -490,7 +290,7 @@
 
                         // Gắn sự kiện change cho Muc Luc sau khi đổ dữ liệu
                         selectElementMucLuc.off('change').on('change', function() {
-                            var selectedMucLuc = $(this).val();
+                            var selectedMucLuc = $jq(this).val();
                             loadHopSo(selectedValue, selectedMaPhong, selectedMucLuc, null); // Reset Hộp Số khi thay đổi Mục Lục
                         });
 
@@ -514,8 +314,8 @@
 
     // Hàm load Hop So khi có Muc Luc
     function loadHopSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo) {
-        var selectElementHopSo = $('#hop_so-select');
-        var selectElementHoSoSo = $('#ho_so_so-select');
+        var selectElementHopSo = $jq('#hop_so-select');
+        var selectElementHoSoSo = $jq('#ho_so_so-select');
 
         // Reset select box Ho So So
         selectElementHopSo.find('option').remove().append('<option value="">Hộp số</option>');
@@ -543,7 +343,7 @@
 
                         // Gắn sự kiện change cho Hộp Số sau khi đổ dữ liệu
                         selectElementHopSo.off('change').on('change', function() {
-                            var selectedHopSo = $(this).val();
+                            var selectedHopSo = $jq(this).val();
                             loadHoSoSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo, null); // Reset Hồ Sơ Số khi thay đổi Hộp Số
                         });
 
@@ -567,7 +367,7 @@
 
     // Hàm load Ho So So khi có Hop So
     function loadHoSoSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo, selectedHoSoSo) {
-        var selectElementHoSoSo = $('#ho_so_so-select');
+        var selectElementHoSoSo = $jq('#ho_so_so-select');
 
         selectElementHoSoSo.find('option').remove().append('<option value="">Hồ sơ số</option>');
         if (selectedHopSo) {
@@ -583,7 +383,7 @@
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        var selectElementHoSoSo = $('#ho_so_so-select');
+                        var selectElementHoSoSo = $jq('#ho_so_so-select');
                         selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
                         response.data.forEach(function(item) {
                             var isSelected = item.ho_so_so == selectedHoSoSo ? 'selected' : '';
@@ -601,7 +401,7 @@
     }
 
     // Khi trang được load lần đầu, tự động gọi loadMaPhong nếu đã có sẵn giá trị
-    var initialConfigId = $('#agency_code-select').val();
+    var initialConfigId = $jq('#agency_code-select').val();
     var initialMaPhong = `{{ $vanban->ma_phong }}`; // Giá trị mã phòng có sẵn
 
     if (initialConfigId) {

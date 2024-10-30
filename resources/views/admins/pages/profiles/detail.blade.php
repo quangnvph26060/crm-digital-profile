@@ -205,6 +205,12 @@
                             @include('globals.alert')
                             <div class="table-rep-plugin">
                                 <div class="table-responsive mb-0" data-pattern="priority-columns">
+                                    <div style="display: flex;justify-content: space-between" class="mb-3">
+                                        <h4>Danh sách văn bản trong hồ sơ</h4>
+                                        <a class="btn btn-success" href="{{ route('admin.vanban.add') }}">
+                                            <i class="fas fa-plus"></i> Thêm mới
+                                        </a>
+                                    </div>
                                     <table id="tech-companies-1" class="table table-striped">
                                         <thead>
                                             <tr>
