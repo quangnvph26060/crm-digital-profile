@@ -14,7 +14,9 @@ input[type="checkbox"] {
     display: inline-block;
     width: 200px;
 }
-
+.main-action{
+height: 32px;
+}
 .select-wrapper select {
     width: 100%;
     padding: 10px;

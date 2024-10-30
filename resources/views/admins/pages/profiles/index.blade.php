@@ -262,7 +262,7 @@
                                                         <td class="d-flex gap-1">
                                                             @if (auth('admin')->user()->level === 2)
                                                                 <a href="{{ route('admin.profile.edit', ['id' => $user->id]) }}"
-                                                                    class="btn btn-warning">
+                                                                    class="btn btn-warning main-action">
                                                                     <img src="{{ asset('svg/detail.svg') }}"
                                                                         alt="SVG Image">
                                                                 </a>
@@ -278,7 +278,7 @@
                                                                 </form>
                                                             @endif
                                                             <a href="{{ route('admin.profile.detail', ['id' => $user->id]) }}"
-                                                                class="btn btn-primary">
+                                                                class="btn btn-primary  main-action">
                                                                 <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
                                                             </a>
                                                         </td>
