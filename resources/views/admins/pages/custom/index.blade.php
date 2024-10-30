@@ -76,7 +76,7 @@
                                             <td>{{ $index + 1 + ($columnDataPaginated->currentPage() - 1) * $columnDataPaginated->perPage() }}</td>
                                             <td>{{ $column['name'] }}</td>
                                             <td>{{ $column['type'] }}</td>
-                                            <td>{{ $column['comment'] }}</td>
+                                            <td>{{  $comment[$column['name']] }}</td>
                                             <td>
                                                 <span class="badge {{ $column['is_required'] === 'Có' ? 'bg-danger' : 'bg-success' }}">
                                                     {{ $column['is_required'] === 'Có' ? 'Bắt buộc' : 'Không bắt buộc' }}

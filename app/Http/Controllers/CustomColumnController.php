@@ -14,32 +14,34 @@ use Illuminate\Support\Facades\File;
 class CustomColumnController extends Controller
 {
     public function index(Request $request)
-    {
+    {   
+        // tên cột db 
         $columns = Schema::getColumnListing('profiles');
-
+       
         $columnData = [];
         foreach ($columns as $column) {
             // Lấy kiểu dữ liệu của cột
             $columnType = Schema::getColumnType('profiles', $column);
 
             // Lấy ghi chú cho cột từ thông tin schema
-            $comment = DB::table('information_schema.columns')
-                ->where('table_schema', env('DB_DATABASE')) // Lấy database từ file .env
-                ->where('table_name', 'profiles')
-                ->where('column_name', $column)
-                ->value('column_comment');
-
+            // $comment = DB::table('information_schema.columns')
+            //     ->where('table_schema', env('DB_DATABASE'))
+            //     ->where('table_name', 'profiles')
+            //     ->where('column_name', $column)
+            //     ->value('column_comment');
+            $comment =  $this->getColumnComments('profiles');
+          //  
             // Kiểm tra xem cột có được yêu cầu không
             $isRequired = DB::table('information_schema.columns')
                 ->where('table_schema', env('DB_DATABASE'))
                 ->where('table_name', 'profiles')
                 ->where('column_name', $column)
                 ->value('is_nullable');
-
+               
             $columnData[] = [
                 'name' => $column,
                 'type' => $columnType,
-                'comment' => $comment, // Thêm ghi chú
+               // 'comment' => $comment, // Thêm ghi chú
                 'is_required' => $isRequired === 'NO' ? 'Có' : 'Không', // Kiểm tra trạng thái yêu cầu
             ];
         }
@@ -61,10 +63,20 @@ class CustomColumnController extends Controller
         );
 
         $title = 'Thêm trường hồ sơ';
-        return view('admins.pages.custom.index', compact('title', 'columnDataPaginated'));
+        return view('admins.pages.custom.index', compact('title', 'columnDataPaginated','comment'));
     }
 
+    private function getColumnComments($tableName)
+    {
+        $columns = Schema::getColumnListing($tableName);
+        $comments = [];
 
+        foreach ($columns as $column) {
+            $comments[$column] = DB::select("SHOW FULL COLUMNS FROM `$tableName` WHERE Field = ?", [$column])[0]->Comment ?? '';
+        }
+
+        return $comments;
+    }
 
     public function store(Request $request)
     {
