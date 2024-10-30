@@ -5,6 +5,53 @@
     .cke_notifications_area {
         display: none;
     }
+    .select2-container--default .select2-selection--single {
+            height: 30px; /* Chiều cao mong muốn */
+            line-height: 30px; /* Căn giữa nội dung */
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 30px; /* Căn giữa nội dung bên trong */
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 30px; /* Chiều cao của mũi tên */
+            top: 5px; /* Điều chỉnh vị trí mũi tên */
+        }
+
+        .select2-container {
+            width: 100% !important; /* Đảm bảo chiều rộng 100% */
+        }
+
+        .col-lg-4 {
+            width: 32%; /* Đặt chiều rộng cho các cột */
+            float: left; /* Để hiển thị bên cạnh nhau */
+            margin-right: 1%; /* Khoảng cách giữa các cột */
+        }
+
+        /* Đặt lại margin cho cột cuối cùng */
+        .col-lg-4:last-child {
+            margin-right: 0;
+        }
+
+        .mb-3 {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .text-danger {
+            color: red;
+        }
+
+        .invalid-feedback {
+            color: red;
+            font-size: 0.875em;
+        }
+
 </style>
 <div class="page-content">
     <div class="container-fluid">
@@ -61,11 +108,11 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="row mb-3">
-                                                <div class="col-lg-4 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
                                                             class="text text-danger">*</span></label>
                                                     <select
-                                                        class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }}"
+                                                        class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }} select2"
                                                         name="ma_co_quan" id="agency_code-select">
                                                         <option value="">Chọn mã cơ quan</option>
                                                         @foreach ($macoquan as $item)
@@ -79,11 +126,11 @@
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-lg-4 mb-3">
+                                                <div class="col-lg-6 mb-3">
                                                     <label for="ma-phong-select" class="form-label">Mã phông <span
                                                             class="text text-danger">*</span></label>
                                                     <select
-                                                        class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }}"
+                                                        class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }} select2"
                                                         name="ma_phong" id="ma-phong-select">
                                                         <option value="">Chọn mã phông</option>
                                                         {{-- Thêm các tùy chọn cho mã phông nếu có --}}
@@ -92,11 +139,11 @@
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-lg-4 mb-3">
+                                                <div class="col-lg-6 mb-3">
                                                     <label for="muc-luc-select" class="form-label">Mã mục lục <span
                                                             class="text text-danger">*</span></label>
                                                     <select
-                                                        class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}"
+                                                        class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }} select2"
                                                         name="ma_mucluc" id="muc-luc-select">
                                                         <option value="">Chọn mã mục lục</option>
                                                         {{-- Thêm các tùy chọn cho mã mục lục nếu có --}}
@@ -111,7 +158,7 @@
                                                     <label for="hop_so" class="form-label">Hộp số <span
                                                             class="text-danger">*</span></label>
                                                     <select name="hop_so" id="hop_so-select"
-                                                        class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
+                                                        class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }} select2">
                                                         <option value="">Chọn hộp số</option>
                                                         {{-- Thêm các tùy chọn cho hộp số nếu có --}}
                                                     </select>
@@ -123,7 +170,7 @@
                                                     <label for="ho_so_so" class="form-label">Hồ sơ số <span
                                                             class="text-danger">*</span></label>
                                                     <select name="ho_so_so" id="ho_so_so-select"
-                                                        class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
+                                                        class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }} select2">
                                                         <option value="">Chọn hồ sơ số</option>
                                                         {{-- Thêm các tùy chọn cho hồ sơ số nếu có --}}
                                                     </select>
@@ -163,213 +210,7 @@
                                         <button type="submit" class="btn btn-primary w-md">Xác nhận</button>
                                     </div>
                                 </div>
-                                {{-- <div class="col-lg-6">
-                                    <div>
-                                        <div class="row">
-                                            <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Đường dẫn <span
-                                                        class="text-danger">*</span></label>
-                                                <input value="{{ old('duong_dan') }}"
-                                                    class="form-control  {{ $errors->has('duong_dan') ? 'is-invalid' : '' }}"
-                                                    name="duong_dan" type="file" id="example-text-input"
-                                                    placeholder="Đường dẫn" accept="application/pdf"
-                                                    onchange="previewPDF(event)">
-                                                @error('duong_dan')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
 
-                                            <div class="mb-3" id="pdf-preview-container" style="display:none;">
-                                                <label class="form-label">Xem trước PDF:</label>
-                                                <iframe id="pdf-preview" style="width: 100%; height: 850px;"
-                                                    frameborder="0"></iframe>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div>
-                                        <div class="row mb-3">
-                                            <div class="col-lg-4 mb-3">
-                                                <label for="agency_code-select" class="form-label">Mã Cơ Quan <span
-                                                        class="text text-danger">*</span></label>
-                                                <select
-                                                    class="form-select {{ $errors->has('config_id') ? 'is-invalid' : '' }}"
-                                                    name="config_id" id="agency_code-select">
-                                                    <option value="">Chọn mã cơ quan</option>
-                                                    @foreach ($macoquan as $item)
-                                                    <option value="{{ $item->id }}" {{ old('config_id')==$item->id ?
-                                                        'selected' : '' }}>
-                                                        {{ $item->agency_name }} -
-                                                        {{ $item->agency_code }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('config_id')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-lg-4 mb-3">
-                                                <label for="ma-phong-select" class="form-label">Mã phông <span
-                                                        class="text text-danger">*</span></label>
-                                                <select
-                                                    class="form-select ma_phong {{ $errors->has('ma_phong') ? 'is-invalid' : '' }}"
-                                                    name="ma_phong" id="ma-phong-select">
-                                                    <option value="">Chọn mã phông</option>
-                                                </select>
-
-                                            </div>
-                                            <div class="col-lg-4 mb-3">
-                                                <label for="muc-luc-select" class="form-label">Mã mục lục <span
-                                                        class="text text-danger">*</span></label>
-                                                <select
-                                                    class="form-select {{ $errors->has('ma_mucluc') ? 'is-invalid' : '' }}"
-                                                    name="ma_mucluc" id="muc-luc-select">
-                                                    <option value="">Chọn mã mục lục</option>
-
-                                                </select>
-                                                @error('ma_mucluc')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <div class="col-lg-6">
-                                                <label for="hop_so" class="form-label">Hộp số <span
-                                                        class="text-danger">*</span></label>
-                                                <select name="hop_so" id="hop_so-select"
-                                                    class="form-control {{ $errors->has('hop_so') ? 'is-invalid' : '' }}">
-                                                    <option value="">Chọn hộp số</option>
-
-                                                </select>
-                                                @error('hop_so')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="ho_so_so" class="form-label">Hồ sơ số <span
-                                                        class="text-danger">*</span></label>
-                                                <select name="ho_so_so" id="ho_so_so-select"
-                                                    class="form-control {{ $errors->has('ho_so_so') ? 'is-invalid' : '' }}">
-                                                    <option value="">Chọn hồ sơ số</option>
-
-                                                </select>
-                                                @error('ho_so_so')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="example-text-input" class="form-label">Số và ký hiệu văn bản
-                                                <span class="text text-danger">*</span></label>
-                                            <input value="{{ old('so_kh_vb') }}"
-                                                class="form-control {{ $errors->has('so_kh_vb') ? 'is-invalid' : '' }}"
-                                                name="so_kh_vb" type="text" id="example-text-input"
-                                                placeholder="Số và ký hiệu văn bản  ">
-                                            @error('so_kh_vb')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-                                        <div class="row">
-                                            <div class=" col-lg-6 mb-3">
-                                                <label for="example-text-input" class="form-label">Ngày tháng văn bản
-                                                    <span class="text text-danger">*</span></label>
-                                                <input value="{{ old('time_vb') }}"
-                                                    class="form-control {{ $errors->has('time_vb') ? 'is-invalid' : '' }}"
-                                                    name="time_vb" type="date" id="example-text-input">
-                                                @error('time_vb')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            <div class=" col-lg-6 mb-3">
-                                                <label for="example-text-input" class="form-label">Tờ số <span
-                                                        class="text text-danger">*</span></label>
-                                                <input value="{{ old('to_so') }}"
-                                                    class="form-control {{ $errors->has('to_so') ? 'is-invalid' : '' }}"
-                                                    name="to_so" type="text" id="example-text-input"
-                                                    placeholder="Tờ số : 01-02">
-                                                @error('to_so')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Tác giả văn bản
-                                                    <span class="text text-danger">*</span></label>
-                                                <input value="{{ old('tac_gia') }}"
-                                                    class="form-control {{ $errors->has('tac_gia') ? 'is-invalid' : '' }}"
-                                                    name="tac_gia" type="text" id="example-text-input"
-                                                    placeholder="Tác giải văm bản">
-                                                @error('tac_gia')
-                                                <div class="invalid-feedback d-block">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-
-                                        </div>
-                                        <div class="col-lg-12 "
-                                            style="display: flex !important;flex-direction: column;">
-
-                                            <label for="example-text-input" class="form-label">Nội dung <span
-                                                    class="text text-danger">*</span></label>
-                                            <textarea name="noi_dung" id="content" cols="30" rows="5"
-                                                placeholder="Ghi chú"
-                                                style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ old('noi_dung') }}</textarea>
-                                            @error('noi_dung')
-                                            <div class="invalid-feedback d-block">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-lg-12 "
-                                            style="display: flex !important;flex-direction: column;">
-
-                                            <label for="example-text-input" class="form-label">Trạng thái <span
-                                                    class="text text-danger">*</span></label>
-                                            <select name="status" id="status-select" class="form-control ">
-                                                <option value="">Chọn trạng thái</option>
-                                                <option value="active">Hoạt động</option>
-                                                <option value="unactive" selected>Không hoạt động</option>
-                                            </select>
-
-                                        </div>
-                                        <div class="col-lg-12 mt-3 "
-                                            style="display: flex !important;flex-direction: column;">
-
-                                            <label for="example-text-input" class="form-label">Ghi chú <span
-                                                    class="text text-danger">*</span></label>
-                                            <textarea name="ghi_chu" id="" cols="30" rows="5" placeholder="Ghi chú"
-                                                style="border-radius: 5px;border:1px solid var(--bs-input-border); padding:10px">{{ old('ghi_chu') }}</textarea>
-
-                                        </div>
-                                    </div>
-                                </div> --}}
-                                {{-- <div class="col-lg-12 mt-4">
-                                    <div>
-                                        <button type="submit" class="btn btn-primary w-md">
-                                            Xác nhận
-                                        </button>
-                                    </div>
-                                </div> --}}
                             </div>
                         </form>
                     </div>
@@ -381,20 +222,33 @@
     </div> <!-- container-fluid -->
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
-            $('#agency_code-select').change(function() {
-                var selectedValue = $(this).val();
+
+    var $jq = jQuery.noConflict();
+    $jq(document).ready(function() {
+        console.log("Kích hoạt Select2");
+        $jq('.select2').select2({
+            width: '100%',
+            // allowClear: true
+        });
+    });
+</script>
+<script>
+    $jq(document).ready(function() {
+            $jq('#agency_code-select').change(function() {
+                var selectedValue = $jq(this).val();
                 // alert(selectedValue);
-                $('#ma-phong-select').find('option').remove().end().append(
-                    '<option value="">Chọn mã phòng</option>').val('');
-                $('#muc-luc-select').find('option').remove().end().append(
+                $jq('#ma-phong-select').find('option').remove().end().append(
+                    '<option value="">Chọn mã phông</option>').val('');
+                $jq('#muc-luc-select').find('option').remove().end().append(
                     '<option value="">Mục lục</option>').val('');
-                $('#hop_so-select').find('option').remove().end().append('<option value="">Hộp số</option>')
+                $jq('#hop_so-select').find('option').remove().end().append('<option value="">Hộp số</option>')
                     .val('');
-                $('#ho_so_so-select').find('option').remove().end().append(
+                $jq('#ho_so_so-select').find('option').remove().end().append(
                     '<option value="">Hồ sơ số</option>').val('');
                 if (selectedValue) {
                     var url = "{{ route('phong-by-config_id') }}";
@@ -407,7 +261,7 @@
                         success: function(response) {
 
                             if (response.status === 'success') {
-                                var selectElement = $('#ma-phong-select');
+                                var selectElement = $jq('#ma-phong-select');
                                 selectElement.find('option').remove();
                                 selectElement.append('<option value="">Chọn mã phông</option>');
                                 response.data.forEach(function(item) {
@@ -417,15 +271,15 @@
                                         );
                                 });
                                 selectElement.val('{{ old('ma_phong') }}');
-                                $('#ma-phong-select').change(function() {
-                                    var selectedMaPhongValue = $(this).val();
-                                    $('#muc-luc-select').find('option').remove().end()
+                                $jq('#ma-phong-select').change(function() {
+                                    var selectedMaPhongValue = $jq(this).val();
+                                    $jq('#muc-luc-select').find('option').remove().end()
                                         .append('<option value="">Mục lục</option>')
                                         .val('');
-                                    $('#hop_so-select').find('option').remove().end()
+                                    $jq('#hop_so-select').find('option').remove().end()
                                         .append('<option value="">Hộp số</option>').val(
                                             '');
-                                    $('#ho_so_so-select').find('option').remove().end()
+                                    $jq('#ho_so_so-select').find('option').remove().end()
                                         .append('<option value="">Hồ sơ số</option>')
                                         .val('');
                                     if (selectedMaPhongValue) {
@@ -442,7 +296,7 @@
                                                 if (response.status ===
                                                     'success') {
                                                     // console.log(response.data);
-                                                    var selectElement = $(
+                                                    var selectElement = $jq(
                                                         '#muc-luc-select'
                                                         );
                                                     selectElement.find(
@@ -467,12 +321,12 @@
                                                                     );
                                                         });
 
-                                                    $('#muc-luc-select')
+                                                    $jq('#muc-luc-select')
                                                         .change(function() {
                                                             var selectedMucLucValue =
-                                                                $(this)
+                                                                $jq(this)
                                                                 .val();
-                                                            $('#hop_so-select')
+                                                            $jq('#hop_so-select')
                                                                 .find(
                                                                     'option'
                                                                     )
@@ -483,7 +337,7 @@
                                                                     )
                                                                 .val(
                                                                 '');
-                                                            $('#ho_so_so-select')
+                                                            $jq('#ho_so_so-select')
                                                                 .find(
                                                                     'option'
                                                                     )
@@ -515,7 +369,7 @@
                                                                             'success'
                                                                             ) {
                                                                             var selectElement =
-                                                                                $(
+                                                                                $jq(
                                                                                     '#hop_so-select');
                                                                             selectElement
                                                                                 .find(
@@ -545,14 +399,14 @@
                                                                                     }
                                                                                     );
 
-                                                                            $('#hop_so-select')
+                                                                            $jq('#hop_so-select')
                                                                                 .change(
                                                                                     function() {
                                                                                         var selectedHopSoValue =
-                                                                                            $(
+                                                                                            $jq(
                                                                                                 this)
                                                                                             .val();
-                                                                                        $('#ho_so_so-select')
+                                                                                        $jq('#ho_so_so-select')
                                                                                             .find(
                                                                                                 'option'
                                                                                                 )
@@ -590,7 +444,7 @@
                                                                                                         'success'
                                                                                                         ) {
                                                                                                         var selectElement =
-                                                                                                            $(
+                                                                                                            $jq(
                                                                                                                 '#ho_so_so-select');
                                                                                                         selectElement
                                                                                                             .find(
@@ -671,8 +525,8 @@
                 }
             });
 
-            // $('#ma-phong-select').change(function() {
-            //     var selectedMaPhongValue = $(this).val();
+            // $jq('#ma-phong-select').change(function() {
+            //     var selectedMaPhongValue = $jq(this).val();
             //     alert(selectedMaPhongValue);
             //     if (selectedMaPhongValue) {
             //         // Thực hiện hành động mà bạn muốn khi chọn mã phòng

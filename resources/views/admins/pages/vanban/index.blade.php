@@ -259,6 +259,7 @@
                                             {{-- @dd($vanban); --}}
                                             {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
                                             @if ($vanban && $vanban->first())
+                                            <th>STT</th>
                                                 @foreach ($vanban->first()->getAttributes() as $column => $value)
                                                     @if (
                                                         !in_array($column, [
@@ -296,7 +297,7 @@
 
                                                 <tr class="row-header">
                                                     <td style="padding: 0px 10px"
-                                                        colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']) + 1 }}">
+                                                        colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']) + 2 }}">
                                                         <strong>Cơ quan : {{ $item->config->agency_code }} / Phông:
                                                             {{ $item->maPhong->ten_phong }} / Mục lục:
                                                             {{ $item->maMucLuc->ten_mucluc }} / Hộp số:
@@ -307,6 +308,7 @@
                                             @endif
 
                                             <tr>
+                                                <th>{{ $index + 1 }}</th>
                                                 @foreach ($item->getAttributes() as $column => $value)
                                                     {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
                                                     @if (

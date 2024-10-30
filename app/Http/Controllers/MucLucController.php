@@ -16,9 +16,9 @@ class MucLucController extends Controller
         $configs = MucLuc::query();
 
         if (isset($request->name) && $request->name != '') {
-            $configs->where(function($query) use ($request) {
+            $configs->where(function ($query) use ($request) {
                 $query->where('ten_mucluc', 'like', '%' . $request->name . '%')
-                      ->orWhere('ma_mucluc', 'like', '%' . $request->name . '%');
+                    ->orWhere('ma_mucluc', 'like', '%' . $request->name . '%');
             });
         }
 
@@ -45,7 +45,7 @@ class MucLucController extends Controller
         $config = MucLuc::find($id);
         $phongdata  = Phong::all();
         $title   = "Sửa mục lục";
-        return view('admins.pages.mucluc.edit', ['title' => $title,'config'=>$config, 'phongdata' => $phongdata]);
+        return view('admins.pages.mucluc.edit', ['title' => $title, 'config' => $config, 'phongdata' => $phongdata]);
     }
     public function update(Request $request, $id)
     {
@@ -55,11 +55,14 @@ class MucLucController extends Controller
             if (!$config) {
                 return back()->with('error', 'Không tìm thấy bản ghi cần chỉnh sửa.');
             }
-            $mucluc = MucLuc::where('id', '!=' , $id)->where('ten_mucluc', $request->ten_mucluc)
-            ->where('ma_mucluc', $request->ma_mucluc)->where('phong_id', $request->phong_id)
+            $mucluc = MucLuc::where('id', '!=', $id)->where('phong_id', $request->phong_id)
+            ->where(function ($query) use ($request) {
+                $query->where('ma_mucluc', $request->ma_mucluc)
+                    ->orWhere('ten_mucluc', $request->ten_mucluc);
+            })
             ->first();
-            if($mucluc){
-                return back()->with('error', 'Không tìm thấy bản ghi cần chỉnh sửa.');
+            if ($mucluc) {
+                return back()->with('error', 'Mã mục lục và Tên mục lục trong Phông đã tồn tại');
             }
             $config->update([
                 'ten_mucluc' => $request->ten_mucluc,
@@ -78,7 +81,7 @@ class MucLucController extends Controller
             $existingConfig = $this->checkExistingConfig($request);
 
             if ($existingConfig) {
-                return back()->with('error', 'Không thể thêm bản ghi vì trùng lặp dữ liệu.');
+                return back()->with('error', 'Mã mục lục và Tên mục lục trong Phông đã tồn tại.');
             }
             $validator = $this->validateConfig($request);
 
@@ -96,8 +99,11 @@ class MucLucController extends Controller
 
     private function checkExistingConfig($request)
     {
-        return MucLuc::where('ten_mucluc', $request->ten_mucluc)
-            ->where('ma_mucluc', $request->ma_mucluc)->where('phong_id', $request->phong_id)
+        return MucLuc::where('phong_id', $request->phong_id)
+            ->where(function ($query) use ($request) {
+                $query->where('ma_mucluc', $request->ma_mucluc)
+                    ->orWhere('ten_mucluc', $request->ten_mucluc);
+            })
             ->first();
     }
 

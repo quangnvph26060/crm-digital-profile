@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Database\Schema\Blueprint;
@@ -11,7 +13,7 @@ use Illuminate\Support\Facades\File;
 
 class CustomColumnController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $columns = Schema::getColumnListing('profiles');
 
@@ -20,33 +22,82 @@ class CustomColumnController extends Controller
             // Lấy kiểu dữ liệu của cột
             $columnType = Schema::getColumnType('profiles', $column);
 
+            // Lấy ghi chú cho cột từ thông tin schema
+            $comment = DB::table('information_schema.columns')
+                ->where('table_schema', env('DB_DATABASE')) // Lấy database từ file .env
+                ->where('table_name', 'profiles')
+                ->where('column_name', $column)
+                ->value('column_comment');
+
+            // Kiểm tra xem cột có được yêu cầu không
+            $isRequired = DB::table('information_schema.columns')
+                ->where('table_schema', env('DB_DATABASE'))
+                ->where('table_name', 'profiles')
+                ->where('column_name', $column)
+                ->value('is_nullable');
+
             $columnData[] = [
                 'name' => $column,
                 'type' => $columnType,
+                'comment' => $comment, // Thêm ghi chú
+                'is_required' => $isRequired === 'NO' ? 'Có' : 'Không', // Kiểm tra trạng thái yêu cầu
             ];
         }
+
+        // Phân trang dữ liệu
+        $perPage = 10; // Số lượng cột trên mỗi trang
+        $currentPage = $request->input('page', 1);
+        $offset = ($currentPage - 1) * $perPage;
+        $total = count($columnData);
+        $columnDataPaginated = array_slice($columnData, $offset, $perPage);
+
+        // Tạo một đối tượng LengthAwarePaginator để hỗ trợ phân trang
+        $columnDataPaginated = new LengthAwarePaginator(
+            $columnDataPaginated,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
         $title = 'Thêm trường hồ sơ';
-        return view('admins/pages/custom/index', compact('title', 'columnData'));
+        return view('admins.pages.custom.index', compact('title', 'columnDataPaginated'));
     }
+
 
 
     public function store(Request $request)
     {
+        // Xác thực các trường đầu vào
+        $request->validate([
+            'column_name' => 'required|string|max:255',
+            'column_type' => 'required|in:string,integer,text',
+            'is_required' => 'required|boolean',
+        ]);
+
         $columnName = $request->input('column_name');
         $columnType = $request->input('column_type');
+        $isRequired = $request->input('is_required');
 
-        $result = $this->addColumnAndUpdateFillable($columnName, $columnType);
+        $result = $this->addColumnAndUpdateFillable($columnName, $columnType, $isRequired);
 
         return $result;
     }
-    public function addColumnAndUpdateFillable($columnName, $columnType)
+
+    // Thêm cột và cập nhật các trường fillable
+    public function addColumnAndUpdateFillable($columnName, $columnType, $isRequired)
     {
-        // Chuyển đổi tên cột sang dạng slug không dấu với dấu gạch dưới
+
         $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName)));
 
         if (!Schema::hasColumn('profiles', $cleanColumnName)) {
-            Schema::table('profiles', function (Blueprint $table) use ($cleanColumnName, $columnType, $columnName) {
-                $table->$columnType($cleanColumnName)->nullable()->comment($columnName);
+            Schema::table('profiles', function (Blueprint $table) use ($cleanColumnName, $columnType, $columnName, $isRequired) {
+
+                if ($isRequired) {
+                    $table->$columnType($cleanColumnName)->comment($columnName);
+                } else {
+                    $table->$columnType($cleanColumnName)->nullable()->comment($columnName);
+                }
             });
 
             // Cập nhật thuộc tính fillable của model Profile
@@ -66,6 +117,7 @@ class CustomColumnController extends Controller
             return back()->with('success', 'Cột đã tồn tại!');
         }
     }
+
 
     // Hàm để cập nhật mảng fillable từ file new_columns.php
     public function updateFillableArray($newColumns)

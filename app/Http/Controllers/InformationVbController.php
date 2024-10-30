@@ -423,7 +423,7 @@ class InformationVbController extends Controller
         Log::info($coquandata);
         return response()->json(['status' => "success", 'data' => $coquandata]);
     }
-    public function addcolumn()
+    public function addcolumn(Request $request)
     {
         $title = "Quản lý trường văn bản";
         $columns = Schema::getColumnListing('information_vb');
@@ -433,34 +433,62 @@ class InformationVbController extends Controller
             // Lấy kiểu dữ liệu của cột
             $columnType = Schema::getColumnType('information_vb', $column);
 
-            // Lấy ghi chú cho cột từ thông tin schema
-            $comment = DB::table('information_schema.columns')
+            // Lấy ghi chú cho cột
+            $columnInfo = DB::table('information_schema.columns')
                 ->where('table_schema', env('DB_DATABASE')) // Lấy database từ file .env
                 ->where('table_name', 'information_vb')
                 ->where('column_name', $column)
-                ->value('column_comment');
+                ->first(['column_comment', 'is_nullable']);
+
+            // Chuyển stdClass thành mảng và kiểm tra giá trị nếu có
+            $columnInfoArray = (array) $columnInfo;
+
+            // Xác định tính bắt buộc của trường
+            $isRequired = isset($columnInfoArray['is_nullable']) && $columnInfoArray['is_nullable'] === 'NO' ? 'Có' : 'Không';
 
             $columnData[] = [
                 'name' => $column,
                 'type' => $columnType,
-                'comment' => $comment, // Thêm ghi chú
+                'comment' => $columnInfoArray['column_comment'] ?? '', // Chuyển thành chuỗi nếu null
+                'is_required' => $isRequired, // Bắt buộc
             ];
         }
 
-        return view('admins.pages.vanban.addcolumn', compact('title', 'columnData'));
+        // Phân trang dữ liệu
+        $perPage = 10; // Số lượng cột trên mỗi trang
+        $currentPage = $request->input('page', 1);
+        $offset = ($currentPage - 1) * $perPage;
+        $total = count($columnData);
+        $columnDataPaginated = array_slice($columnData, $offset, $perPage);
+
+        // Tạo một đối tượng LengthAwarePaginator để hỗ trợ phân trang
+        $columnDataPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $columnDataPaginated,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        return view('admins.pages.vanban.addcolumn', compact('title', 'columnDataPaginated'));
     }
+
+
 
 
 
     public function storecolumn(Request $request)
     {
+        // Validate yêu cầu
         $request->validate([
             'column_name' => 'required|string|max:255',
             'data_type' => 'required|in:varchar,int,text',
+            'is_required' => 'nullable|boolean', // Kiểm tra giá trị bắt buộc
         ]);
 
         $tableName = 'information_vb';
 
+        // Xác định kiểu dữ liệu dựa trên lựa chọn của người dùng
         switch ($request->data_type) {
             case 'varchar':
                 $columnType = 'VARCHAR(255)';
@@ -475,18 +503,22 @@ class InformationVbController extends Controller
                 return back()->withErrors(['data_type' => 'Kiểu dữ liệu không hợp lệ.']);
         }
 
-        // $columnName = $request->column_name;
         $comment = $request->column_name;
         $columnName = str_replace('-', '_', Str::slug($comment));
 
+        // Kiểm tra nếu trường bắt buộc
+        $isRequired = $request->is_required ? 'NOT NULL' : 'NULL';
 
         try {
-            DB::statement("ALTER TABLE `$tableName` ADD `$columnName` $columnType NULL");
+            // Thêm cột vào bảng
+            DB::statement("ALTER TABLE `$tableName` ADD `$columnName` $columnType $isRequired");
 
+            // Nếu có ghi chú, thêm ghi chú cho cột
             if (!empty($comment)) {
-                DB::statement("ALTER TABLE `$tableName` MODIFY `$columnName` $columnType NULL COMMENT '$comment'");
+                DB::statement("ALTER TABLE `$tableName` MODIFY `$columnName` $columnType $isRequired COMMENT '$comment'");
             }
 
+            // Cập nhật mảng văn bản (nếu cần)
             $this->updateArrayVanBan($columnName);
 
             return back()->with('success', 'Cột đã được thêm thành công!');
