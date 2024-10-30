@@ -71,7 +71,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                            
                                     @foreach($columnDataPaginated as $index => $column)
 
                                         <tr>

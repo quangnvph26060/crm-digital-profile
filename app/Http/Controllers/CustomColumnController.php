@@ -37,7 +37,6 @@ class CustomColumnController extends Controller
                 ->where('table_name', 'profiles')
                 ->where('column_name', $column)
                 ->value('is_nullable');
-               
             $columnData[] = [
                 'name' => $column,
                 'type' => $columnType,
