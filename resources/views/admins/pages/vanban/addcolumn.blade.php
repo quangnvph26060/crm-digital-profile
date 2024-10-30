@@ -34,11 +34,6 @@
                         <form action="{{ route('admin.vanban.addcolumn') }}" method="POST" class="container mt-4">
                             @csrf
 
-                            {{-- <div class="mb-3">
-                                <label  for="comment" class="form-label">Nội dung cột</label>
-                                <input type="text" class="form-control" name="comment" id="comment">
-                            </div> --}}
-
                             <div class="mb-3">
                                 <label for="column_name" class="form-label">Tên cột:</label>
                                 <input type="text" class="form-control" name="column_name" id="column_name" required>
@@ -53,6 +48,13 @@
                                     <option value="text">TEXT</option>
                                 </select>
                             </div>
+                            <div class="mb-3">
+                                <label for="is_required" class="form-label">Yêu cầu bắt buộc:</label>
+                                <select name="is_required" id="is_required" class="form-select">
+                                    <option value="1">Có</option>
+                                    <option value="0" selected>Không</option>
+                                </select>
+                            </div>
 
 
                             <button type="submit" class="btn btn-primary">Thêm cột</button>
@@ -63,7 +65,7 @@
             </div> <!-- end col -->
         </div>
 
-        <div class="container mt-5">
+        {{-- <div class="container mt-5">
             <h1>Danh sách cột trong bảng</h1>
             <div class="row mt-3">
                 @foreach($columnData as $column)
@@ -78,7 +80,7 @@
                             <span class="">( {{ $column['type'] }} )</span>
                         </div>
                         <div>
-                            {{-- <a href="" class="btn btn-warning btn-sm" style="margin-right: 10px">Sửa</a> --}}
+
                             <form action="{{ route('admin.vanban.delete.column', $column['name']) }}" method="POST"
                                 style="display:inline;">
                                 @csrf
@@ -94,7 +96,56 @@
                 @endif
                 @endforeach
             </div>
+        </div> --}}
+        <div class="container mt-5">
+            <h3>Danh sách các trường thông tin</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên trường</th>
+                        <th>Ký hiệu</th>
+                        <th>Kiểu dữ liệu</th>
+
+                        <th>Yêu cầu bắt buộc</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($columnDataPaginated as $index => $column)
+                        @if($column['name'] == 'created_at' || $column['name'] == 'updated_at' || $column['name'] == 'id')
+                            @continue
+                        @endif
+
+                        <tr>
+                            <td>{{ $index  + ($columnDataPaginated->currentPage() - 1) * $columnDataPaginated->perPage() }}</td>
+                            <td>{{ htmlspecialchars($column['comment'], ENT_QUOTES, 'UTF-8') }}</td>
+                            <td>{{ $column['name'] }}</td>
+                            <td>{{ $column['type'] }}</td>
+                            <td>
+                                <span class="badge {{ $column['is_required'] === 'Có' ? 'bg-danger' : 'bg-success' }}">
+                                    {{ $column['is_required'] === 'Có' ? 'Bắt buộc' : 'Không bắt buộc' }}
+                                </span>
+                            </td>
+                            <td>
+                                <form action="{{ route('admin.vanban.delete.column', $column['name']) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <!-- Hiển thị các liên kết phân trang -->
+            <div class="mt-3">
+                {{ $columnDataPaginated->links() }} <!-- Sử dụng phương thức links() để hiển thị các liên kết phân trang -->
+            </div>
         </div>
+
+
         <!-- end row -->
 
     </div> <!-- container-fluid -->

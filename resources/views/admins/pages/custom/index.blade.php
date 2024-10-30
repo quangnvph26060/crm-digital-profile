@@ -21,19 +21,22 @@
 
             <!-- end page title -->
 
-          <div class="container">
+          <div class="">
             <div class="row">
+                <div class="col-lg-12">
+                    @include('globals.alert')
+                </div>
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                          
+
                                 <form action="{{ route('admin.column.store') }}" method="post" class="">
                                     @csrf
-                                    <div class="form-group ">
+                                    <div class="form-group mt-3 ">
                                         <label for="column_name">Tên Cột</label>
                                         <input type="text" class="form-control" id="column_name" name="column_name" placeholder="Ví dụ: Mô Tả (mo_ta)" required>
                                     </div>
-                                    <div class="form-group ">
+                                    <div class="form-group mt-3">
                                         <label for="column_type">Kiểu Dữ Liệu</label>
                                         <select class="form-control" id="column_type" name="column_type" required>
                                             <option value="string">Chuỗi (string)</option>
@@ -42,39 +45,63 @@
                                             <!-- Thêm các kiểu dữ liệu khác nếu cần -->
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    <div class=" form-group mt-3">
+                                        <label for="is_required" class="form-label">Yêu cầu bắt buộc</label>
+                                        <select name="is_required" id="is_required" class="form-select">
+                                            <option value="1">Có</option>
+                                            <option value="0" selected>Không</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-3">
                                         <button type="submit" class="btn btn-primary mt-2 mb-2">Thêm Cột</button>
                                     </div>
                                 </form>
                         </div>
                         <div class="container mt-5">
-                            <h1>Danh sách cột trong bảng</h1>
-                            <div class="row mt-3">
-                                @foreach($columnData as $column)
-                                <div class="col-md-2 mb-3">
-                                    <div class="column-box">
-                                        <div style="display: flex; justify-content: startss">
-                                            <p>{{ $column['name'] }}</p>
-                                            <span class="">( {{ $column['type'] }} )</span>
-                                        </div>
-                                        <div>
-                                            {{-- <a href="" class="btn btn-warning btn-sm" style="margin-right: 10px">Sửa</a> --}}
-                                            <form action="{{ route('admin.column.deleteColumn', $column['name']) }}" method="POST"
-                                                style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                @if(($loop->index + 1) % 6 == 0)
-                            </div>
-                            <div class="row mt-3">
-                                @endif
-                                @endforeach
+                            <h1>{{ $title }}</h1>
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên cột</th>
+                                        <th>Kiểu dữ liệu</th>
+                                        <th>Ghi chú</th>
+                                        <th>Trạng thái yêu cầu</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($columnDataPaginated as $index => $column)
+                                        <tr>
+                                            <td>{{ $index + 1 + ($columnDataPaginated->currentPage() - 1) * $columnDataPaginated->perPage() }}</td>
+                                            <td>{{ $column['name'] }}</td>
+                                            <td>{{ $column['type'] }}</td>
+                                            <td>{{ $column['comment'] }}</td>
+                                            <td>
+                                                <span class="badge {{ $column['is_required'] === 'Có' ? 'bg-danger' : 'bg-success' }}">
+                                                    {{ $column['is_required'] === 'Có' ? 'Bắt buộc' : 'Không bắt buộc' }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <form action="{{ route('admin.column.deleteColumn', $column['name']) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            <!-- Phân trang -->
+                            <div class="mt-3">
+                                {{ $columnDataPaginated->links() }}
                             </div>
                         </div>
+
+
+
                     </div>
                     <!-- end card -->
                 </div> <!-- end col -->

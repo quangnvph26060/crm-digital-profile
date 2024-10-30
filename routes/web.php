@@ -122,7 +122,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     });
 
     Route::prefix('vanban')->name('vanban.')->group(function () {
-        Route::get('', [InformationVbController::class, 'index'])->name('index');
+        Route::get('index', [InformationVbController::class, 'index'])->name('index');
         Route::get('/add-vanban', [InformationVbController::class, 'add'])->name('add');
         Route::get('/edit-vanban/{id}', [InformationVbController::class, 'edit'])->name('edit');
         Route::get('/view-vanban/{id}', [InformationVbController::class, 'view'])->name('view');

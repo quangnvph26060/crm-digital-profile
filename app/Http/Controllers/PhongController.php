@@ -16,24 +16,24 @@ class PhongController extends Controller
     {
         $inputs = $request->all();
         $configs = Phong::query();
-     
+
         if (isset($request->name) && $request->name != '') {
             $configs->where(function($query) use ($request) {
                 $query->where('ten_phong', 'like', '%' . $request->name . '%')
                       ->orWhere('ma_phong', 'like', '%' . $request->name . '%');
             });
         }
-        
+
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $configs = $configs->paginate($perPage);
-        
+
         $title   = "Danh sách Phông";
         return view("admins.pages.phong.list", [
             "phong" => $configs,
             "title"  => $title,
             "inputs" => $inputs,
-           
+
         ]);
     }
     public function add()
@@ -52,12 +52,21 @@ class PhongController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $config = Phong::find($id);
+            $phong = Phong::find($id);
 
-            if (!$config) {
+            if (!$phong) {
                 return back()->with('error', 'Không tìm thấy bản ghi cần chỉnh sửa.');
             }
-            $config->update([
+            $empty_phong = Phong::where('id', '!=', $id)->where('coquan_id', $request->ma_coquan)
+            ->where(function ($query) use ($request) {
+                $query->where('ten_phong', $request->ten_phong)
+                    ->orWhere('ma_phong', $request->ma_phong);
+            })->first();
+
+            if ($empty_phong) {
+                return back()->with('error', 'Tên phong và Mã phong đã tồn tại trong cơ quan.');
+            }
+            $phong->update([
                 'ten_phong' => $request->ten_phong,
                 'ma_phong' => $request->ma_phong,
                 'coquan_id' => $request->ma_coquan,
@@ -77,6 +86,15 @@ class PhongController extends Controller
                 return back()->with('error', 'Không thể thêm bản ghi vì trùng lặp dữ liệu.');
             }
             $validator = $this->validateConfig($request);
+            $empty_phong = Phong::where('coquan_id', $request->ma_coquan)
+            ->where(function ($query) use ($request) {
+                $query->where('ten_phong', $request->ten_phong)
+                    ->orWhere('ma_phong', $request->ma_phong);
+            })->first();
+
+            if ($empty_phong) {
+                return back()->with('error', 'Tên phong và Mã phong đã tồn tại trong cơ quan.');
+            }
             $this->saveConfig($request);
 
             return back()->with('success', 'Thêm thành công');
@@ -108,20 +126,20 @@ class PhongController extends Controller
         $phong->coquan_id = $request->ma_coquan;
         $phong->save();
         // $this->addPhongToTrungGian($phong->id);
-     
+
     }
-    
+
     // public function addPhongToTrungGian($id)
     // {
     //     $muclucs = MucLuc::all();
-    
+
     //     $data = $muclucs->map(function ($mucluc) use ($id) {
     //         return [
     //             'phong_id' => $id,
     //             'mucluc_id' => $mucluc->id,
     //         ];
     //     })->toArray();
-    
+
     //     // Thêm dữ liệu vào bảng trung gian
     //     DB::table('phong_mucluc')->insert($data);
     // }
@@ -132,7 +150,7 @@ class PhongController extends Controller
             return back()->with('error', 'Mã phông này còn liên quan đền hồ sơ');
         }
         $config = Phong::find($userId);
-       
+
         if ($config) {
             $config->delete();
             return back()->with('success', 'Xóa phông thành công');
