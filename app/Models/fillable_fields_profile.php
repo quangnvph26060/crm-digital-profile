@@ -12,4 +12,9 @@ return array (
   9 => 'so_to',
   10 => 'thbq',
   11 => 'ghi_chu',
+  12 => 'noi_dung_bai_bao',
+  13 => 'aaaaassss',
+  14 => 'noi_dung_bai_baofghgh',
+  15 => 'dfsdfsdg',
+  16 => 'tac_gia',
 );

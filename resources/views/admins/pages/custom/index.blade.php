@@ -71,7 +71,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     @foreach($columnDataPaginated as $index => $column)
+
                                         <tr>
                                             <td>{{ $index + 1 + ($columnDataPaginated->currentPage() - 1) * $columnDataPaginated->perPage() }}</td>
                                             <td>{{ $column['name'] }}</td>
