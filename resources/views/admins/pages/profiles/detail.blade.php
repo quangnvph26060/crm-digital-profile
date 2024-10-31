@@ -207,7 +207,7 @@
                                 <div class="table-responsive mb-0" data-pattern="priority-columns">
                                     <div style="display: flex;justify-content: space-between" class="mb-3">
                                         <h4>Danh sách văn bản trong hồ sơ</h4>
-                                        <a class="btn btn-success" href="{{ route('admin.vanban.add') }}">
+                                        <a class="btn btn-success" href="{{ route('admin.vanban.addbyhoso', ['id' => $profile->id]) }}">
                                             <i class="fas fa-plus"></i> Thêm mới
                                         </a>
                                     </div>
