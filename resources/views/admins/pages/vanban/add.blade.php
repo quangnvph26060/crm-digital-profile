@@ -5,52 +5,6 @@
     .cke_notifications_area {
         display: none;
     }
-    .select2-container--default .select2-selection--single {
-            height: 30px; /* Chiều cao mong muốn */
-            line-height: 30px; /* Căn giữa nội dung */
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 30px; /* Căn giữa nội dung bên trong */
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 30px; /* Chiều cao của mũi tên */
-            top: 5px; /* Điều chỉnh vị trí mũi tên */
-        }
-
-        .select2-container {
-            width: 100% !important; /* Đảm bảo chiều rộng 100% */
-        }
-
-        .col-lg-4 {
-            width: 32%; /* Đặt chiều rộng cho các cột */
-            float: left; /* Để hiển thị bên cạnh nhau */
-            margin-right: 1%; /* Khoảng cách giữa các cột */
-        }
-
-        /* Đặt lại margin cho cột cuối cùng */
-        .col-lg-4:last-child {
-            margin-right: 0;
-        }
-
-        .mb-3 {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .text-danger {
-            color: red;
-        }
-
-        .invalid-feedback {
-            color: red;
-            font-size: 0.875em;
-        }
 
 </style>
 <div class="page-content">

@@ -134,54 +134,21 @@ class InformationVbController extends Controller
         ]);
     }
 
-    // public function store(Request $request)
-    // {
-    //     //  dd($request->all());
-    //     $vanban = InformationVb::where('ma_phong', $request->ma_phong)
-    //         ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
-    //         ->where('ho_so_so', $request->ho_so_so)
-    //         ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
+    public function addbyhoso($id)
+    {
 
-    //     if ($vanban) {
-    //         return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
-    //     }
+        $title = "Thêm văn bản";
+        $macoquan = Config::all();
+        $mamucluc = MucLuc::all();
+        $hoso = Profile::find($id);
+        return view("admins.pages.vanban.addbyhoso", [
+            "title" => $title,
+            'macoquan' => $macoquan,
+            'mamucluc' => $mamucluc,
+            'vanban' => $hoso,
+        ]);
+    }
 
-    //     $profile = Profile::where('ma_phong', $request->ma_phong)
-    //         ->where('ma_muc_luc', $request->ma_mucluc)
-    //         ->where('hop_so', $request->hop_so)
-    //         ->first();
-
-    //     if (!$profile) {
-    //         return back()->with('error', 'Hồ sơ không tồn tại.');
-    //     }
-    //     $vanbannew = new InformationVb();
-    //     $vanbannew->config_id  = $request->config_id;
-    //     $vanbannew->ma_phong = $request->ma_phong;
-    //     $vanbannew->ma_mucluc = $request->ma_mucluc;
-    //     $vanbannew->hop_so = $request->hop_so;
-    //     $vanbannew->ho_so_so = $request->ho_so_so;
-    //     $vanbannew->so_va_ki_hieu_van_ban = $request->so_va_ki_hieu_van_ban;
-    //     $vanbannew->time_vb = $request->time_vb;
-    //     $vanbannew->to_so = $request->to_so;
-    //     $vanbannew->tac_gia = $request->tac_gia;
-    //     $vanbannew->noi_dung = $request->noi_dung;
-    //     $vanbannew->ghi_chu = $request->ghi_chu;
-    //     $vanbannew->profile_id = $profile->id;
-    //     $vanbannew->status = $request->status;
-    //     if ($request->file('duong_dan')) {
-    //         $coquan = Config::find($request->config_id);
-    //         $phong = Phong::find($request->ma_phong);
-    //         $mucluc = MucLuc::find($request->ma_mucluc);
-    //         $hoso = Profile::find($profile->id);
-    //         $file = $request->file('duong_dan');
-    //         $fileName = time() . '/' . $coquan->agency_code . '/' . $phong->ma_phong . '/' . $mucluc->ma_mucluc . '/' . $hoso->hop_so . '/' . $hoso->ho_so_so . '/' . $file->getClientOriginalName();
-    //         $filePath = $file->storeAs('duong_dan', $fileName, 'public');
-    //         $vanbannew->duong_dan = $filePath; // Lưu đường dẫn file
-    //     }
-    //     $vanbannew->save();
-
-    //     return back()->with('success', 'Thêm văn bản thành công');
-    // }
 
     public function store(Request $request)
     {
