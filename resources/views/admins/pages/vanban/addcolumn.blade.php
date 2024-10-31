@@ -36,7 +36,7 @@
                                     <label for="column_name" class="form-label">Tên
                                         cột:</label>
                                     <input type="text" class="form-control"
-                                        name="column_name" id="column_name" required>
+                                        name="column_name" id="column_name" placeholder="Ví dụ: Mô tả (mo_ta)" required>
                                 </div>
 
                                 <div class="mb-3">

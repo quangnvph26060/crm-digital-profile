@@ -161,7 +161,10 @@ class CustomColumnController extends Controller
         // Ghi lại mảng fillable mới vào file fillable_fields_profile.php
         $fillableFields = array_values($fillableFields); // Đảm bảo mảng không có key
         File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
+        $cacheKey = 'duplicateValues';
 
+        // Xóa dữ liệu trong session với key là $cacheKey
+        session()->forget($cacheKey);
         return redirect()->back()->with('success', 'Cột đã được xóa thành công.');
     }
 }

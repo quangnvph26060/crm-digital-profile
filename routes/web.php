@@ -135,6 +135,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/add-column', [InformationVbController::class, 'addcolumn'])->name('column');
         Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');
+        Route::post('/get-column', [InformationVbController::class, 'getColumnVanBan'])->name('column');
 
         Route::get('/template-vanban', [VanBanController::class, 'indexTemplate'])->name('indexTemplate');
         Route::post('/template-vanban', [VanBanController::class, 'storeTemplate'])->name('storeTemplates');

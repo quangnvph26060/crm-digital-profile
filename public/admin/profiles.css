@@ -112,7 +112,7 @@ input[type="checkbox"]:checked+.checkbox-label {
 
     #checkBoxes {
         display: none;
-        border: 1px #8DF5E4 solid;
+        border: 1px #c3d0ce solid;
     }
 
     #checkBoxes label {
@@ -123,4 +123,8 @@ input[type="checkbox"]:checked+.checkbox-label {
         background-color: #1794e4;
         color: white;
         /* Added text color for better visibility */
+    }
+    #applyForm{
+        display: flex;
+        flex-direction: column;
     }
