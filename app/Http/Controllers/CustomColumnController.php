@@ -118,7 +118,7 @@ class CustomColumnController extends Controller
             $profile->fillable($fillable);
 
             // Đọc và cập nhật mảng fillable_fields_profile.php
-            $fillableFields = include app_path('Models/fillable_fields_profile.php');
+            $fillableFields = include app_path('app/Models/fillable_fields_profile.php');
             $fillableFields = array_values(array_unique($fillableFields)); // Loại bỏ các key và giữ các giá trị duy nhất
             $fillableFields[] = $cleanColumnName;
             File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
