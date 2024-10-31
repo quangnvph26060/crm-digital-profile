@@ -40,7 +40,7 @@ Route::get("/admin/customer/{id}/detail", "CustomerController@getDetailCustomer"
 Route::get("/admin/customer/{id}/delete", "CustomerController@delete")->name("delete-customer")->middleware("is-login-admin");
 Route::get('/', 'AuthController@loginForm')->name('login');
 Route::post('/login', 'AuthController@postLogin')->name('post-login');
-
+Route::post('/get-column', [ProfileController::class, 'getColumnHoSo'])->name('column');
 // Route::get('/register', 'AuthController@registerForm')->name('register');
 // Route::post('/register', 'AuthController@postRegister')->name('post-register');
 

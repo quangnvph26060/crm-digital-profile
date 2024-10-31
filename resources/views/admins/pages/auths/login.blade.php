@@ -3,10 +3,10 @@
 @section('title', 'Đăng nhập Ship Viêt')
 
 @section('content')
-<div class="col-xxl-3 col-lg-4 col-md-5">
+<div class="col-xxl-5 col-lg-4 col-md-5">
     <div class="auth-full-page-content d-flex p-sm-5 p-4">
-        <div class="w-100">
-            <div class="d-flex flex-column h-100">
+        <div class="w-100 d-flex justify-content-center">
+            <div class="d-flex flex-column h-100 w-420">
                 @include('auths.elements.logo')
                 <div class="auth-content my-auto">
                     <div class="text-center">
@@ -63,4 +63,9 @@
     </div>
     <!-- end auth full page content -->
 </div>
+<style scoped>
+    .w-420{
+        width: 420px;
+    }
+</style>
 @endsection

@@ -46,7 +46,12 @@ class ProfileImport implements ToModel, WithHeadingRow
                     $existingPhong->save();
                 }
             }
-            $ngay_thang_arr = explode('-', $row['ngay_thang_bd_kt']);
+            if (array_key_exists('ngay_thang_bd_kt', $row)) {
+                $ngay_thang_arr = explode('-', $row['ngay_thang_bd_kt']);
+            }else{
+                $ngay_thang_arr = explode('-', $row['ngay_thang_bd']);
+            }
+            
             if (count($ngay_thang_arr) === 2) {
                 $ngay_bat_dau = date_create_from_format('d/m/Y', trim($ngay_thang_arr[0]));
                 $ngay_ket_thuc = date_create_from_format('d/m/Y', trim($ngay_thang_arr[1]));

@@ -38,20 +38,28 @@ class ProfileExport implements FromCollection, WithHeadings
     
         $headings = [];
         $seenHeadings = []; // Mảng để lưu trữ các tiêu đề đã xuất hiện
-    
-        foreach ($columns as $column) {
-            // Bỏ qua các cột không cần thiết
-            if (!in_array($column->Field, $excludedColumns)) {
-                $heading = $column->Comment ?: $column->Field;
-                
-                // Kiểm tra xem tiêu đề đã xuất hiện chưa
-                if (!in_array($heading, $seenHeadings)) {
-                    $headings[] = $heading;
-                    $seenHeadings[] = $heading; // Đánh dấu tiêu đề đã xuất hiện
+      
+            foreach ($columns as $column) {
+                // Bỏ qua các cột không cần thiết
+            
+                if (!in_array($column->Field, $excludedColumns) && $column->Field !== 'ngay_ket_thuc') {
+                    $heading = $column->Comment ?: $column->Field;
+                    
+                    // Kiểm tra xem tiêu đề đã xuất hiện chưa
+                    if (!in_array($heading, $seenHeadings)) {
+                        $headings[] = $heading;
+                        $seenHeadings[] = $heading; // Đánh dấu tiêu đề đã xuất hiện
+                        foreach ($seenHeadings as $key => $value) {
+                            if ($value === "Ngày tháng BĐ") {
+                               
+                                $seenHeadings[$key] = "Ngày tháng BĐ-KT";
+                            }
+                        }
+                      
+                    }
                 }
             }
-        }
-    
+          
         return $headings;
     }
 }
