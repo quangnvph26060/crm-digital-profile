@@ -37,7 +37,7 @@ class TemplateFormController extends Controller
 
     public function create()
     {
-        $title = "Tạo mới template form";
+        $title = "Tạo mới template form văn bản";
         return view("admins.pages.templateform.add", ["title" => $title]);
     }
 
@@ -61,7 +61,7 @@ class TemplateFormController extends Controller
             return redirect()->route('admin.templateform.index')->with('error', 'Không tìm thấy template form này.');
         }
 
-        $title = "Sửa template form";
+        $title = "Sửa template form v";
         return view("admins.pages.templateform.edit", ["title" => $title, "template" => $template]);
     }
 

@@ -47,7 +47,7 @@ class VanbanFormController extends Controller
 
     public function create()
     {
-        $title = "Tạo mới template form";
+        $title = "Tạo mới template form văn bản";
         return view("admins.pages.templateform_vanban.add", ["title" => $title]);
     }
 
@@ -83,7 +83,7 @@ class VanbanFormController extends Controller
             return redirect()->route('admin.templateform_vanban.index')->with('error', 'Không tìm thấy template form này.');
         }
 
-        $title = "Sửa template form";
+        $title = "Sửa template form văn bản";
         return view("admins.pages.templateform_vanban.edit", ["title" => $title, "template" => $template]);
     }
 

@@ -39,25 +39,22 @@ class HoSoController extends Controller
 
     public function showAddFormHoSo()
     {
-        $title = "Tạo mới template form";
+        $title = "Tạo mới template form hồ sơ";
         return view("admins.pages.templateform_hoso.add", ["title" => $title]);
     }
 
     public function store(TemplateFormRequest $request)
     {
-
-
         $existingTemplate = TemplateFormHoSo::where('name', $request->name)->first();
-
         if ($existingTemplate) {
             return back()->withErrors(['name' => 'Tên template form này đã tồn tại.'])->withInput();
         }
         $flag = true;
         if ($request->status == Status::ENABLE) {
             TemplateFormHoSo::where('status', 'active')->update(['status' => 'unactive']);
-            $bladeFilePath = resource_path('views/admins/pages/profiles/form-add.blade.php');
+          //  $bladeFilePath = resource_path('views/admins/pages/profiles/form-add.blade.php');
             $flag = false;
-            File::put($bladeFilePath, $request->template_form);
+          //  File::put($bladeFilePath, $request->template_form);
         }
         if (!$flag) {
             $is_active = 'active';
@@ -157,7 +154,7 @@ class HoSoController extends Controller
             return redirect()->route('admin.templateform_hoso.index')->with('error', 'Không tìm thấy template form này.');
         }
 
-        $title = "Sửa template form";
+        $title = "Sửa template form hồ sơ";
         return view("admins.pages.templateform_hoso.edit", ["title" => $title, "template" => $template]);
     }
 
@@ -174,16 +171,15 @@ class HoSoController extends Controller
             return back()->withErrors(['name' => 'Tên template form này đã tồn tại.'])->withInput();
         }
 
-        $flag = true;
+    //    $flag = true;
+
         if ($request->status == Status::ENABLE) {
             TemplateFormHoSo::where('status', 'active')->update(['status' => 'unactive']);
-            $bladeFilePath = resource_path('views/admins/pages/profiles/form-add.blade.php');
-            $flag = false;
-            File::put($bladeFilePath, $request->template_form);
-        }
-        if (!$flag) {
+          //  $bladeFilePath = resource_path('views/admins/pages/profiles/form-add.blade.php');
+          //  $flag = false;
+          //  File::put($bladeFilePath, $request->template_form);
             $is_active = 'active';
-        } else {
+        }else{
             $is_active = 'unactive';
         }
         $templateForm->update([
