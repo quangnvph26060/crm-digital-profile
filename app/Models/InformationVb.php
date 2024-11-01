@@ -17,16 +17,16 @@ class InformationVb extends Model
     // Các trường có thể được gán giá trị hàng loạt
     protected $guarded = [];
 
-    // public function __construct(array $attributes = [])
-    // {
-    //     parent::__construct($attributes);
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
 
-    //     $this->fillable = require __DIR__ . '/array_vanban.php';
+        $this->fillable = require __DIR__ . '/array_vanban.php';
 
-    //     if (!is_array($this->fillable)) {
-    //         $this->fillable = [];
-    //     }
-    // }
+        if (!is_array($this->fillable)) {
+            $this->fillable = [];
+        }
+    }
 
     public function config()
     {

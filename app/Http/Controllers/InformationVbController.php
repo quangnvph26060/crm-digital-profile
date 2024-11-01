@@ -106,7 +106,7 @@ class InformationVbController extends Controller
 
         $vanban = $vanban->orderBy('created_at', 'desc');
         // Thêm phân trang ở đây
-        $fillable = ['id','profile_id']; //  các cột mặc định phải có
+        $fillable = ['id', 'profile_id']; //  các cột mặc định phải có
 
         $cacheKey = 'duplicateValuesVb';
         $selectedProfiles = [];
@@ -114,7 +114,7 @@ class InformationVbController extends Controller
             $duplicateValues = session($cacheKey);
             $selectedProfiles = $duplicateValues;
             $mergedArray = array_unique(array_merge($fillable, $selectedProfiles));
-            if(count($mergedArray) > 1){
+            if (count($mergedArray) > 1) {
                 $vanban->select($mergedArray);
             }
         }
@@ -181,7 +181,7 @@ class InformationVbController extends Controller
 
     public function store(Request $request)
     {
-         DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             $data = $request->except('_token');
@@ -399,7 +399,6 @@ class InformationVbController extends Controller
     {
         $coquandata = Profile::where('config_id', $request->id)->with('config', 'maPhong', 'maMucLuc')->distinct('ma_phong')->get();
         $uniqueData = $coquandata->unique('ma_phong');
-        Log::info($uniqueData);
         return response()->json(['status' => "success", 'data' => $uniqueData]);
     }
 
@@ -407,7 +406,6 @@ class InformationVbController extends Controller
     {
         $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->with('config', 'maPhong', 'maMucLuc')->get();
         $uniqueData = $coquandata->unique('ma_muc_luc');
-        Log::info($uniqueData);
         return response()->json(['status' => "success", 'data' => $uniqueData]);
     }
 
@@ -416,17 +414,14 @@ class InformationVbController extends Controller
 
         $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->where('ma_muc_luc', $request->mucluc)->with('config', 'maPhong', 'maMucLuc')->distinct()->get();
         $uniqueData = $coquandata->unique('hop_so');
-        Log::info($uniqueData);
         return response()->json(['status' => "success", 'data' => $uniqueData]);
     }
     public function HoSoSoByHopSo(Request $request)
     {
 
         $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->where('ma_muc_luc', $request->mucluc)->where('hop_so', $request->hopso)->with('config', 'maPhong', 'maMucLuc')->distinct()->get();
-
-        $uniqueData = $coquandata->unique('ho_so_so');
-        Log::info($uniqueData);
-        return response()->json(['status' => "success", 'data' => $uniqueData]);
+        Log::info($coquandata);
+        return response()->json(['status' => "success", 'data' => $coquandata]);
     }
     public function addcolumn(Request $request)
     {
@@ -533,23 +528,7 @@ class InformationVbController extends Controller
     }
 
 
-    // Hàm để cập nhật $fillable trong model
-    private function updateArrayVanBan($columnName)
-    {
-        // Đường dẫn đến file chứa mảng
-        $arrayPath = app_path('Models/array_vanban.php');
 
-        // Đọc nội dung file
-        $array = include $arrayPath;
-
-        // Kiểm tra xem cột đã tồn tại chưa
-        if (!in_array($columnName, $array)) {
-            $array[] = $columnName; // Thêm cột mới vào mảng
-
-            // Ghi lại nội dung file
-            file_put_contents($arrayPath, "<?php\n\nreturn " . var_export($array, true) . ";\n");
-        }
-    }
 
 
 
@@ -567,7 +546,6 @@ class InformationVbController extends Controller
         session()->forget($cacheKey);
 
         return redirect()->back()->with('success', 'Cột đã được xóa thành công');
-
     }
 
     private function removeColumnFromArrayVanBan($columnName)
@@ -576,16 +554,32 @@ class InformationVbController extends Controller
         $arrayPath = app_path('Models/array_vanban.php');
         // Đọc nội dung file
         $array = include $arrayPath;
-
         // Kiểm tra xem cột có tồn tại trong mảng hay không
         if (in_array($columnName, $array)) {
             // Xóa cột khỏi mảng
             $array = array_filter($array, function ($value) use ($columnName) {
                 return $value !== $columnName;
             });
-
             // Ghi lại mảng đã cập nhật vào file
             file_put_contents($arrayPath, "<?php\n\nreturn " . var_export(array_values($array), true) . ";\n");
+        }
+    }
+    // Hàm để cập nhật $fillable trong model
+    private function updateArrayVanBan($columnName)
+    {
+        // Đường dẫn đến file chứa mảng
+        $arrayPath = app_path('Models/array_vanban.php');
+
+        // Đọc nội dung file
+        $array = include $arrayPath;
+
+        // Kiểm tra xem cột đã tồn tại chưa
+        if (!in_array($columnName, $array)) {
+            $array[] = $columnName; // Thêm cột mới vào mảng
+
+            // Ghi lại nội dung file
+            file_put_contents($arrayPath, "<?php\n\nreturn " . var_export($array, true) . ";\n");
+            chmod($arrayPath, 7777);
         }
     }
 }
