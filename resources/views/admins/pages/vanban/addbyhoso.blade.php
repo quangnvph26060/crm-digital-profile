@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="card-body p-4">
-                        <form action="{{ route('admin.vanban.add') }}" method="POST"
+                        <form action="{{ route('admin.vanban.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
 
@@ -72,7 +72,7 @@
                                                         name="ma_co_quan" id="agency_code-select">
                                                         <option value="">Chọn mã cơ quan</option>
                                                         @foreach ($macoquan as $item)
-                                                        <option value="{{ $item->id }}" {{ (isset($vanban) && $vanban->config_id == $item->id) ? 'selected'
+                                                        <option value="{{ $item->id }}" {{ (isset($hoso) && $hoso->config_id == $item->id) ? 'selected'
                                                             : '' }}>
                                                             {{ $item->agency_name }} - {{ $item->agency_code }}
                                                         </option>
@@ -241,7 +241,7 @@
 
                         // Nếu có giá trị sẵn, gọi loadMucLuc
                         if (selectedMaPhong) {
-                            loadMucLuc(selectedValue, selectedMaPhong, `{{ $vanban->ma_muc_luc }}`);
+                            loadMucLuc(selectedValue, selectedMaPhong, `{{ $hoso->ma_muc_luc }}`);
                         }
                     }
                 },
@@ -296,7 +296,7 @@
 
                         // Nếu có giá trị sẵn, gọi loadHopSo
                         if (selectedMucLuc) {
-                            loadHopSo(selectedValue, selectedMaPhong, selectedMucLuc, `{{ $vanban->hop_so }}`);
+                            loadHopSo(selectedValue, selectedMaPhong, selectedMucLuc, `{{ $hoso->hop_so }}`);
                         }
                     }
                 },
@@ -349,7 +349,7 @@
 
                         // Nếu có giá trị sẵn, gọi loadHoSoSo
                         if (selectedHopSo) {
-                            loadHoSoSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo, `{{ $vanban->ho_so_so }}`);
+                            loadHoSoSo(selectedValue, selectedMaPhong, selectedMucLuc, selectedHopSo, `{{ $hoso->ho_so_so }}`);
                         }
                     }
                 },
@@ -400,9 +400,9 @@
         }
     }
 
-    // Khi trang được load lần đầu, tự động gọi loadMaPhong nếu đã có sẵn giá trị
+    
     var initialConfigId = $jq('#agency_code-select').val();
-    var initialMaPhong = `{{ $vanban->ma_phong }}`; // Giá trị mã phòng có sẵn
+    var initialMaPhong = `{{ $hoso->ma_phong }}`; // Giá trị mã phòng có sẵn
 
     if (initialConfigId) {
         loadMaPhong(initialConfigId, initialMaPhong); // Load mã phòng ban đầu
