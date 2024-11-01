@@ -125,7 +125,8 @@ class CustomColumnController extends Controller
           //  File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
 
             file_put_contents(app_path('Models/fillable_fields_profile.php'), "<?php\n\nreturn " . var_export($fillableFields, true) . ";\n");
-
+            chmod($arrayPath, 7777);
+            
             return back()->with('success', 'Cột đã được thêm thành công!');
         } else {
             return back()->with('success', 'Cột đã tồn tại!');
