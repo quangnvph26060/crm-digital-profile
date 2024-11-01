@@ -54,7 +54,9 @@ class InformationVb extends Model
 
     }
 
-
+    public function fillableProfiles(){
+        return  $this->fillable;
+    }
     public function profile()
     {
         return $this->belongsTo(Profile::class, 'profile_id');

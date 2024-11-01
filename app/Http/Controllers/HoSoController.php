@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Constants\Status;
 use App\Http\Requests\TemplateFormRequest;
+use App\Models\Profile;
 use App\Models\TemplateFormHoSo;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
 class HoSoController extends Controller
 {
+   
     public function showTemplate(Request $request)
     {
         $inputs = $request->all();

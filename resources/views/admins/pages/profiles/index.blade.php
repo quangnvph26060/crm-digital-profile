@@ -100,134 +100,65 @@
                                 <div class="row">
                                     <div class="col-lg-2">
 
-                                            <form action="{{ route('admin.profile.export') }}" method="POST">
+                                        <form action="{{ route('admin.profile.export') }}" method="POST">
                                             @csrf
                                             <button type="submit" class="btn btn-primary">
-                                              Import Excel
+                                                Import Excel
                                             </button>
                                         </form>
                                     </div>
-                                   @if (auth('admin')->user()->level === 2)
-                                <div class="col-lg-2">
-                                    <button class="btn btn-success" id="exportExcelBtn">
-                                        <input type="file" style="display: none">
-                                         Export Excel
-                                    </button>
+                                    @if (auth('admin')->user()->level === 2)
+                                        <div class="col-lg-2">
+                                            <button class="btn btn-success" id="exportExcelBtn">
+                                                <input type="file" style="display: none">
+                                                Export Excel
+                                            </button>
+                                        </div>
+                                    @endif
                                 </div>
-                                @endif
-
-                                   
-                                </div>
-                               
-
                             </div>
                         </div>
                         <div class="card-body">
                             @include('globals.alert')
                             <div class="table-rep-plugin">
                                 <div class="table-responsive mb-0" data-pattern="priority-columns">
-                                    {{-- <table id="" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>STT</th>
+                                    <div class="row">
+                                        <div class="col-lg-3 main-option">
+                                            <label for="column-select">Chọn cột để hiển thị:</label>
+                                            <div class="selectBox form-select" id="toggleBtn">
 
-                                            <th>Hộp số</th>
-                                            <th>Hồ sơ số</th>
-                                            <th>Tiêu đề hồ sơ</th>
-                                            <th>Ngày tháng BĐ-KT</th>
-                                            <th>Số tờ</th>
-                                            <th>THBQ</th>
-                                            <th>Ghi chú</th>
-                                            @if (auth('admin')->user()->level === 2)
-                                            <th>Hành động</th>
-                                            @endif
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($profiles as $key => $item)
-                                        <tr>
-                                            <td>
-                                                {{ $key + 1 }}
-                                            </td>
+                                                <option>Chọn cột</option>
 
-
-                                            <td>
-                                                {{ $item->hop_so }}
-                                            </td>
-                                            <td>
-                                                {{ $item->ho_so_so }}
-                                            </td>
-                                            <td>
-                                                {{ $item->tieu_de_ho_so }}
-                                            </td>
-                                            <td>
-                                                {{ $item->ngay_bat_dau }} - {{ $item->ngay_ket_thuc }}
-                                            </td>
-                                            <td>
-                                                {{ $item->so_to }}
-                                            </td>
-                                            <td>
-                                                {{ $item->thbq }}
-                                            </td>
-                                            <td>
-                                                {{ $item->ghi_chu }}
-                                            </td>
-
-                                            <td class="d-flex gap-1">
-                                                @if (auth('admin')->user()->level === 2)
-                                                <a href="{{ route('admin.profile.edit', ['id' => $item->id]) }}"
-                                                    class="btn btn-warning">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                        viewBox="0 0 24 24">
-                                                        <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5"
-                                                            d="M4 21h16M5.666 13.187A2.278 2.278 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.278 2.278 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001l-9.507 9.52Z" />
-                                                    </svg>
-                                                </a>
-                                                <form method="post"
-                                                    action="{{ route('admin.profile.delete.hoso', ['id' => $item->id]) }}"
-                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                <div class="overSelect"></div>
+                                            </div>
+                                            <div class="checkboxes" id="checkboxes">
+                                                <form id="applyForm" action="{{ route('column') }}" method="post">
+                                                    <input type="hidden" id="selectedValuesInput" name="selectedValues">
                                                     @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                            viewBox="0 0 26 26">
-                                                            <path fill="currentColor"
-                                                                d="M11.5-.031c-1.958 0-3.531 1.627-3.531 3.594V4H4c-.551 0-1 .449-1 1v1H2v2h2v15c0 1.645 1.355 3 3 3h12c1.645 0 3-1.355 3-3V8h2V6h-1V5c0-.551-.449-1-1-1h-3.969v-.438c0-1.966-1.573-3.593-3.531-3.593h-3zm0 2.062h3c.804 0 1.469.656 1.469 1.531V4H10.03v-.438c0-.875.665-1.53 1.469-1.53zM6 8h5.125c.124.013.247.031.375.031h3c.128 0 .25-.018.375-.031H20v15c0 .563-.437 1-1 1H7c-.563 0-1-.437-1-1V8zm2 2v12h2V10H8zm4 0v12h2V10h-2zm4 0v12h2V10h-2z" />
-                                                        </svg>
-                                                    </button>
-                                                </form>
-                                                @endif
-                                                <a href="{{ route('admin.profile.detail', ['id' => $item->id]) }}"
-                                                    class="btn btn-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                        viewBox="0 0 16 16">
-                                                        <path fill="currentColor" fill-rule="evenodd"
-                                                            d="M0 4.13v1.428a.5.5 0 0 0 .725.446l.886-.446l.377-.19L2 5.362l1.404-.708l.07-.036l.662-.333l.603-.304a.5.5 0 0 0 0-.893l-.603-.305l-.662-.333l-.07-.036L2 1.706l-.012-.005l-.377-.19l-.886-.447A.5.5 0 0 0 0 1.51v2.62ZM7.25 2a.75.75 0 0 0 0 1.5h7a.25.25 0 0 1 .25.25v8.5a.25.25 0 0 1-.25.25h-9.5a.25.25 0 0 1-.25-.25V6.754a.75.75 0 0 0-1.5 0v5.496c0 .966.784 1.75 1.75 1.75h9.5A1.75 1.75 0 0 0 16 12.25v-8.5A1.75 1.75 0 0 0 14.25 2h-7Zm-.5 4a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5ZM6 9.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 0 1.5h-3.5A.75.75 0 0 1 6 9.25Z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </a>
-                                            </td>
-
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table> --}}
-                                    <div class="main-option">
-                                        <label for="column-select">Chọn cột để hiển thị:</label>
-                                        <select name="column-select" id="column-select" multiple class="form-control">
-                                            @if ($profiles && $profiles->first())
-                                                @forelse ($profiles->first()->getAttributes() as $key => $value)
-                                                    @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
-                                                        <option value="{{ $key }}">{{ $columnComments[$key] ?? $key }}</option>
+                                                    @if ($fillableFields)
+                                                        @forelse ($fillableFields as $key => $value)
+                                                            @if ($value !== 'config_id' && $value !== 'ma_muc_luc')
+                                                                @php
+                                                                    $isChecked = in_array($value, $selectedProfiles);
+                                                                @endphp
+                                                                <label>
+                                                                    <input type="checkbox" style="margin-right: 5px"
+                                                                        value="{{ $value }}"
+                                                                        {{ $isChecked ? 'checked' : '' }}>
+                                                                    {{ $columnComments[$value] ?? $key }}
+                                                                </label>
+                                                            @endif
+                                                        @empty
+                                                            <label>Không có dữ liệu</label>
+                                                        @endforelse
+                                                    @else
+                                                        <label>Không có dữ liệu</label>
                                                     @endif
-                                                @empty
-                                                    <option value="">Không có dữ liệu</option>
-                                                @endforelse
-                                            @else
-                                                <option value="">Không có dữ liệu</option>
-                                            @endif
-                                        </select>
+                                                    <button id="applyBtn"
+                                                        class="btn btn-primary"style="margin-top: 10px;">Lưu</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- Bảng dữ liệu -->
                                     <table id="userTable" class="table table-striped">
@@ -236,7 +167,8 @@
                                                 @if ($profiles && $profiles->first())
                                                     @forelse ($profiles->first()->getAttributes() as $key => $value)
                                                         @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
-                                                           <th  class="column-{{ $key }}"> {{ $columnComments[$key] ?? $key }}</th>
+                                                            <th class="column-{{ $key }}">
+                                                                {{ $columnComments[$key] ?? $key }}</th>
                                                         @endif
                                                     @empty
                                                         <option value="">Không có dữ liệu</option>
@@ -252,10 +184,10 @@
                                             @if ($profiles && $profiles->first())
                                                 @forelse ($profiles as $user)
                                                     <tr>
-
                                                         @foreach ($user->getAttributes() as $key => $value)
                                                             @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
-                                                                <td class="column-{{ $key }}">{{ $value }}
+                                                                <td class="column-{{ $key }}">
+                                                                    {{ $value }}
                                                                 </td>
                                                             @endif
                                                         @endforeach
@@ -304,56 +236,81 @@
 
         </div> <!-- container-fluid -->
     </div>
-  
 
-   
+
+
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#column-select').on('change', function() {
-        var selectedColumns = $(this).val() || [];
+    $(document).ready(function() {
+        $("#applyBtn").on("click", function(e) {
+            e.preventDefault();
+            var selectedValues = [];
+            $("input[type='checkbox']:checked").each(function() {
+                selectedValues.push($(this).val());
+            });
+            var selectedValuesJSON = JSON.stringify(selectedValues);
 
-        // Ẩn tất cả các cột trước khi hiển thị các cột đã chọn
-        $('#userTable th, #userTable td').addClass('hidden');
+            $("#selectedValuesInput").val(selectedValuesJSON);
 
-        // Hiển thị các cột đã chọn
-        selectedColumns.forEach(function(column) {
-            $('#userTable .column-' + column).removeClass('hidden');
+
+            $("#applyForm").submit();
         });
     });
-});
+    $(document).ready(function() {
+        $('#column-select').on('change', function() {
+            var selectedColumns = $(this).val() || [];
 
-$(document).ready(function() {
-    $('#exportExcelBtn').on('click', function() {
-        $('<input type="file">').change(function() {
-            var selectedFile = this.files[0];
-            console.log('File đã chọn:', selectedFile);
+            // Ẩn tất cả các cột trước khi hiển thị các cột đã chọn
+            $('#userTable th, #userTable td').addClass('hidden');
 
-
-            var formData = new FormData();
-            formData.append('file', selectedFile);
-            var url = "{{ route('import') }}";
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    console.log('Kết quả:', response);
-
-                },
-                error: function(xhr, status, error) {
-                    console.error('Đã xảy ra lỗi khi gửi file.');
-                }
+            // Hiển thị các cột đã chọn
+            selectedColumns.forEach(function(column) {
+                $('#userTable .column-' + column).removeClass('hidden');
             });
-        }).click();
+        });
     });
-});
+    $(document).ready(function() {
+        let show = true;
 
+        $("#toggleBtn").on("click", function() {
+            let checkboxes = $("#checkboxes");
+
+            if (show) {
+                checkboxes.css("display", "block");
+                show = false;
+            } else {
+                checkboxes.css("display", "none");
+                show = true;
+            }
+        });
+    });
+    $(document).ready(function() {
+        $('#exportExcelBtn').on('click', function() {
+            $('<input type="file">').change(function() {
+                var selectedFile = this.files[0];
+                console.log('File đã chọn:', selectedFile);
+
+
+                var formData = new FormData();
+                formData.append('file', selectedFile);
+                var url = "{{ route('import') }}";
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log('Kết quả:', response);
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Đã xảy ra lỗi khi gửi file.');
+                    }
+                });
+            }).click();
+        });
+    });
 </script>
-{{-- @section('scripts')
-    <script src="{{ asset('js/profiles.js') }}"></script>
-@endsection --}}

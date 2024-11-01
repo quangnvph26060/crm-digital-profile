@@ -61,7 +61,20 @@ class InformationVbController extends Controller
     // }
 
     // Thêm phương thức để lấy ghi chú cột
+    public function getColumnvanBan(Request $request)
+    {
+        $selectedValuesArray = json_decode($request->selectedValues, true);
+        $InformationVb = new InformationVb();
+        $fillableFields = $InformationVb->fillableProfiles();
+        $cacheKey = 'duplicateValuesVb';
 
+        $duplicateValues = array_intersect($selectedValuesArray, $fillableFields);
+
+        // Lưu giá trị vào Session
+        $request->session()->put($cacheKey, $duplicateValues);
+
+        return back()->with('success', 'Chỉnh sửa thành công');
+    }
     public function index(Request $request)
     {
         $inputs = $request->all();
@@ -93,15 +106,31 @@ class InformationVbController extends Controller
 
         $vanban = $vanban->orderBy('created_at', 'desc');
         // Thêm phân trang ở đây
+        $fillable = ['id','profile_id']; //  các cột mặc định phải có
+
+        $cacheKey = 'duplicateValuesVb';
+        $selectedProfiles = [];
+        if (session()->has($cacheKey)) {
+            $duplicateValues = session($cacheKey);
+            $selectedProfiles = $duplicateValues;
+            $mergedArray = array_unique(array_merge($fillable, $selectedProfiles));
+            if(count($mergedArray) > 1){
+                $vanban->select($mergedArray);
+            }
+        }
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $vanban = $vanban->orderBy('profile_id', 'asc')->paginate($perPage);
 
         // Lấy ghi chú cho các cột
         $columnComments = $this->getColumnComments('information_vb');
 
+        $InformationVb = new InformationVb();
+        $fillableFields = $InformationVb->fillableProfiles();
         return view("admins.pages.vanban.index", [
             "vanban" => $vanban,
             "title"  => $title,
+            "fillableFields"    => $fillableFields,
+            "selectedProfiles"   => $selectedProfiles,
             "inputs" => $inputs,
             "columnComments" => $columnComments, // Chuyển ghi chú đến view
             "phongdata" => $phongdata,
@@ -368,6 +397,7 @@ class InformationVbController extends Controller
 
     public function PhongByConfigID(Request $request)
     {
+
         $coquandata = Profile::where('config_id', $request->id)
             ->with('config', 'maPhong', 'maMucLuc')
             ->get()
@@ -375,10 +405,12 @@ class InformationVbController extends Controller
             ->values() // Đảm bảo reindex lại collection sau unique
             ->toArray(); // Chuyển đổi sang dạng mảng
         return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
 
     public function MucLucByPhongID(Request $request)
     {
+
         $coquandata = Profile::where('config_id', $request->id)
             ->where('ma_phong', $request->phongId)
             ->with('config', 'maPhong', 'maMucLuc')
@@ -388,6 +420,7 @@ class InformationVbController extends Controller
             ->toArray(); // Chuyển đổi thành mảng
 
         return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
 
     public function HopSoByMucLuc(Request $request)
@@ -401,7 +434,9 @@ class InformationVbController extends Controller
             ->values()
             ->toArray();
 
+
         return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
 
     public function HoSoSoByHopSo(Request $request)
@@ -416,7 +451,9 @@ class InformationVbController extends Controller
             ->values()
             ->toArray();
 
+
         return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
 
     public function addcolumn(Request $request)
@@ -552,14 +589,19 @@ class InformationVbController extends Controller
             $table->dropColumn($column);
         });
         $this->removeColumnFromArrayVanBan($column);
+
+        $cacheKey = 'duplicateValuesVb';
+
+        session()->forget($cacheKey);
+
         return redirect()->back()->with('success', 'Cột đã được xóa thành công');
+
     }
 
     private function removeColumnFromArrayVanBan($columnName)
     {
         // Đường dẫn đến file chứa mảng
         $arrayPath = app_path('Models/array_vanban.php');
-
         // Đọc nội dung file
         $array = include $arrayPath;
 

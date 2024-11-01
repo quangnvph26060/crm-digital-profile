@@ -121,7 +121,10 @@ class CustomColumnController extends Controller
             $fillableFields = include app_path('Models/fillable_fields_profile.php');
             $fillableFields = array_values(array_unique($fillableFields)); // Loại bỏ các key và giữ các giá trị duy nhất
             $fillableFields[] = $cleanColumnName;
-            File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
+
+          //  File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
+
+            file_put_contents(app_path('Models/fillable_fields_profile.php'), "<?php\n\nreturn " . var_export($fillableFields, true) . ";\n");
 
             return back()->with('success', 'Cột đã được thêm thành công!');
         } else {
@@ -161,7 +164,10 @@ class CustomColumnController extends Controller
         // Ghi lại mảng fillable mới vào file fillable_fields_profile.php
         $fillableFields = array_values($fillableFields); // Đảm bảo mảng không có key
         File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
+        $cacheKey = 'duplicateValues';
 
+        // Xóa dữ liệu trong session với key là $cacheKey
+        session()->forget($cacheKey);
         return redirect()->back()->with('success', 'Cột đã được xóa thành công.');
     }
 }
