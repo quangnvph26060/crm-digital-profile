@@ -23,7 +23,7 @@
                             </a>
                         </li> --}}
                         <li>
-                            <a href="{{ route('admin.profile.index') }}">
+                            <a href="{{ route('admin.index') }}">
                                 <span data-key="t-chat">Danh sách</span>
                             </a>
                         </li>

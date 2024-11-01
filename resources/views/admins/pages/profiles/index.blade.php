@@ -79,6 +79,17 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="">Hộp số</label>
+                                            <select class="form-select" name="hop_so" id="hop_so" disabled>
+                                                <option value="{{ isset($inputs['hop_so']) ? $inputs['hop_so'] : '' }}">
+                                                    {{ isset($inputs['hop_so']) ? $inputs['hop_so'] : 'Chọn hộp số' }}
+                                                </option>
+
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-3">
                                         <div class="form-group">
                                             <label for="" style="opacity: 0">1</label> <br>
@@ -242,6 +253,69 @@
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function() {
+        function getSelectedValues() {
+            var selectedCoQuan = $('#coquan').val();
+            var selectedPhong = $('#phong').val();
+            var selectedMucLuc = $('#muc_luc').val();
+
+            return {
+                coquan: selectedCoQuan,
+                phong: selectedPhong,
+                muc_luc: selectedMucLuc
+            };
+        }
+
+        function sendAjaxRequest(selectedValues) {
+            var url = "{{ route('admin.profile.searchHoSo') }}";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: selectedValues,
+                success: function(response) {
+                    handleAjaxSuccess(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Lỗi AJAX:', error);
+                }
+            });
+        }
+
+        function handleAjaxSuccess(response) {
+            if (response.status === 'success') {
+                var data = response.data;
+                var selectElement = document.getElementById('hop_so');
+                
+                selectElement.innerHTML = '';
+
+                Object.keys(data).forEach(function(key) {
+                    var option = document.createElement('option');
+                    option.value = data[key];
+                    option.text = data[key];
+                    selectElement.add(option);
+                });
+
+                selectElement.disabled = false;
+            }
+        }
+
+        // Lấy giá trị khi trang được tải lại
+        var selectedValues = getSelectedValues();
+
+        // Kiểm tra và gửi yêu cầu AJAX nếu có đủ giá trị
+        if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
+            sendAjaxRequest(selectedValues);
+        }
+
+        // Xử lý sự kiện thay đổi
+        $('#coquan, #phong, #muc_luc').on('change', function() {
+            var selectedValues = getSelectedValues();
+            if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
+                sendAjaxRequest(selectedValues);
+            }
+        });
+    });
     $(document).ready(function() {
         $("#applyBtn").on("click", function(e) {
             e.preventDefault();

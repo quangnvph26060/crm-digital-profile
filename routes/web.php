@@ -98,8 +98,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
 
+    Route::get('/hoso', [ProfileController::class, 'index'])->name('index');
     Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::get('/search-hoso', [ProfileController::class, 'searchHoSo'])->name('searchHoSo');
         Route::get('/add-config', [ProfileController::class, 'add'])->name('add');
         Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
         Route::get('/detail-config/{id}', [ProfileController::class, 'detail'])->name('detail');

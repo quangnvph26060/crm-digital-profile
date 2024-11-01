@@ -39,7 +39,6 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $inputs = $request->all();
-
         $phongdata  = Phong::all();
         $muclucdata = MucLuc::all();
         $configdata = Config::all();
@@ -71,7 +70,13 @@ class ProfileController extends Controller
                 $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
             });
         }
+        if (isset($request->hop_so) && $request->hop_so != '') {
 
+            $profiles->where(function ($query) use ($request) {
+
+                $query->where('hop_so', 'like', '%' . $request->hop_so . '%');
+            });
+        }
         $fillable = ['id']; //  các cột mặc định phải có
 
         $cacheKey = 'duplicateValues';
@@ -363,4 +368,30 @@ class ProfileController extends Controller
     {
         return Excel::download(new ProfileExport, 'users.xlsx');
     }
+    public function searchHoSo(Request $request)
+    {
+        $profiles = Profile::query();
+        if (isset($request->coquan) && $request->coquan != '') {
+
+            $profiles->where(function ($query) use ($request) {
+                $query->where('config_id', 'like', '%' . $request->coquan . '%');
+            });
+        }
+        if (isset($request->phong) && $request->phong != '') {
+
+            $profiles->where(function ($query) use ($request) {
+                $query->where('ma_phong', 'like', '%' . $request->phong . '%');
+            });
+        }
+        if (isset($request->muc_luc) && $request->muc_luc != '') {
+
+            $profiles->where(function ($query) use ($request) {
+
+                $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
+            });
+        }
+        $maPhongs = $profiles->pluck('hop_so')->unique();
+        return response()->json(['status'=>'success','data'=>$maPhongs]);
+    }
 }
+
