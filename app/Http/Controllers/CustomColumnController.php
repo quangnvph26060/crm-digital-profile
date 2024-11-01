@@ -118,15 +118,15 @@ class CustomColumnController extends Controller
             $profile->fillable($fillable);
 
             // Đọc và cập nhật mảng fillable_fields_profile.php
-            $fillableFields = include app_path('Models/fillable_fields_profile.php');
+            $fillableFields = include     $arrayPath = app_path('Models/array_vanban.php');
             $fillableFields = array_values(array_unique($fillableFields)); // Loại bỏ các key và giữ các giá trị duy nhất
             $fillableFields[] = $cleanColumnName;
-
+            $arrayPath =    $arrayPath = app_path('Models/array_vanban.php');
           //  File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
 
             file_put_contents(app_path('Models/fillable_fields_profile.php'), "<?php\n\nreturn " . var_export($fillableFields, true) . ";\n");
             chmod($arrayPath, 7777);
-            
+
             return back()->with('success', 'Cột đã được thêm thành công!');
         } else {
             return back()->with('success', 'Cột đã tồn tại!');
