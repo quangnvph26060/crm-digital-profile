@@ -10,4 +10,4 @@ return array (
   7 => 'so_to',
   8 => 'thbq',
   9 => 'ghi_chu',
-);
+);        
