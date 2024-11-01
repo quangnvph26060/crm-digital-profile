@@ -181,7 +181,7 @@ class InformationVbController extends Controller
 
     public function store(Request $request)
     {
-         DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             $data = $request->except('_token');
@@ -397,37 +397,65 @@ class InformationVbController extends Controller
 
     public function PhongByConfigID(Request $request)
     {
-        $coquandata = Profile::where('config_id', $request->id)->with('config', 'maPhong', 'maMucLuc')->distinct('ma_phong')->get();
-        $uniqueData = $coquandata->unique('ma_phong');
-        Log::info($uniqueData);
-        return response()->json(['status' => "success", 'data' => $uniqueData]);
+
+        $coquandata = Profile::where('config_id', $request->id)
+            ->with('config', 'maPhong', 'maMucLuc')
+            ->get()
+            ->unique('ma_phong')
+            ->values() // Đảm bảo reindex lại collection sau unique
+            ->toArray(); // Chuyển đổi sang dạng mảng
+        return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
 
     public function MucLucByPhongID(Request $request)
     {
-        $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->with('config', 'maPhong', 'maMucLuc')->get();
-        $uniqueData = $coquandata->unique('ma_muc_luc');
-        Log::info($uniqueData);
-        return response()->json(['status' => "success", 'data' => $uniqueData]);
+
+        $coquandata = Profile::where('config_id', $request->id)
+            ->where('ma_phong', $request->phongId)
+            ->with('config', 'maPhong', 'maMucLuc')
+            ->get()
+            ->unique('ma_muc_luc')
+            ->values() // Đảm bảo reindex lại collection
+            ->toArray(); // Chuyển đổi thành mảng
+
+        return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
 
     public function HopSoByMucLuc(Request $request)
     {
+        $coquandata = Profile::where('config_id', $request->id)
+            ->where('ma_phong', $request->phongId)
+            ->where('ma_muc_luc', $request->mucluc)
+            ->with('config', 'maPhong', 'maMucLuc')
+            ->get()
+            ->unique('hop_so')
+            ->values()
+            ->toArray();
 
-        $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->where('ma_muc_luc', $request->mucluc)->with('config', 'maPhong', 'maMucLuc')->distinct()->get();
-        $uniqueData = $coquandata->unique('hop_so');
-        Log::info($uniqueData);
-        return response()->json(['status' => "success", 'data' => $uniqueData]);
+
+        return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
+
     public function HoSoSoByHopSo(Request $request)
     {
+        $coquandata = Profile::where('config_id', $request->id)
+            ->where('ma_phong', $request->phongId)
+            ->where('ma_muc_luc', $request->mucluc)
+            ->where('hop_so', $request->hopso)
+            ->with('config', 'maPhong', 'maMucLuc')
+            ->get()
+            ->unique('ho_so_so')
+            ->values()
+            ->toArray();
 
-        $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->where('ma_muc_luc', $request->mucluc)->where('hop_so', $request->hopso)->with('config', 'maPhong', 'maMucLuc')->distinct()->get();
 
-        $uniqueData = $coquandata->unique('ho_so_so');
-        Log::info($uniqueData);
-        return response()->json(['status' => "success", 'data' => $uniqueData]);
+        return response()->json(['status' => "success", 'data' => $coquandata]);
+
     }
+
     public function addcolumn(Request $request)
     {
         $title = "Quản lý trường văn bản";
