@@ -147,14 +147,19 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            @php
-                                            use Illuminate\Support\Facades\Blade;
+                                        @php
+                                                use Illuminate\Support\Facades\Blade;
 
-                                            $template = $template_form_vanban->template_form;
+                                                $template = $template_form_vanban->template_form;
 
-                                            $compiled = Blade::compileString($template);
-
-                                            eval('?>'.$compiled);
+                                              
+                                                if (!empty($template)) {
+                                                    $compiled = Blade::compileString($template);
+                                                    eval('?>'.$compiled);
+                                                } else {
+                                                 
+                                                    echo "";
+                                                }
                                         @endphp
                                         </div>
 

@@ -53,11 +53,15 @@ class AppServiceProvider extends ServiceProvider
 
 
         $template_form_hoso = TemplateFormHoSo::where('status', 'active')->first();
-
+        if (!$template_form_hoso) {
+            $template_form_hoso = ''; 
+        }
         View::share("template_form_hoso", $template_form_hoso);
 
         $template_form_vanban = TemplateFormVanBan::where('status', 'active')->first();
-
+        if (!$template_form_vanban) {
+            $template_form_vanban = ''; 
+        }
         View::share("template_form_vanban", $template_form_vanban);
         // $setting = DB::table('smtps')->first();
 
