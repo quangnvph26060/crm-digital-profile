@@ -399,6 +399,7 @@ class InformationVbController extends Controller
     {
         $coquandata = Profile::where('config_id', $request->id)->with('config', 'maPhong', 'maMucLuc')->distinct('ma_phong')->get();
         $uniqueData = $coquandata->unique('ma_phong');
+        Log::info($uniqueData);
         return response()->json(['status' => "success", 'data' => $uniqueData]);
     }
 
@@ -406,6 +407,7 @@ class InformationVbController extends Controller
     {
         $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->with('config', 'maPhong', 'maMucLuc')->get();
         $uniqueData = $coquandata->unique('ma_muc_luc');
+        Log::info($uniqueData);
         return response()->json(['status' => "success", 'data' => $uniqueData]);
     }
 
@@ -414,14 +416,17 @@ class InformationVbController extends Controller
 
         $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->where('ma_muc_luc', $request->mucluc)->with('config', 'maPhong', 'maMucLuc')->distinct()->get();
         $uniqueData = $coquandata->unique('hop_so');
+        Log::info($uniqueData);
         return response()->json(['status' => "success", 'data' => $uniqueData]);
     }
     public function HoSoSoByHopSo(Request $request)
     {
 
         $coquandata = Profile::where('config_id', $request->id)->where('ma_phong', $request->phongId)->where('ma_muc_luc', $request->mucluc)->where('hop_so', $request->hopso)->with('config', 'maPhong', 'maMucLuc')->distinct()->get();
-        Log::info($coquandata);
-        return response()->json(['status' => "success", 'data' => $coquandata]);
+
+        $uniqueData = $coquandata->unique('ho_so_so');
+        Log::info($uniqueData);
+        return response()->json(['status' => "success", 'data' => $uniqueData]);
     }
     public function addcolumn(Request $request)
     {
@@ -560,7 +565,7 @@ class InformationVbController extends Controller
         $cacheKey = 'duplicateValuesVb';
 
         session()->forget($cacheKey);
-        
+
         return redirect()->back()->with('success', 'Cột đã được xóa thành công');
 
     }
