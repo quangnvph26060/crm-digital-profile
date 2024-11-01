@@ -7,6 +7,7 @@ use App\Models\InformationVb;
 use App\Models\MucLuc;
 use App\Models\Phong;
 use App\Models\Profile;
+use Carbon\Carbon;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -29,6 +30,7 @@ class InformationVbImport implements ToModel, WithHeadingRow
             $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
             if ($coquan) {
                 $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
+                // dd($phong);
                 $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
                 // dd($phong);
                 if ($phong && $mucluc) {
@@ -49,14 +51,14 @@ class InformationVbImport implements ToModel, WithHeadingRow
                             $vanbannew->profile_id = $profile->id;
                             foreach ($row as $key => $value) {
 
-                                if (!Schema::hasColumn('information_vb', $key) || $key == 'ma_co_quan' || $key == 'ma_phong'||$key == 'ma_mucluc'||$key == 'hop_so'||$key == 'ho_so_so'||$key == 'so_va_ki_hieu_van_ban' ) {
+                                if (!Schema::hasColumn('information_vb', $key) || $key == 'ma_co_quan' || $key == 'ma_phong' || $key == 'ma_mucluc' || $key == 'hop_so' || $key == 'ho_so_so' || $key == 'so_va_ki_hieu_van_ban') {
                                     continue;
                                 }
                                 $vanbannew->$key = $value;
-                                // Log::info($key);
-                                if (isset($vanbannew->ngay_thang_van_ban) && $row['ngay_thang_van_ban']) {
-                                    $vanbannew->ngay_thang_van_ban = \Carbon\Carbon::createFromFormat('d/m/Y', $row['ngay_thang_van_ban'])->format('Y-m-d');
-                                }
+                                Log::info($key);
+
+                                $vanbannew->ngay_thang_van_ban = Carbon::createFromFormat('d/m/Y', $row['ngay_thang_van_ban'])->format('Y-m-d');
+
                                 $localPath = $row['duong_dan'];
                                 if (file_exists($localPath)) {
                                     // Tạo tên file duy nhất

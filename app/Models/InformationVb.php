@@ -15,18 +15,18 @@ class InformationVb extends Model
     protected $table = 'information_vb';
 
     // Các trường có thể được gán giá trị hàng loạt
-    protected $fillable = [];
+    protected $guarded = [];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
+    // public function __construct(array $attributes = [])
+    // {
+    //     parent::__construct($attributes);
 
-        $this->fillable = require __DIR__ . '/array_vanban.php';
+    //     $this->fillable = require __DIR__ . '/array_vanban.php';
 
-        if (!is_array($this->fillable)) {
-            $this->fillable = [];
-        }
-    }
+    //     if (!is_array($this->fillable)) {
+    //         $this->fillable = [];
+    //     }
+    // }
 
     public function config()
     {
@@ -44,14 +44,14 @@ class InformationVb extends Model
     }
     public function getStatus() : string
     {
-       
+
                 if ($this->status == Status::ENABLE) {
                     return '<span class="badge badge--primary">Hoạt động</span>';
                 } else {
                     return '<span><span class="badge badge--dark">Không hoạt động</span></span>';
                 } //Unfeatured
 
-         
+
     }
 
 
