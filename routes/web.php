@@ -40,7 +40,7 @@ Route::get("/admin/customer/{id}/detail", "CustomerController@getDetailCustomer"
 Route::get("/admin/customer/{id}/delete", "CustomerController@delete")->name("delete-customer")->middleware("is-login-admin");
 Route::get('/', 'AuthController@loginForm')->name('login');
 Route::post('/login', 'AuthController@postLogin')->name('post-login');
-
+Route::post('/get-column', [ProfileController::class, 'getColumnHoSo'])->name('column');
 // Route::get('/register', 'AuthController@registerForm')->name('register');
 // Route::post('/register', 'AuthController@postRegister')->name('post-register');
 
@@ -135,6 +135,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/add-column', [InformationVbController::class, 'addcolumn'])->name('column');
         Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');
+        Route::post('/get-column', [InformationVbController::class, 'getColumnVanBan'])->name('column');
 
         Route::get('/template-vanban', [VanBanController::class, 'indexTemplate'])->name('indexTemplate');
         Route::post('/template-vanban', [VanBanController::class, 'storeTemplate'])->name('storeTemplates');

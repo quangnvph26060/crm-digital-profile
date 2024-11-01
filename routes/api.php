@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HoSoController;
 use App\Http\Controllers\InformationVbController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;

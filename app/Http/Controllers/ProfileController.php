@@ -12,6 +12,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Models\Config;
 use App\Models\InformationVb;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Svg\Tag\Rect;
@@ -19,15 +20,25 @@ use Illuminate\Support\Facades\Schema;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function getColumnHoSo(Request $request)
+    {
+        $selectedValuesArray = json_decode($request->selectedValues, true);
+        $profile = new Profile();
+        $fillableFields = $profile->fillableProfiles();
+        $cacheKey = 'duplicateValues';
+
+        $duplicateValues = array_intersect($selectedValuesArray, $fillableFields);
+
+        // Lưu giá trị vào Session
+        $request->session()->put($cacheKey, $duplicateValues);
+
+        return back()->with('success', 'Chỉnh sửa thành công');
+    }
+
     public function index(Request $request)
     {
         $inputs = $request->all();
-        // dd($request->all());
 
         $phongdata  = Phong::all();
         $muclucdata = MucLuc::all();
@@ -36,29 +47,42 @@ class ProfileController extends Controller
         $profiles = Profile::query();
         if (isset($request->name) && $request->name != '') {
 
-            $profiles->where(function($query) use ($request) {
+            $profiles->where(function ($query) use ($request) {
 
                 $query->where('tieu_de_ho_so', 'like', '%' . $request->name . '%');
             });
         }
         if (isset($request->coquan) && $request->coquan != '') {
 
-            $profiles->where(function($query) use ($request) {
+            $profiles->where(function ($query) use ($request) {
                 $query->where('config_id', 'like', '%' . $request->coquan . '%');
             });
         }
         if (isset($request->phong) && $request->phong != '') {
 
-            $profiles->where(function($query) use ($request) {
+            $profiles->where(function ($query) use ($request) {
                 $query->where('ma_phong', 'like', '%' . $request->phong . '%');
             });
         }
         if (isset($request->muc_luc) && $request->muc_luc != '') {
 
-            $profiles->where(function($query) use ($request) {
+            $profiles->where(function ($query) use ($request) {
 
                 $query->where('ma_muc_luc', 'like', '%' . $request->muc_luc . '%');
             });
+        }
+
+        $fillable = ['id']; //  các cột mặc định phải có
+
+        $cacheKey = 'duplicateValues';
+        $selectedProfiles = [];
+        if (session()->has($cacheKey)) {
+            $duplicateValues = session($cacheKey);
+            $selectedProfiles = $duplicateValues;
+            $mergedArray = array_unique(array_merge($fillable, $selectedProfiles));
+            if(count($mergedArray) > 1){
+                $profiles->select($mergedArray);
+            }
         }
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
@@ -66,14 +90,19 @@ class ProfileController extends Controller
 
         $columnComments = $this->getColumnComments('profiles');
 
+        $profileNew = new Profile();
+        $fillableFields = $profileNew->fillableProfiles();
+
         return view("admins.pages.profiles.index", [
-            "profiles"      => $profiles,
-            "columnComments" => $columnComments,
-            "title"         => $title,
-            "inputs"        => $inputs,
-            "phongdata" => $phongdata,
-            "muclucdata" => $muclucdata,
-            "configdata" => $configdata,
+            "profiles"          => $profiles,
+            "fillableFields"    => $fillableFields,
+            "selectedProfiles"   => $selectedProfiles,
+            "columnComments"    => $columnComments,
+            "title"             => $title,
+            "inputs"            => $inputs,
+            "phongdata"         => $phongdata,
+            "muclucdata"        => $muclucdata,
+            "configdata"        => $configdata,
         ]);
     }
 
@@ -102,7 +131,6 @@ class ProfileController extends Controller
                 'mamucluc' => $mamucluc
             ]
         );
-
     }
     public function PhongDetailToConfig(Request $request)
     {
@@ -110,7 +138,8 @@ class ProfileController extends Controller
         return response()->json(['status' => "success", 'data' => $phongdata]);
     }
 
-    public function MucLucDetailToPhong(Request $request){
+    public function MucLucDetailToPhong(Request $request)
+    {
         $muclucdata = MucLuc::where('phong_id', $request->id)->get();
         return response()->json(['status' => "success", 'data' => $muclucdata]);
     }
@@ -136,8 +165,8 @@ class ProfileController extends Controller
 
         try {
             $data = $request->except('_token');
-           //   dd($data);
-            $macoquan = $this->checkExistence(Config::class, $request->config_id , 'Không tìm thấy mã cơ quan.');
+            //   dd($data);
+            $macoquan = $this->checkExistence(Config::class, $request->config_id, 'Không tìm thấy mã cơ quan.');
 
             $maphong = Phong::where('id', $request->ma_phong)
                 ->where('coquan_id', $request->config_id)
@@ -234,11 +263,11 @@ class ProfileController extends Controller
 
 
         if (isset($request->name) && $request->name != '') {
-            $vanban->where(function($query) use ($request) {
+            $vanban->where(function ($query) use ($request) {
                 $query->where('so_kh_vb', 'like', '%' . $request->name . '%');
             });
         }
-        $vanban->where('profile_id',$id);
+        $vanban->where('profile_id', $id);
         $perPage = 10;
         $vanban = $vanban->paginate($perPage);
 
@@ -266,15 +295,17 @@ class ProfileController extends Controller
         $profile = Profile::find($id);
         $mamucluc = MucLuc::all();
         $title   = "Xem hồ sơ";
-        return view('admins.pages.profiles.detail',
-        [
-            'title' => $title,
-            'profile' => $profile,
-            'macoquan' => $macoquan,
-            'mamucluc' => $mamucluc,
-            'profiles' => $profiles,
-            'vanban'=>$vanban
-        ]);
+        return view(
+            'admins.pages.profiles.detail',
+            [
+                'title' => $title,
+                'profile' => $profile,
+                'macoquan' => $macoquan,
+                'mamucluc' => $mamucluc,
+                'profiles' => $profiles,
+                'vanban' => $vanban
+            ]
+        );
     }
     /**
      * Update the specified resource in storage.

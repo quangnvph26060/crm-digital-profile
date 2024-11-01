@@ -24,7 +24,7 @@
                 <div class="row g-0">
                     @yield('content')
                     <!-- end col -->
-                    <div class="col-xxl-9 col-lg-8 col-md-7">
+                    <div class="col-xxl-7 col-lg-8 col-md-7">
                         <div class="auth-bg pt-md-5 p-4 d-flex">
                             <div class="bg-overlay bg-primary"></div>
                             <ul class="bg-bubbles">
