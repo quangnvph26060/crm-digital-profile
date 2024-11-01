@@ -135,11 +135,11 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="mb-3">
-                                                    <label for="example-text-input" class="form-label">Số và ký hiệu văn bản<span
+                                                    <label for="so_va_ki_hieu_van_ban" class="form-label">Số và ký hiệu văn bản<span
                                                             class="text text-danger">*</span></label>
                                                     <input value="{{ isset($vanban) ? $vanban->so_va_ki_hieu_van_ban : old('so_va_ki_hieu_van_ban') }}"
                                                         class="form-control {{ $errors->has('so_va_ki_hieu_van_ban') ? 'is-invalid' : '' }}" name="so_va_ki_hieu_van_ban" type="text"
-                                                        id="example-text-input" placeholder="Số và ký hiệu văn bản">
+                                                        id="so_va_ki_hieu_van_ban" placeholder="Số và ký hiệu văn bản">
                                                     @error('so_va_ki_hieu_van_ban')
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
