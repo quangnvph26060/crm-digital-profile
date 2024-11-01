@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\File;
 class CustomColumnController extends Controller
 {
     public function index(Request $request)
-    {
+    {   
         // tên cột db 
         $columns = Schema::getColumnListing('profiles');
-
+       
         $columnData = [];
         foreach ($columns as $column) {
             // Lấy kiểu dữ liệu của cột
@@ -30,7 +30,7 @@ class CustomColumnController extends Controller
             //     ->where('column_name', $column)
             //     ->value('column_comment');
             $comment =  $this->getColumnComments('profiles');
-            //  
+          //  
             // Kiểm tra xem cột có được yêu cầu không
             $isRequired = DB::table('information_schema.columns')
                 ->where('table_schema', env('DB_DATABASE'))
@@ -40,7 +40,7 @@ class CustomColumnController extends Controller
             $columnData[] = [
                 'name' => $column,
                 'type' => $columnType,
-                // 'comment' => $comment, // Thêm ghi chú
+               // 'comment' => $comment, // Thêm ghi chú
                 'is_required' => $isRequired === 'NO' ? 'Có' : 'Không', // Kiểm tra trạng thái yêu cầu
             ];
         }
@@ -62,7 +62,7 @@ class CustomColumnController extends Controller
         );
 
         $title = 'Thêm trường hồ sơ';
-        return view('admins.pages.custom.index', compact('title', 'columnDataPaginated', 'comment'));
+        return view('admins.pages.custom.index', compact('title', 'columnDataPaginated','comment'));
     }
 
     private function getColumnComments($tableName)
@@ -118,15 +118,13 @@ class CustomColumnController extends Controller
             $profile->fillable($fillable);
 
             // Đọc và cập nhật mảng fillable_fields_profile.php
-            $filePath = app_path('Models/fillable_fields_profile.php');
-
-            $fillableFields = include $filePath;
+            $fillableFields = include app_path('Models/fillable_fields_profile.php');
             $fillableFields = array_values(array_unique($fillableFields)); // Loại bỏ các key và giữ các giá trị duy nhất
             $fillableFields[] = $cleanColumnName;
-            if (!file_exists(dirname($filePath))) {
-                mkdir(dirname($filePath), 0777, true);
-            }
-            File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
+
+          //  File::put(app_path('Models/fillable_fields_profile.php'), '<?php' . PHP_EOL . 'return ' . var_export($fillableFields, true) . ';');
+
+            file_put_contents(app_path('Models/fillable_fields_profile.php'), "<?php\n\nreturn " . var_export($fillableFields, true) . ";\n");
 
             return back()->with('success', 'Cột đã được thêm thành công!');
         } else {
