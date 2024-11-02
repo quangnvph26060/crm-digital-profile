@@ -55,7 +55,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.mucluc.index') }}">
+                                <a href="{{ route('admin.hopso') }}">
                                     <span data-key="t-chat">Hộp lưu trữ</span>
                                 </a>
                             </li>

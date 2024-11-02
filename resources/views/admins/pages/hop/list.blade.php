@@ -43,11 +43,40 @@
                                                     {{ $item->agency_name }}</option>
                                             @endforeach
 
-                                            <!-- Thêm các tùy chọn mục lục khác nếu cần -->
+                                          
                                         </select>
                                     </div>
                                 </div>
-                              
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Phông</label>
+                                        <select class="form-select" name="coquan" id="coquan" >
+                                            <option value="">Chọn phông</option>
+                                            @foreach ($coquan as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
+                                                    {{ $item->agency_name }}</option>
+                                            @endforeach
+
+                                          
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Mục Lục</label>
+                                        <select class="form-select" name="coquan" id="coquan" >
+                                            <option value="">Chọn cơ mục lục</option>
+                                            @foreach ($coquan as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
+                                                    {{ $item->agency_name }}</option>
+                                            @endforeach
+
+                                          
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="" style="opacity: 0">1</label> <br>
@@ -69,30 +98,33 @@
                                     <thead>
                                         <tr>
                                             <th>STT</th>
-                                            <th>Mã cơ quan</th>
-                                            <th>Tên Phông</th>
-                                            <th>Mã phông</th>
+                                            <th>Cơ quan</th>
+                                            <th>Phông</th>
+                                            <th>Mục lục</th>
+                                            <th>Hộp số</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                        
-                                        @foreach ($phong as $key => $item)
+                                        @foreach ($hopso as $key => $item)
                                           
                                             <tr>
                                                 <td>
                                                     {{$key + 1}}
                                                 </td>
                                                 <td>
-                                                    {{ $item->coquan->agency_name}} 
+                                                    {{ $item->coquan_id}} 
                                                 </td>
                                                 <td>
-                                                    {{ $item->ten_phong}}
+                                                    {{ $item->phong_id}}
                                                 </td>
                                                 <td>
-                                                    {{ $item->ma_phong}}
+                                                    {{ $item->mucluc_id}}
                                                 </td>
-                                               
+                                                <td>
+                                                    {{ $item->mucluc_id}}
+                                                </td>
                                                 <td class="d-flex gap-1">
                                                     <a href="{{ route('admin.phong.edit', ['id' => $item->id]) }}" class="btn btn-warning">
                                                         <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
@@ -116,7 +148,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{$phong->links()}}
+                            {{$hopso->links()}}
                         </div>
 
                     </div>

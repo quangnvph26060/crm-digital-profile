@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ZnsMessageController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\CustomColumnController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\HopController;
 use App\Http\Controllers\HoSoController;
 use App\Http\Controllers\MucLucController;
 use App\Http\Controllers\PhongController;
@@ -161,6 +162,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::put('/status/{id}', [VanbanFormController::class, 'updatestatus'])->name('updatestatus.template');
     });
 
+    Route::get('/hop', [HopController::class, 'index'])->name('hopso');
+    
     Route::prefix('form_template')->name('form_template.')->group(function () {
         Route::get('', [TemplateFormController::class, 'index'])->name('index');
         Route::get('add', [TemplateFormController::class, 'create'])->name('add.template');
