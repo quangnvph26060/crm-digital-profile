@@ -87,7 +87,7 @@
                                                     </form>
                                                     <a href="{{ route('admin.phong.index',['coquan' => $item->id])}}"
                                                         class="btn btn-primary  main-action">
-                                                        <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
+                                                            <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
                                                     </a>
                                                 </td>
                                             </tr>

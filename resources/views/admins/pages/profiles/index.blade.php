@@ -312,6 +312,8 @@
         if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
             sendAjaxRequest(selectedValues);
         }
+      
+        
         if (selectedValues.coquan && selectedValues.phong) {
             // var url = new URL(window.location.href);
             // var params = new URLSearchParams(url.search);
@@ -344,9 +346,10 @@
                         });
 
                         selectElement.disabled = false;
-
-                        var selectedValues = getSelectedValues();
-                        sendAjaxRequest(selectedValues);
+                        var selectedPhong = $('#phong').val();
+                        searchMucLuc(selectedPhong)
+                        // var selectedValues = getSelectedValues();
+                        // sendAjaxRequest(selectedValues);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -378,8 +381,10 @@
                         });
 
                         selectElement.disabled = false;
+                      
                         
                         var selectedValues = getSelectedValues();
+                        
                         sendAjaxRequest(selectedValues);
                     }
                 },

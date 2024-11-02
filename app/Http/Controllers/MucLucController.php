@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Config;
 use App\Models\MucLuc;
 use App\Models\Phong;
 use Illuminate\Http\Request;
@@ -14,23 +15,23 @@ class MucLucController extends Controller
     {
         $inputs = $request->all();
         $configs = MucLuc::query();
-
-        if (isset($request->name) && $request->name != '') {
+        if (isset($request->phong) && $request->phong != '') {
             $configs->where(function ($query) use ($request) {
-                $query->where('ten_mucluc', 'like', '%' . $request->name . '%')
-                    ->orWhere('ma_mucluc', 'like', '%' . $request->name . '%');
+                $query->where('phong_id', 'like', '%' . $request->phong . '%');
+                   
             });
         }
 
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $configs = $configs->paginate($perPage);
-
+        $coquan = Config::all();
         $title   = "Danh sách mục lục";
         return view("admins.pages.mucluc.list", [
             "mucluc" => $configs,
             "title"  => $title,
-            "inputs" => $inputs,
+            "inputs" => $inputs,  
+            "coquan" => $coquan,
 
         ]);
     }

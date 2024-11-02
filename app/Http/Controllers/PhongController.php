@@ -38,6 +38,7 @@ class PhongController extends Controller
 
         $title   = "Danh sách Phông";
         $coquan = Config::all();
+        
         return view("admins.pages.phong.list", [
             "phong" => $configs,
             "title"  => $title,

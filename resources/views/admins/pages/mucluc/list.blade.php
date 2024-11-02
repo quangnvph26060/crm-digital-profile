@@ -26,10 +26,26 @@
                     <div class="card-header">
                         <form method="GET">
                             <div class="row">
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label for="">Tên mục lục và mã mục lục </label>
-                                        <input value="{{isset($inputs['name']) ? $inputs['name'] : ''}}" autocomplete="off" name="name" placeholder="Tên mục lục và mã mục lục" type="text" class="form-control">
+                                        <label for="">Cơ quan</label>
+                                        <select class="form-select" name="coquan" id="coquan" >
+                                            <option value="">Chọn cơ quan</option>
+                                            @foreach ($coquan as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
+                                                    {{ $item->agency_name }}</option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Phông</label>
+                                        <select class="form-select" name="phong" id="phong" disabled>
+                                            <option value="">Chọn cơ phông</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -82,7 +98,7 @@
                                                 </td>
 
                                                 <td class="d-flex gap-1">
-                                                    <a href="{{ route('admin.mucluc.edit', ['id' => $item->id]) }}" class="btn btn-warning">
+                                                    <a href="{{ route('admin.mucluc.edit', ['id' => $item->id]) }}" class="btn btn-warning h-32">
                                                         <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
 
                                                     </a>
@@ -93,6 +109,10 @@
                                                             <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
                                                         </button>
                                                     </form>
+                                                    <a href="{{ route('admin.mucluc.index', ['id' => $item->id]) }}"
+                                                        class="btn btn-primary  main-action h-32">
+                                                        <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -111,4 +131,92 @@
     </div> <!-- container-fluid -->
 </div>
 @endsection
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function getSelectedValues() {
+            var selectedCoQuan = $('#coquan').val();
+            var selectedPhong = $('#phong').val();
+            
+            return {
+                coquan: selectedCoQuan,
+                phong: selectedPhong,
+            };
+        }
+        var selectedValues = getSelectedValues();
+     
+        
+        // Kiểm tra và gửi yêu cầu AJAX nếu có đủ giá trị
+        if (selectedValues.coquan ) {
+            searchPhong(selectedValues.coquan)
+        }
+        var url = new URL(window.location.href);
+        var params = new URLSearchParams(url.search);
+        var coquan = params.get('coquan');
+        if(coquan){
+            searchPhong(coquan)
+        }
+
+        function sendAjaxRequest(selectedValues) {
+            var url = "{{ route('admin.profile.searchHoSo') }}";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: selectedValues,
+                success: function(response) {
+                 //   handleAjaxSuccess(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Lỗi AJAX:', error);
+                }
+            });
+        }
+
+        function searchPhong(selectedCoQuan) {
+            var url = "{{ route('admin.profile.searchPhong') }}";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    coquan: selectedCoQuan
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        var data = response.data;
+                        var selectElement = document.getElementById('phong');
+
+                        selectElement.innerHTML = '';
+
+                        Object.keys(data).forEach(function(key) {
+                            var option = document.createElement('option');
+                            option.value = data[key];
+                            option.text = key;
+                            selectElement.add(option);
+                        });
+
+                        selectElement.disabled = false;
+
+                        // var selectedValues = getSelectedValues();
+                        // sendAjaxRequest(selectedValues);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Lỗi AJAX:', error);
+                }
+            });
+        }
+        $('#coquan').on('change', function() {
+            var selectedCoQuan = $('#coquan').val();
+            console.log(selectedCoQuan);
+            
+            searchPhong(selectedCoQuan);
+        });
+    });
+</script>
+<style scoped>
+    .h-32{
+        height: 32px;
+    }
+</style>
 
