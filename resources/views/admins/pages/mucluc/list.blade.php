@@ -109,7 +109,10 @@
                                                             <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
                                                         </button>
                                                     </form>
-                                                    <a href="{{ route('admin.mucluc.index', ['id' => $item->id]) }}"
+                                                    @php
+                                                        $macoquan = App\Models\Phong::find($item->phong_id)->coquan_id;
+                                                    @endphp
+                                                    <a href="{{ route('admin.hopso', ['coquan' => $macoquan,'phong' => $item->phong_id,'mucluc' => $item->id]) }}"
                                                         class="btn btn-primary  main-action h-32">
                                                         <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
                                                     </a>

@@ -114,16 +114,16 @@
                                                     {{$key + 1}}
                                                 </td>
                                                 <td>
-                                                    {{ $item->coquan_id}} 
+                                                    {{ $item->maCoQuan->agency_name}} 
                                                 </td>
                                                 <td>
-                                                    {{ $item->phong_id}}
+                                                    {{ $item->maPhong->ten_phong}}
                                                 </td>
                                                 <td>
-                                                    {{ $item->mucluc_id}}
+                                                    {{ $item->maMucLuc->ten_mucluc}}
                                                 </td>
                                                 <td>
-                                                    {{ $item->mucluc_id}}
+                                                    {{ $item->hop_so}}
                                                 </td>
                                                 <td class="d-flex gap-1">
                                                     <a href="{{ route('admin.phong.edit', ['id' => $item->id]) }}" class="btn btn-warning">
