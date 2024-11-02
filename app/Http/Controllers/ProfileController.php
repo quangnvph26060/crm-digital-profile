@@ -393,5 +393,33 @@ class ProfileController extends Controller
         $maPhongs = $profiles->pluck('hop_so')->unique();
         return response()->json(['status'=>'success','data'=>$maPhongs]);
     }
+    public function searchPhong(Request $request)
+    {
+        $profiles = Phong::query();
+        if (isset($request->coquan) && $request->coquan != '') {
+
+            $profiles->where(function ($query) use ($request) {
+
+                $query->where('coquan_id', 'like', '%' . $request->coquan . '%');
+            });
+        }
+        $maPhongs = $profiles->pluck('id', 'ten_phong')->unique();
+        return response()->json(['status'=>'success','data'=>$maPhongs]);
+    }
+    public function searchMucLuc(Request $request)
+    {
+      
+        $profiles = MucLuc::query();
+        if (isset($request->coquan) && $request->coquan != '') {
+
+            $profiles->where(function ($query) use ($request) {
+
+                $query->where('phong_id', 'like', '%' . $request->coquan . '%');
+            });
+        }
+       
+        $maPhongs = $profiles->pluck('id','ten_mucluc')->unique();
+        return response()->json(['status'=>'success','data'=>$maPhongs]);
+    }
 }
 

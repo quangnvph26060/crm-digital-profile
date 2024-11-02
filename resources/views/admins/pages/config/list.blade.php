@@ -85,6 +85,10 @@
                                                             <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
                                                         </button>
                                                     </form>
+                                                    <a href="{{ route('admin.phong.index',['coquan' => $item->id])}}"
+                                                        class="btn btn-primary  main-action">
+                                                        <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach

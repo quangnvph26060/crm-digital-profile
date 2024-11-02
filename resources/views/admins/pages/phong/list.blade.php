@@ -26,10 +26,25 @@
                     <div class="card-header">
                         <form method="GET">
                             <div class="row">
-                                <div class="col-lg-3">
+                                {{-- <div class="col-lg-3">
                                     <div class="form-group">
                                         <label for="">Tên cơ quan và Mã cơ quan </label>
                                         <input value="{{isset($inputs['name']) ? $inputs['name'] : ''}}" autocomplete="off" name="name" placeholder="Tên cơ quan và mã cơ quan" type="text" class="form-control">
+                                    </div>
+                                </div> --}}
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Cơ quan</label>
+                                        <select class="form-select" name="coquan" id="coquan" >
+                                            <option value="">Chọn cơ quan</option>
+                                            @foreach ($coquan as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
+                                                    {{ $item->agency_name }}</option>
+                                            @endforeach
+
+                                            <!-- Thêm các tùy chọn mục lục khác nếu cần -->
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -90,6 +105,10 @@
 
                                                         </button>
                                                     </form>
+                                                    <a href="{{ route('admin.phong.index') }}"
+                                                    class="btn btn-primary  main-action">
+                                                    <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
+                                                </a>
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -50,12 +50,14 @@
                                                 <!-- Thêm các tùy chọn phòng khác nếu cần -->
                                             </select>
                                         </div>
+                                      
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label for="">Phông</label>
-                                            <select class="form-select" name="phong" id="phong">
+                                            <select class="form-select" name="phong" id="phong" disabled>
                                                 <option value="">Chọn Phông</option>
+                                                
                                                 @foreach ($phongdata as $item)
                                                     <option value="{{ $item->id }}"
                                                         {{ isset($inputs['phong']) ? ($inputs['phong'] == $item->id ? 'selected' : '') : '' }}>
@@ -68,13 +70,14 @@
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label for="">Mục lục</label>
-                                            <select class="form-select" name="muc_luc" id="muc_luc">
+                                            <select class="form-select" name="muc_luc" id="muc_luc" disabled>
                                                 <option value="">Chọn mục lục</option>
                                                 @foreach ($muclucdata as $item)
                                                     <option value="{{ $item->id }}"
                                                         {{ isset($inputs['muc_luc']) ? ($inputs['muc_luc'] == $item->id ? 'selected' : '') : '' }}>
                                                         {{ $item->ten_mucluc }}</option>
                                                 @endforeach
+
                                                 <!-- Thêm các tùy chọn mục lục khác nếu cần -->
                                             </select>
                                         </div>
@@ -282,11 +285,13 @@
             });
         }
 
+
+
         function handleAjaxSuccess(response) {
             if (response.status === 'success') {
                 var data = response.data;
                 var selectElement = document.getElementById('hop_so');
-                
+
                 selectElement.innerHTML = '';
 
                 Object.keys(data).forEach(function(key) {
@@ -307,6 +312,91 @@
         if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
             sendAjaxRequest(selectedValues);
         }
+        if (selectedValues.coquan && selectedValues.phong) {
+            // var url = new URL(window.location.href);
+            // var params = new URLSearchParams(url.search);
+            // var phong = params.get('phong');
+            // var coquan = params.get('coquan');
+            searchPhong(selectedValues.coquan)
+            searchMucLuc(selectedValues.phong)
+        }
+
+        function searchPhong(selectedCoQuan) {
+            var url = "{{ route('admin.profile.searchPhong') }}";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    coquan: selectedCoQuan
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        var data = response.data;
+                        var selectElement = document.getElementById('phong');
+
+                        selectElement.innerHTML = '';
+
+                        Object.keys(data).forEach(function(key) {
+                            var option = document.createElement('option');
+                            option.value = data[key];
+                            option.text = key;
+                            selectElement.add(option);
+                        });
+
+                        selectElement.disabled = false;
+
+                        var selectedValues = getSelectedValues();
+                        sendAjaxRequest(selectedValues);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Lỗi AJAX:', error);
+                }
+            });
+        }
+
+        function searchMucLuc(selectedMucLuc) {
+            var url = "{{ route('admin.profile.searchMucLuc') }}"
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    coquan: selectedMucLuc
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        var data = response.data;
+                        var selectElement = document.getElementById('muc_luc');
+
+                        selectElement.innerHTML = '';
+
+                        Object.keys(data).forEach(function(key) {
+                            var option = document.createElement('option');
+                            option.value = data[key];
+                            option.text = key;
+                            selectElement.add(option);
+                        });
+
+                        selectElement.disabled = false;
+                        
+                        var selectedValues = getSelectedValues();
+                        sendAjaxRequest(selectedValues);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Lỗi AJAX:', error);
+                }
+            });
+        }
+        $('#coquan').on('change', function() {
+            var selectedCoQuan = $('#coquan').val();
+            searchPhong(selectedCoQuan);
+        });
+        $('#phong').on('change', function() {
+            var selectedMucLuc = $('#phong').val();
+            searchMucLuc(selectedMucLuc)
+        });
+
 
         // Xử lý sự kiện thay đổi
         $('#coquan, #phong, #muc_luc').on('change', function() {
@@ -316,6 +406,8 @@
             }
         });
     });
+
+
     $(document).ready(function() {
         $("#applyBtn").on("click", function(e) {
             e.preventDefault();

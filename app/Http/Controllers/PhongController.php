@@ -16,23 +16,33 @@ class PhongController extends Controller
     {
         $inputs = $request->all();
         $configs = Phong::query();
+       
+        // if (isset($request->name) && $request->name != '') {
+        //     $configs->where(function($query) use ($request) {
+        //         $query->where('ten_phong', 'like', '%' . $request->name . '%')
+        //               ->orWhere('ma_phong', 'like', '%' . $request->name . '%');
+                 
+        //     });
+        // }
 
-        if (isset($request->name) && $request->name != '') {
+        if (isset($request->coquan) && $request->coquan != '') {
             $configs->where(function($query) use ($request) {
-                $query->where('ten_phong', 'like', '%' . $request->name . '%')
-                      ->orWhere('ma_phong', 'like', '%' . $request->name . '%');
+                $query->where('coquan_id', 'like', '%' . $request->coquan . '%');
+                    
+                 
             });
         }
-
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $configs = $configs->paginate($perPage);
 
         $title   = "Danh sách Phông";
+        $coquan = Config::all();
         return view("admins.pages.phong.list", [
             "phong" => $configs,
             "title"  => $title,
             "inputs" => $inputs,
+            "coquan" => $coquan,
 
         ]);
     }

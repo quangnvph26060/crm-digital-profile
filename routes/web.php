@@ -59,16 +59,17 @@ Route::group(["prefix" => "cronjob"], function () {
     Route::get("/set-kpi", "CronjobController@setKpiAuto");
 });
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'middleware' => 'is-login-admin'], function () {
-
+    Route::get('/thongtinhoso', [CustomColumnController::class, 'index'])->name('thongtinhoso');
     Route::prefix('column')->name('column.')->group(function () {
-        Route::get('', [CustomColumnController::class, 'index'])->name('index');
+       
         Route::post('/add', [CustomColumnController::class, 'store'])->name('store');
         Route::delete('/delete/{column}', [CustomColumnController::class, 'deleteColumn'])->name('deleteColumn');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
     //config
+    Route::get('/coquan', [ConfigController::class, 'index'])->name('coquan');
     Route::prefix('config')->name('config.')->group(function () {
-        Route::get('', [ConfigController::class, 'index'])->name('index');
+    
         Route::get('/add-config', [ConfigController::class, 'add'])->name('add');
         Route::get('/edit-config/{id}', [ConfigController::class, 'edit'])->name('edit');
         Route::get('/get-agency-code', [ConfigController::class, 'getAgencyCode'])->name('get-agency-code');
@@ -101,6 +102,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::get('/hoso', [ProfileController::class, 'index'])->name('index');
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/search-hoso', [ProfileController::class, 'searchHoSo'])->name('searchHoSo');
+        Route::get('/search-phong', [ProfileController::class, 'searchPhong'])->name('searchPhong');
+        Route::get('/search-mucluc', [ProfileController::class, 'searchMucLuc'])->name('searchMucLuc');
         Route::get('/add-config', [ProfileController::class, 'add'])->name('add');
         Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
         Route::get('/detail-config/{id}', [ProfileController::class, 'detail'])->name('detail');
@@ -122,6 +125,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::delete('/delete/{id}', [HoSoController::class, 'destroy'])->name('delete.template');
     });
 
+    Route::get('/thongtinvanban', [InformationVbController::class, 'addcolumn'])->name('column');
     Route::prefix('vanban')->name('vanban.')->group(function () {
         Route::get('index', [InformationVbController::class, 'index'])->name('index');
         Route::get('/add-vanban', [InformationVbController::class, 'add'])->name('add');
@@ -133,7 +137,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/update-vanban/{id}', [InformationVbController::class, 'update'])->name('update');
         Route::post('/import-vanban', [InformationVbController::class, 'importExcel'])->name('import');
         Route::get('/export-vanban', [InformationVbController::class, 'exportExcel'])->name('export');
-        Route::get('/add-column', [InformationVbController::class, 'addcolumn'])->name('column');
+      
         Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');
         Route::post('/get-column', [InformationVbController::class, 'getColumnVanBan'])->name('column');
@@ -275,10 +279,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/{id}/edit', 'UserController@edit')->name('edit');
         Route::post('/{id}/update', 'UserController@update')->name('update');
         Route::get("/{id}/delete", 'UserController@delete')->name("delete");
-    });
+    });   
 
+    Route::get('user/list', 'AdminController@list')->name('list');
 	Route::group(["prefix" => "admin", "as" => "admin."], function () {
-        Route::get('/list', 'AdminController@list')->name('list');
+    
         Route::get('/add', 'AdminController@add')->name('add');
         Route::get('/{id}/edit', 'AdminController@edit')->name('edit');
         Route::post('/{id}/update', 'AdminController@update')->name('update');
