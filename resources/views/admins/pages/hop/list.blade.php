@@ -89,7 +89,7 @@
                                                 kiếm</button>
                                             <a href="{{ url()->current() }}" class="btn btn-danger"><i
                                                     class="fas fa-history"></i> Tải lại</a>
-                                            <a class="btn btn-success" href="{{ route('admin.phong.add') }}">
+                                            <a class="btn btn-success" href="{{ route('admin.hop.add') }}">
                                                 <i class="fas fa-plus"></i> Thêm mới
                                             </a>
                                         </div>
@@ -133,13 +133,13 @@
                                                         {{ $item->hop_so }}
                                                     </td>
                                                     <td class="d-flex gap-1">
-                                                        <a href="{{ route('admin.phong.edit', ['id' => $item->id]) }}"
+                                                        <a href="{{ route('admin.hop.edit', ['id' => $item->id]) }}"
                                                             class="btn btn-warning main-action">
                                                             <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
 
                                                         </a>
                                                         <form method="post"
-                                                            action="{{ route('admin.phong.delete', ['id' => $item->id]) }}"
+                                                            action="{{ route('admin.hop.delete', ['id' => $item->id]) }}"
                                                             onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                             @csrf
                                                             @method('DELETE')
@@ -303,6 +303,6 @@ height: 32px;
 
 
         var params = getUrlParams(currentUrl);
-       
+
     });
 </script>
