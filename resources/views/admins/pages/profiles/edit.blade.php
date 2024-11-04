@@ -260,7 +260,6 @@
 
             $('#agency_code-select').on('change', function() {
                 var selectedCoQuan = $('#agency_code-select').val();
-                console.log(selectedCoQuan);
                 
                 searchPhong(selectedCoQuan);
             });
@@ -367,6 +366,58 @@
                     }
                 });
             }
+            function searchHopSo(selectedCoQuan, selectedPhong, selectedMucLuc) {
+                var url = "{{ route('admin.profile.searchHopSo') }}"
+                console.log('123');
+                
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        coquan: selectedCoQuan,
+                        phong: selectedPhong,
+                        mucluc: selectedMucLuc
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            var data = response.data;
+                           
+                            var selectElement = document.getElementById('hop_so');
+
+                            selectElement.innerHTML = '';
+
+                            Object.keys(data).forEach(function(key) {
+                                var option = document.createElement('option');
+                                option.value = data[key];
+                                option.text = key;
+                                // if (data[key] == params.muc_luc) {
+                                //     option.selected = true;
+                                // }
+                                selectElement.add(option);
+                            });
+
+                            selectElement.disabled = false;
+
+
+                            var selectedValues = getSelectedValues();
+
+                            sendAjaxRequest(selectedValues);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Lỗi AJAX:', error);
+                    }
+                });
+            }
+            $('#agency_code-select, #ma-phong-select, #mucluc-select').on('change', function() {
+                var selectedCoQuan = $('#agency_code-select').val();
+                var selectedPhong = $('#ma-phong-select').val();
+                var selectedMucLuc = $('#mucluc-select').val();
+             
+                if (selectedCoQuan && selectedPhong && selectedMucLuc) {
+                    searchHopSo(selectedCoQuan, selectedPhong, selectedMucLuc);
+                }
+            });
         });
     </script>
 

@@ -210,7 +210,7 @@ class ProfileController extends Controller
             $fillableFields = (new Profile)->getFillable();
 
             $data['config_id'] = $request->config_id;
-            $data['hop_so'] = $hopso->hop_so;
+            $data['hop_so'] = $hopso->id;
             Profile::unguard(); // Bỏ qua fillable để tạo bản ghi
             Profile::create($data);
             Profile::reguard();
