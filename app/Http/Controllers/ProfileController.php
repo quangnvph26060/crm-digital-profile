@@ -138,6 +138,7 @@ class ProfileController extends Controller
             ]
         );
     }
+
     public function PhongDetailToConfig(Request $request)
     {
         $phongdata = Phong::select('ma_phong', 'ten_phong', 'id')->where('coquan_id', $request->id)->get();
@@ -147,6 +148,13 @@ class ProfileController extends Controller
     public function MucLucDetailToPhong(Request $request)
     {
         $muclucdata = MucLuc::where('phong_id', $request->id)->get();
+        return response()->json(['status' => "success", 'data' => $muclucdata]);
+    }
+
+    public function MucLucDetailToHopSo(Request $request)
+    {
+        $muclucdata = Profile::where('id',$request->id)->first();
+         $muclucdata = $muclucdata->hopso->hop_so;
         return response()->json(['status' => "success", 'data' => $muclucdata]);
     }
 
@@ -194,7 +202,7 @@ class ProfileController extends Controller
                 ->where('ma_muc_luc', $request->ma_muc_luc)
                 ->where('ho_so_so', $request->ho_so_so)
                 ->first();
-
+            $hopso = HopSoModel::find($request->hop_so);
             if ($result_profile) {
                 DB::rollback();
                 return back()->with('error', 'Đã có hồ sơ trong hộp này');
@@ -202,6 +210,7 @@ class ProfileController extends Controller
             $fillableFields = (new Profile)->getFillable();
 
             $data['config_id'] = $request->config_id;
+            $data['hop_so'] = $hopso->hop_so;
             Profile::unguard(); // Bỏ qua fillable để tạo bản ghi
             Profile::create($data);
             Profile::reguard();
@@ -426,6 +435,33 @@ class ProfileController extends Controller
 
         $maPhongs = $profiles->pluck('id','ten_mucluc')->unique();
         return response()->json(['status'=>'success','data'=>$maPhongs]);
+    }
+    public function searchHopSo(Request $request)
+    {
+        $profiles = HopSoModel::query();
+        if (isset($request->coquan) && $request->coquan != '') {
+
+            $profiles->where(function ($query) use ($request) {
+
+                $query->where('coquan_id', 'like', '%' . $request->coquan . '%');
+            });
+        }
+        if (isset($request->phong) && $request->phong != '') {
+
+            $profiles->where(function ($query) use ($request) {
+
+                $query->where('phong_id', 'like', '%' . $request->phong . '%');
+            });
+        }
+        if (isset($request->mucluc) && $request->mucluc != '') {
+
+            $profiles->where(function ($query) use ($request) {
+
+                $query->where('mucluc_id', 'like', '%' . $request->mucluc . '%');
+            });
+        }
+        $hopso = $profiles->pluck('id','hop_so')->unique();
+        return response()->json(['status'=>'success','data'=>$hopso]);
     }
 }
 

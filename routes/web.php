@@ -105,6 +105,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/search-hoso', [ProfileController::class, 'searchHoSo'])->name('searchHoSo');
         Route::get('/search-phong', [ProfileController::class, 'searchPhong'])->name('searchPhong');
         Route::get('/search-mucluc', [ProfileController::class, 'searchMucLuc'])->name('searchMucLuc');
+        Route::get('/search-hopso', [ProfileController::class, 'searchHopSo'])->name('searchHopSo');
         Route::get('/add-config', [ProfileController::class, 'add'])->name('add');
         Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
         Route::get('/detail-config/{id}', [ProfileController::class, 'detail'])->name('detail');
