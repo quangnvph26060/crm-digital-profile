@@ -90,18 +90,21 @@ class InformationVbController extends Controller
         }
 
         // Sửa biến $request->config_id thành $request->phong
-        if (isset($request->ma_co_quan) && $request->ma_co_quan != '') {
-            $vanban->where('ma_co_quan', 'like', '%' . $request->ma_co_quan . '%');
+        if (isset($request->coquan) && $request->coquan != '') {
+            $vanban->where('ma_co_quan', 'like', '%' . $request->coquan . '%');
         }
 
         // Tìm kiếm theo mã phòng
-        if (isset($request->ma_phong) && $request->ma_phong != '') {
-            $vanban->where('ma_phong', 'like', '%' . $request->ma_phong . '%');
+        if (isset($request->phong) && $request->phong != '') {
+            $vanban->where('ma_phong', 'like', '%' . $request->phong . '%');
         }
 
         // Tìm kiếm theo mục lục
         if (isset($request->muc_luc) && $request->muc_luc != '') {
             $vanban->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
+        }
+        if (isset($request->hop_so) && $request->hop_so != '') {
+            $vanban->where('hop_so', 'like', '%' . $request->hop_so . '%');
         }
 
         $vanban = $vanban->orderBy('created_at', 'desc');
@@ -437,7 +440,7 @@ class InformationVbController extends Controller
 
         return response()->json(['status' => "success", 'data' => $coquandata]);
 
-     
+
     }
 
     public function HoSoSoByHopSo(Request $request)

@@ -17,7 +17,7 @@
                 </div> --}}
             </div>
         </div>
-       
+
         <!-- end page title -->
 
         <div class="row">
@@ -43,7 +43,7 @@
                                                     {{ $item->agency_name }}</option>
                                             @endforeach
 
-                                          
+
                                         </select>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                                                     {{ $item->agency_name }}</option>
                                             @endforeach
 
-                                          
+
                                         </select>
                                     </div>
                                 </div>
@@ -73,7 +73,7 @@
                                                     {{ $item->agency_name }}</option>
                                             @endforeach
 
-                                          
+
                                         </select>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                         <label for="" style="opacity: 0">1</label> <br>
                                         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm kiếm</button>
                                         <a href="{{url()->current()}}" class="btn btn-danger"><i class="fas fa-history"></i> Tải lại</a>
-                                        <a class="btn btn-success" href="{{route('admin.phong.add')}}">
+                                        <a class="btn btn-success" href="{{route('admin.hop.add')}}">
                                             <i class="fas fa-plus"></i> Thêm mới
                                         </a>
                                     </div>
@@ -106,15 +106,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       
+
                                         @foreach ($hopso as $key => $item)
-                                          
+
                                             <tr>
                                                 <td>
                                                     {{$key + 1}}
                                                 </td>
                                                 <td>
-                                                    {{ $item->coquan_id}} 
+                                                    {{ $item->coquan_id}}
                                                 </td>
                                                 <td>
                                                     {{ $item->phong_id}}
@@ -126,11 +126,11 @@
                                                     {{ $item->mucluc_id}}
                                                 </td>
                                                 <td class="d-flex gap-1">
-                                                    <a href="{{ route('admin.phong.edit', ['id' => $item->id]) }}" class="btn btn-warning">
+                                                    <a href="{{ route('admin.hop.edit', ['id' => $item->id]) }}" class="btn btn-warning">
                                                         <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
- 
+
                                                     </a>
-                                                    <form method="post" action="{{ route('admin.phong.delete', ['id' => $item->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                    <form method="post" action="{{ route('admin.hop.delete', ['id' => $item->id]) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger">

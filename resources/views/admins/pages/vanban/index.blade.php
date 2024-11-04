@@ -29,7 +29,7 @@
                     <div class="card-header">
                         <form method="GET">
                             <div class="row">
-                                <div class="col-lg-2">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label for="">Số và ký hiệu văn bản</label>
                                         <input value="{{ isset($inputs['name']) ? $inputs['name'] : '' }}"
@@ -37,28 +37,30 @@
                                             class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label for="">Cơ quan</label>
-                                        <select class="form-select" name="ma_co_quan" id="coquan">
+                                        <select class="form-select" name="coquan" id="coquan">
                                             <option value="">Chọn cơ quan</option>
                                             @foreach ($configdata as $item)
                                                 <option value="{{ $item->id }}"
-                                                    {{ isset($inputs['ma_co_quan']) ? ($inputs['ma_co_quan'] == $item->id ? 'selected' : '') : '' }}>
+                                                    {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
                                                     {{ $item->agency_name }}</option>
                                             @endforeach
                                             <!-- Thêm các tùy chọn phòng khác nếu cần -->
                                         </select>
                                     </div>
+
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label for="">Phông</label>
-                                        <select class="form-select" name="ma_phong" id="phong">
+                                        <select class="form-select" name="phong" id="phong" disabled>
                                             <option value="">Chọn Phông</option>
+
                                             @foreach ($phongdata as $item)
                                                 <option value="{{ $item->id }}"
-                                                    {{ isset($inputs['ma_phong']) ? ($inputs['ma_phong'] == $item->id ? 'selected' : '') : '' }}>
+                                                    {{ isset($inputs['phong']) ? ($inputs['phong'] == $item->id ? 'selected' : '') : '' }}>
                                                     {{ $item->ten_phong }}</option>
                                             @endforeach
                                             <!-- Thêm các tùy chọn phòng khác nếu cần -->
@@ -68,17 +70,32 @@
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label for="">Mục lục</label>
-                                        <select class="form-select" name="muc_luc" id="muc_luc">
+                                        <select class="form-select" name="muc_luc" id="muc_luc" disabled>
                                             <option value="">Chọn mục lục</option>
                                             @foreach ($muclucdata as $item)
                                                 <option value="{{ $item->id }}"
                                                     {{ isset($inputs['muc_luc']) ? ($inputs['muc_luc'] == $item->id ? 'selected' : '') : '' }}>
                                                     {{ $item->ten_mucluc }}</option>
                                             @endforeach
+
                                             <!-- Thêm các tùy chọn mục lục khác nếu cần -->
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label for="">Hộp số</label>
+                                        <select class="form-select" name="hop_so" id="hop_so" disabled>
+                                            <option value="{{ isset($inputs['hop_so']) ? $inputs['hop_so'] : '' }}">
+                                                {{ isset($inputs['hop_so']) ? $inputs['hop_so'] : 'Chọn hộp số' }}
+                                            </option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="" style="opacity: 0">1</label> <br>
@@ -187,7 +204,7 @@
                                 </div>
                             </div>
                         </div>
-                      
+
                         <div class="mt-4">
                             @include('globals.alert')
                         </div>
@@ -320,6 +337,238 @@
         </div> <!-- container-fluid -->
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function getSelectedValues() {
+                var selectedCoQuan = $('#coquan').val();
+                var selectedPhong = $('#phong').val();
+                var selectedMucLuc = $('#muc_luc').val();
+
+                return {
+                    coquan: selectedCoQuan,
+                    phong: selectedPhong,
+                    muc_luc: selectedMucLuc
+                };
+            }
+
+            function sendAjaxRequest(selectedValues) {
+                var url = "{{ route('admin.profile.searchHoSo') }}";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: selectedValues,
+                    success: function(response) {
+                        handleAjaxSuccess(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Lỗi AJAX:', error);
+                    }
+                });
+            }
+
+
+
+            function handleAjaxSuccess(response) {
+                if (response.status === 'success') {
+                    var data = response.data;
+                    var selectElement = document.getElementById('hop_so');
+
+                    selectElement.innerHTML = '';
+
+                    Object.keys(data).forEach(function(key) {
+                        var option = document.createElement('option');
+                        option.value = data[key];
+                        option.text = data[key];
+                        selectElement.add(option);
+                    });
+
+                    selectElement.disabled = false;
+                }
+            }
+
+            // Lấy giá trị khi trang được tải lại
+            var selectedValues = getSelectedValues();
+
+            // Kiểm tra và gửi yêu cầu AJAX nếu có đủ giá trị
+            if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
+                sendAjaxRequest(selectedValues);
+            }
+
+
+            if (selectedValues.coquan && selectedValues.phong) {
+                // var url = new URL(window.location.href);
+                // var params = new URLSearchParams(url.search);
+                // var phong = params.get('phong');
+                // var coquan = params.get('coquan');
+                searchPhong(selectedValues.coquan)
+                searchMucLuc(selectedValues.phong)
+            }
+
+            function searchPhong(selectedCoQuan) {
+                var url = "{{ route('admin.profile.searchPhong') }}";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        coquan: selectedCoQuan
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            var data = response.data;
+                            var selectElement = document.getElementById('phong');
+
+                            selectElement.innerHTML = '';
+
+                            Object.keys(data).forEach(function(key) {
+                                var option = document.createElement('option');
+                                option.value = data[key];
+                                option.text = key;
+                                selectElement.add(option);
+                            });
+
+                            selectElement.disabled = false;
+                            var selectedPhong = $('#phong').val();
+                            searchMucLuc(selectedPhong)
+                            // var selectedValues = getSelectedValues();
+                            // sendAjaxRequest(selectedValues);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Lỗi AJAX:', error);
+                    }
+                });
+            }
+
+            function searchMucLuc(selectedMucLuc) {
+                var url = "{{ route('admin.profile.searchMucLuc') }}"
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        coquan: selectedMucLuc
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            var data = response.data;
+                            var selectElement = document.getElementById('muc_luc');
+
+                            selectElement.innerHTML = '';
+
+                            Object.keys(data).forEach(function(key) {
+                                var option = document.createElement('option');
+                                option.value = data[key];
+                                option.text = key;
+                                selectElement.add(option);
+                            });
+
+                            selectElement.disabled = false;
+
+
+                            var selectedValues = getSelectedValues();
+
+                            sendAjaxRequest(selectedValues);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Lỗi AJAX:', error);
+                    }
+                });
+            }
+            $('#coquan').on('change', function() {
+                var selectedCoQuan = $('#coquan').val();
+                searchPhong(selectedCoQuan);
+            });
+            $('#phong').on('change', function() {
+                var selectedMucLuc = $('#phong').val();
+                searchMucLuc(selectedMucLuc)
+            });
+
+
+            // Xử lý sự kiện thay đổi
+            $('#coquan, #phong, #muc_luc').on('change', function() {
+                var selectedValues = getSelectedValues();
+                if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
+                    sendAjaxRequest(selectedValues);
+                }
+            });
+        });
+
+
+        $(document).ready(function() {
+            $("#applyBtn").on("click", function(e) {
+                e.preventDefault();
+                var selectedValues = [];
+                $("input[type='checkbox']:checked").each(function() {
+                    selectedValues.push($(this).val());
+                });
+                var selectedValuesJSON = JSON.stringify(selectedValues);
+
+                $("#selectedValuesInput").val(selectedValuesJSON);
+
+
+                $("#applyForm").submit();
+            });
+        });
+        $(document).ready(function() {
+            $('#column-select').on('change', function() {
+                var selectedColumns = $(this).val() || [];
+
+                // Ẩn tất cả các cột trước khi hiển thị các cột đã chọn
+                $('#userTable th, #userTable td').addClass('hidden');
+
+                // Hiển thị các cột đã chọn
+                selectedColumns.forEach(function(column) {
+                    $('#userTable .column-' + column).removeClass('hidden');
+                });
+            });
+        });
+        $(document).ready(function() {
+            let show = true;
+
+            $("#toggleBtn").on("click", function() {
+                let checkboxes = $("#checkboxes");
+
+                if (show) {
+                    checkboxes.css("display", "block");
+                    show = false;
+                } else {
+                    checkboxes.css("display", "none");
+                    show = true;
+                }
+            });
+        });
+        $(document).ready(function() {
+            $('#exportExcelBtn').on('click', function() {
+                $('<input type="file">').change(function() {
+                    var selectedFile = this.files[0];
+                    console.log('File đã chọn:', selectedFile);
+
+
+                    var formData = new FormData();
+                    formData.append('file', selectedFile);
+                    var url = "{{ route('import') }}";
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            console.log('Kết quả:', response);
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Đã xảy ra lỗi khi gửi file.');
+                        }
+                    });
+                }).click();
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             let show = true;
@@ -361,7 +610,7 @@
                 });
             });
         });
-       
+
     </script>
     <script>
          document.addEventListener('DOMContentLoaded', function() {

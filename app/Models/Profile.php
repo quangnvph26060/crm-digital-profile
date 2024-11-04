@@ -18,9 +18,9 @@ class Profile extends Model
         parent::__construct($attributes);
 
         $this->fillable = require 'fillable_fields_profile.php';
-       
+
     }
-   
+
     // Định nghĩa rules cho validation (nếu cần)
     // public static $rules = [
     //     'config_id' => 'required|exists:configs,id',
@@ -49,6 +49,11 @@ class Profile extends Model
     public function maMucLuc()
     {
         return $this->belongsTo(MucLuc::class, 'ma_muc_luc');
+    }
+
+    public function hopso()
+    {
+        return $this->belongsTo(HopSoModel::class, 'hop_so');
     }
     public function fillableProfiles(){
         return  $this->fillable;

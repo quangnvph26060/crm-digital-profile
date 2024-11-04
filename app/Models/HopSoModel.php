@@ -18,4 +18,6 @@ class HopSoModel extends Model
         "hop_so"
     ];
 
+    
+
 }

@@ -50,14 +50,14 @@
                                                 <!-- Thêm các tùy chọn phòng khác nếu cần -->
                                             </select>
                                         </div>
-                                      
+
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label for="">Phông</label>
                                             <select class="form-select" name="phong" id="phong" disabled>
                                                 <option value="">Chọn Phông</option>
-                                                
+
                                                 @foreach ($phongdata as $item)
                                                     <option value="{{ $item->id }}"
                                                         {{ isset($inputs['phong']) ? ($inputs['phong'] == $item->id ? 'selected' : '') : '' }}>
@@ -201,8 +201,20 @@
                                                         @foreach ($user->getAttributes() as $key => $value)
                                                             @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
                                                                 <td class="column-{{ $key }}">
+
+                                                                    @if ($key == 'hop_so')
+                                                                    {{ $user->hopso->hop_so }}
+                                                                    @else
                                                                     {{ $value }}
+                                                                    @endif
+
                                                                 </td>
+                                                                {{-- @if($key == 'hop_so')
+                                                                <td class="column-{{ $key }}">
+                                                                    {{ $user->hopso->hop_so }}
+
+                                                                </td>
+                                                                @endif --}}
                                                             @endif
                                                         @endforeach
                                                         <td class="d-flex gap-1">
@@ -312,8 +324,8 @@
         if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
             sendAjaxRequest(selectedValues);
         }
-      
-        
+
+
         if (selectedValues.coquan && selectedValues.phong) {
             // var url = new URL(window.location.href);
             // var params = new URLSearchParams(url.search);
@@ -381,10 +393,10 @@
                         });
 
                         selectElement.disabled = false;
-                      
-                        
+
+
                         var selectedValues = getSelectedValues();
-                        
+
                         sendAjaxRequest(selectedValues);
                     }
                 },
