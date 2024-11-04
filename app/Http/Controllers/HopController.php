@@ -168,5 +168,12 @@ class HopController extends Controller
         return response()->json(['status' => "success", 'data' => $mucluc]);
 
     }
+    public function HopSoByMucLuc(Request $request)
+    {
 
+        $mucluc = MucLuc::where('phong_id', $request->phongId)->get();
+
+        return response()->json(['status' => "success", 'data' => $mucluc]);
+
+    }
 }
