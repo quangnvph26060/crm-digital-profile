@@ -291,17 +291,7 @@
         var params = getUrlParams(currentUrl);
         console.log(params);
 
-        function getSelectedValues() {
-            var selectedCoQuan = $('#coquan').val();
-            var selectedPhong = $('#phong').val();
-            var selectedMucLuc = $('#muc_luc').val();
-
-            return {
-                coquan: selectedCoQuan,
-                phong: selectedPhong,
-                muc_luc: selectedMucLuc
-            };
-        }
+       
 
         function sendAjaxRequest(selectedValues) {
             var url = "{{ route('admin.profile.searchHoSo') }}";

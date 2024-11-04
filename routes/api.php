@@ -37,6 +37,9 @@ Route::get('/phong-to-config', [ProfileController::class, 'PhongDetailToConfig']
 Route::get('/mucluc-to-phong', [ProfileController::class, 'MucLucDetailToPhong'])->name('mucluc-to-phong');
 Route::get('/hopso-by-mucluc-hs', [ProfileController::class, 'HopSoToMucLuc'])->name('hopso-to-mucluc-hs');
 
+Route::get('/mucluc-to-hopso', [ProfileController::class, 'MucLucDetailToHopSo'])->name('mucluc-to-hopso');
+
+
 Route::get('/phong-by-config_id', [InformationVbController::class, 'PhongByConfigID'])->name('phong-by-config_id');
 Route::get('/mucluc-by-phong_id', [InformationVbController::class, 'MucLucByPhongID'])->name('mucluc-by-phong_id');
 Route::get('/hopso-by-mucluc', [InformationVbController::class, 'HopSoByMucLuc'])->name('hopso-by-mucluc');

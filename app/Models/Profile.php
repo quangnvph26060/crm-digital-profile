@@ -19,7 +19,7 @@ class Profile extends Model
 
         $this->fillable = require 'fillable_fields_profile.php';
 
-    }
+    }   
 
     // Định nghĩa rules cho validation (nếu cần)
     // public static $rules = [
