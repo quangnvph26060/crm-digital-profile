@@ -203,7 +203,7 @@
                                                                 <td class="column-{{ $key }}">
 
                                                                     @if ($key == 'hop_so')
-                                                                    {{ $user->hopso->hop_so }}
+                                                                    {{ $user->hopso->hop_so ?? "" }}
                                                                     @else
                                                                     {{ $value }}
                                                                     @endif

@@ -75,14 +75,13 @@ class ProfileImport implements ToModel, WithHeadingRow
 
               
                 $mergedArray = $collection1->merge($collection2);
-             
+              
                 $arrayData = json_decode($mergedArray, true);
-               
-               $fillableFields = (new \App\Models\Profile())->getFillable();
-
-               $filteredData = array_intersect_key($arrayData, array_flip($fillableFields));
-
                 
+                $fillableFields = (new \App\Models\Profile())->getFillable();
+                  
+                $filteredData = array_intersect_key($arrayData, array_flip($fillableFields));
+                $filteredData['config_id'] = $mergedArray['config_id'];
                 $result = new Profile();
                 $result->fill($filteredData);
                 $result->save();
