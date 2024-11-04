@@ -259,7 +259,7 @@
                                                     <strong>Cơ quan : {{ $item->config->agency_code ?? "" }} / Phông:
                                                         {{ $item->maPhong->ten_phong ?? "" }} / Mục lục:
                                                         {{ $item->maMucLuc->ten_mucluc ?? "" }} / Hộp số:
-                                                        {{ $item->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} / Hồ
+                                                        {{ $item->hopso->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} / Hồ
                                                         sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
                                                 </td>
                                             </tr>
@@ -374,7 +374,7 @@
                 if (response.status === 'success') {
                     var data = response.data;
                     var selectElement = document.getElementById('hop_so');
-
+                    console.log(data);
                     selectElement.innerHTML = '';
 
                     Object.keys(data).forEach(function(key) {

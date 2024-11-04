@@ -148,7 +148,7 @@
 
                                                             </button>
                                                         </form>
-                                                        <a href="{{ route('admin.index', ['coquan' => $item->coquan_id,'phong'=> $item->phong_id,'muc_luc'=>$item->mucluc_id]) }}"
+                                                        <a href="{{ route('admin.hop.view', ['id' => $item->id ]) }}"
                                                             class="btn btn-primary  main-action">
                                                             <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
                                                         </a>

@@ -130,21 +130,35 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            @foreach ($columns as $key => $column)
                                             <div class="row mb-3">
-                                                <div class="mb-3">
-                                                    <label for="example-text-input" class="form-label">Số và ký hiệu văn
-                                                        bản<span class="text text-danger">*</span></label>
+                                                <div class="col-lg-12 mb-3">
+                                                    <label for="example-text-input-{{ $column['name'] }}"
+                                                        class="form-label">
+                                                        {{ $column['comment'] }} <span class="text text-danger">*</span>
+                                                    </label>
+
+                                                    @if ($column['type'] === 'text')
+                                                    <textarea
+                                                        class="form-control {{ $errors->has($column['name']) ? 'is-invalid' : '' }}"
+                                                        name="{{ $column['name'] }}"
+                                                        id="example-text-input-{{ $column['name'] }}"
+                                                        placeholder="{{ $column['comment'] }}">{{ isset($vanban) ? $vanban->{$column['name']} : old($column['name']) }}</textarea>
+                                                    @else
                                                     <input
-                                                        value="{{ isset($vanban) ? $vanban->so_va_ki_hieu_van_ban : old('so_va_ki_hieu_van_ban') }}"
-                                                        class="form-control {{ $errors->has('so_va_ki_hieu_van_ban') ? 'is-invalid' : '' }}"
-                                                        name="so_va_ki_hieu_van_ban" type="text" id="example-text-input"
-                                                        placeholder="Số và ký hiệu văn bản">
-                                                    @error('so_va_ki_hieu_van_ban')
+                                                        value="{{ isset($vanban) ? $vanban->{$column['name']} : old($column['name']) }}"
+                                                        class="form-control {{ $errors->has($column['name']) ? 'is-invalid' : '' }}"
+                                                        name="{{ $column['name'] }}" type="{{ $column['type'] }}"
+                                                        id="example-text-input-{{ $column['name'] }}"
+                                                        placeholder="{{ $column['comment'] }}">
+                                                    @endif
+
+                                                    @error($column['name'])
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
-                                            @include('admins/pages/vanban/form-add')
+                                            @endforeach
                                         </div>
 
                                     </div>
@@ -328,7 +342,7 @@
                         selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
                         response.data.forEach(function(item) {
                             var isSelected = item.hop_so == selectedHopSo ? 'selected' : '';
-                            selectElementHopSo.append('<option value="' + item.hop_so + '" ' + isSelected + '>' + item.hop_so + '</option>');
+                            selectElementHopSo.append('<option value="' + item.hop_so + '" ' + isSelected + '>' + item.hopso.hop_so + '</option>');
                         });
 
                         // Gắn sự kiện change cho Hộp Số sau khi đổ dữ liệu
@@ -406,7 +420,7 @@
 
 
 <script>
-    CKEDITOR.replace('content', {
+    CKEDITOR.replace('example-text-input-trich_yeu_noi_dung_van_ban', {
   toolbar: [
       { name: 'document', items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
       { name: 'clipboard', items: [ 'Undo', 'Redo' ] },

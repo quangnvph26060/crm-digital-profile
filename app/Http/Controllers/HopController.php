@@ -140,6 +140,16 @@ class HopController extends Controller
         }
     }
 
+    public function view($id){
+        $title   = "Chi tiết hộp số";
+        $hopso = HopSoModel::find($id);
+        if(!$hopso){
+            return back()->with('error', 'Không tìm thấy hộp số cần xem.');
+        }
+        $profiles = Profile::where('hop_so', $id)->with('config', 'maPhong', 'maMucLuc')->paginate(10);
+        return view('admins.pages.hop.detail', ['title' => $title, 'hopso' => $hopso, 'hoso' => $profiles]);
+    }
+
 
     public function PhongByConfigID(Request $request)
     {
