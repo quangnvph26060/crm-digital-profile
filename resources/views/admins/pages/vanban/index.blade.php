@@ -149,7 +149,7 @@
 
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-lg-3 main-option">
                                 <label for="column-select">Chọn cột để hiển thị:</label>
                                 <div class="selectBox form-select" id="toggleBtn">

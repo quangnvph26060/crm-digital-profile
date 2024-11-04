@@ -257,6 +257,28 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
+        function getUrlParams(url) {
+            var params = {};
+            var urlParts = url.split("?");
+
+            if (urlParts.length > 1) {
+                var queryString = urlParts[1];
+                var paramArray = queryString.split("&");
+
+                paramArray.forEach(function(param) {
+                    var keyValue = param.split("=");
+                    params[keyValue[0]] = keyValue[1];
+                });
+            }
+
+            return params;
+        }
+        var currentUrl = window.location.href;
+
+
+        var params = getUrlParams(currentUrl);
+        console.log(params);
+        
         function getSelectedValues() {
             var selectedCoQuan = $('#coquan').val();
             var selectedPhong = $('#phong').val();
@@ -342,6 +364,9 @@
                             var option = document.createElement('option');
                             option.value = data[key];
                             option.text = key;
+                            if (data[key] == params.phong) {
+                                option.selected = true;
+                            }
                             selectElement.add(option);
                         });
 
@@ -377,6 +402,9 @@
                             var option = document.createElement('option');
                             option.value = data[key];
                             option.text = key;
+                            if (data[key] == params.muc_luc) {
+                                option.selected = true;
+                            }
                             selectElement.add(option);
                         });
 

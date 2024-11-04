@@ -106,7 +106,10 @@
 
                                                         </button>
                                                     </form>
-                                                    <a href="{{ route('admin.mucluc.index',['coquan'=>$item->coquan_id]) }}"
+                                                    @php 
+
+                                                    @endphp
+                                                    <a href="{{ route('admin.mucluc.index',['coquan'=>$item->coquan_id,'phong'=>$item->id]) }}"
                                                     class="btn btn-primary  main-action">
                                                     <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
                                                 </a>
