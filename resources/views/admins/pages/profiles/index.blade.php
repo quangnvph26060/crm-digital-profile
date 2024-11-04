@@ -93,7 +93,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-8">
                                         <div class="form-group">
                                             <label for="" style="opacity: 0">1</label> <br>
                                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
@@ -290,7 +290,7 @@
 
         var params = getUrlParams(currentUrl);
         console.log(params);
-        
+
         function getSelectedValues() {
             var selectedCoQuan = $('#coquan').val();
             var selectedPhong = $('#phong').val();
