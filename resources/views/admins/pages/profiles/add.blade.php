@@ -94,8 +94,8 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-lg-3">
+                                            <div class="row mb-3">
+                                                <div class="col-lg-12">
                                                     <label for="example-text-input" class="form-label">Hộp số<span
                                                             class="text text-danger">*</span></label>
                                                     {{-- <input value="{{ isset($profile) ? $profile->hop_so : old('hop_so') }}"
@@ -114,7 +114,7 @@
                                                         </div>
                                                     @enderror --}}
                                                 </div>
-                                                <div class="col-lg-3">
+                                                {{-- <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Hồ sơ số<span
                                                             class="text text-danger">*</span></label>
                                                     <input
@@ -127,8 +127,8 @@
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
-                                                </div>
-                                                <div class="col-lg-3">
+                                                </div> --}}
+                                                {{-- <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Số tờ <span
                                                             class="text text-danger">*</span></label>
                                                     <input value="{{ isset($profile) ? $profile->so_to : old('so_to') }}"
@@ -140,8 +140,8 @@
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
-                                                </div>
-                                                <div class="col-lg-3">
+                                                </div> --}}
+                                                {{-- <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label"> THBQ <span
                                                             class="text text-danger">*</span></label>
                                                     <input value="{{ isset($profile) ? $profile->thbq : old('thbq') }}"
@@ -153,9 +153,9 @@
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
-                                                </div>
+                                                </div> --}}
                                             </div>
-                                            <div class="mb-3 mt-3">
+                                            {{-- <div class="mb-3 mt-3">
                                                 <label for="example-text-input" class="form-label">Tiêu đề hồ sơ <span
                                                         class="text text-danger">*</span></label>
                                                 <input
@@ -168,7 +168,7 @@
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
-                                            </div>
+                                            </div> --}}
                                             {{-- @php
                                                 use Illuminate\Support\Facades\Blade;
                                             
@@ -183,7 +183,7 @@
                                                     echo "";
                                                 }
                                             @endphp --}}
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <div class="col-lg-6 mb-3">
                                                     <label for="date_start-text-input" class="form-label">Ngày bắt đầu
                                                         <span class="text text-danger">*</span></label>
@@ -203,8 +203,8 @@
 
                                                 </div>
 
-                                            </div>
-                                            <div class="col-lg-12 "
+                                            </div> --}}
+                                            {{-- <div class="col-lg-12 "
                                                 style="display: flex !important;flex-direction: column;">
 
                                                 <p>
@@ -213,9 +213,36 @@
                                                 <textarea name="ghi_chu" id="" cols="30" rows="5" placeholder="Ghi chú"
                                                     style="border-radius: 5px;border:1px solid var(--bs-input-border);">{{ isset($profile) ? $profile->ghi_chu : old('ghi_chu') }}</textarea>
 
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
+                                    @foreach ($columns as $key => $column)
+                                        <div class="row mb-3 ">
+                                            <div class="col-lg-12 mb-3">
+                                                <label for="example-text-input-{{ $column['name'] }}" class="form-label">
+                                                    {{ $column['comment'] }} <span class="text text-danger">*</span>
+                                                </label>
+
+                                                @if ($column['type'] === 'text')
+                                                    <textarea class="form-control {{ $errors->has($column['name']) ? 'is-invalid' : '' }}" name="{{ $column['name'] }}"
+                                                        id="example-text-input-{{ $column['name'] }}" placeholder="{{ $column['comment'] }}">{{ isset($profile) ? $profile->{$column['name']} : old($column['name']) }}</textarea>
+                                                @else
+                                                    <input
+                                                        value="{{ isset($profile) ? $profile->{$column['name']} : old($column['name']) }}"
+                                                        class="form-control {{ $errors->has($column['name']) ? 'is-invalid' : '' }}"
+                                                        name="{{ $column['name'] }}" type="{{ $column['type'] }}"
+                                                        id="example-text-input-{{ $column['name'] }}"
+                                                        placeholder="{{ $column['comment'] }}">
+                                                @endif
+
+                                                @error($column['name'])
+                                                    <div class="invalid-feedback d-block">{{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endforeach
+
                                     <div class="col-lg-12 mt-4">
                                         <div>
                                             <button type="submit" class="btn btn-primary w-md">
@@ -372,7 +399,7 @@
                     success: function(response) {
                         if (response.status === 'success') {
                             var data = response.data;
-                            
+
                             var selectElement = document.getElementById('hop_so');
 
                             selectElement.innerHTML = '';

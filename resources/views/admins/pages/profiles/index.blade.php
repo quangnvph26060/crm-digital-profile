@@ -328,7 +328,15 @@
                 selectElement.disabled = false;
             }
         }
+        function getSelectedValues() {
+            var selectedCoQuan = $('#coquan').val();
+            var selectedPhong = $('#phong').val();
 
+            return {
+                coquan: selectedCoQuan,
+                phong: selectedPhong,
+            };
+        }
         // Lấy giá trị khi trang được tải lại
         var selectedValues = getSelectedValues();
 

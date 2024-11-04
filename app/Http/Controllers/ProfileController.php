@@ -86,7 +86,7 @@ class ProfileController extends Controller
             $duplicateValues = session($cacheKey);
             $selectedProfiles = $duplicateValues;
             $mergedArray = array_unique(array_merge($fillable, $selectedProfiles));
-            if(count($mergedArray) > 1){
+            if (count($mergedArray) > 1) {
                 $profiles->select($mergedArray);
             }
         }
@@ -128,15 +128,59 @@ class ProfileController extends Controller
         $title   = "Thêm mới hồ sơ";
         $macoquan = ModelsConfig::all();
         $mamucluc = MucLuc::all();
-
+        $listcolumns = $this->listcolumn();
         return view(
             'admins.pages.profiles.add',
             [
                 'title' => $title,
                 'macoquan' => $macoquan,
-                'mamucluc' => $mamucluc
+                'mamucluc' => $mamucluc,
+                'columns' => $listcolumns,
             ]
         );
+    }
+    public function listcolumn()
+    {
+        $columns = Schema::getColumnListing('profiles');
+
+        $excludedColumns = [
+            'id',
+            'created_at',
+            'updated_at',
+            'config_id',
+            'ma_phong',
+            'ma_muc_luc',
+            'hop_so',
+            'status'
+        ];
+
+        $columnData = [];
+        foreach ($columns as $column) {
+            // Bỏ qua các trường trong danh sách loại trừ
+            if (in_array($column, $excludedColumns)) {
+                continue;
+            }
+
+            $columnType = Schema::getColumnType('profiles', $column);
+
+            $columnInfo = DB::table('information_schema.columns')
+                ->where('table_schema', env('DB_DATABASE'))
+                ->where('table_name', 'profiles')
+                ->where('column_name', $column)
+                ->first(['column_comment', 'is_nullable']);
+
+            $columnInfoArray = (array) $columnInfo;
+            $columnInfoArray = array_change_key_case($columnInfoArray, CASE_LOWER);
+            // dd($columnInfoArray);
+            $columnData[] = [
+                'name' => $column,
+                'type' => $columnType,
+                'comment' => $columnInfoArray['column_comment'] ?? '',
+                'is_required' => $columnInfoArray['is_nullable'],
+            ];
+        }
+
+        return $columnData;
     }
 
     public function PhongDetailToConfig(Request $request)
@@ -153,12 +197,13 @@ class ProfileController extends Controller
 
     public function MucLucDetailToHopSo(Request $request)
     {
-        $muclucdata = Profile::where('id',$request->id)->first();
-         $muclucdata = $muclucdata->hopso->hop_so;
+        $muclucdata = Profile::where('id', $request->id)->first();
+        $muclucdata = $muclucdata->hopso->hop_so;
         return response()->json(['status' => "success", 'data' => $muclucdata]);
     }
 
-    public function HopSoToMucLuc(Request $request){
+    public function HopSoToMucLuc(Request $request)
+    {
         $muclucdata = HopSoModel::where('mucluc_id', $request->id)->get();
         return response()->json(['status' => "success", 'data' => $muclucdata]);
     }
@@ -227,7 +272,6 @@ class ProfileController extends Controller
     }
 
 
-
     /**
      * Display the specified resource.
      *
@@ -274,8 +318,8 @@ class ProfileController extends Controller
         $profile = Profile::find($id);
         $mamucluc = MucLuc::all();
         $title   = "Sửa hồ sơ";
-
-        return view('admins.pages.profiles.edit', ['title' => $title, 'profile' => $profile, 'macoquan' => $macoquan, 'mamucluc' => $mamucluc, 'profiles' => $profiles]);
+        $listcolumns = $this->listcolumn();
+        return view('admins.pages.profiles.edit', ['title' => $title, 'profile' => $profile, 'macoquan' => $macoquan, 'mamucluc' => $mamucluc, 'profiles' => $profiles,  'columns' => $listcolumns]);
     }
     public function detail($id)
     {
@@ -406,7 +450,7 @@ class ProfileController extends Controller
             });
         }
         $maPhongs = $profiles->pluck('hop_so')->unique();
-        return response()->json(['status'=>'success','data'=>$maPhongs]);
+        return response()->json(['status' => 'success', 'data' => $maPhongs]);
     }
     public function searchPhong(Request $request)
     {
@@ -419,7 +463,7 @@ class ProfileController extends Controller
             });
         }
         $maPhongs = $profiles->pluck('id', 'ten_phong')->unique();
-        return response()->json(['status'=>'success','data'=>$maPhongs]);
+        return response()->json(['status' => 'success', 'data' => $maPhongs]);
     }
     public function searchMucLuc(Request $request)
     {
@@ -432,8 +476,8 @@ class ProfileController extends Controller
                 $query->where('phong_id', 'like', '%' . $request->coquan . '%');
             });
         }
-        $mucluc = $profiles->pluck('id','ten_mucluc')->unique();
-        return response()->json(['status'=>'success','data'=>$mucluc]);
+        $mucluc = $profiles->pluck('id', 'ten_mucluc')->unique();
+        return response()->json(['status' => 'success', 'data' => $mucluc]);
     }
 
     public function searchHopSo(Request $request)
@@ -460,9 +504,7 @@ class ProfileController extends Controller
                 $query->where('mucluc_id', 'like', '%' . $request->mucluc . '%');
             });
         }
-        $hopso = $profiles->pluck('id','hop_so')->unique();
-        return response()->json(['status'=>'success','data'=>$hopso]);
+        $hopso = $profiles->pluck('id', 'hop_so')->unique();
+        return response()->json(['status' => 'success', 'data' => $hopso]);
     }
 }
-
-

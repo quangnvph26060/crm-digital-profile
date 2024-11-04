@@ -25,7 +25,6 @@ class InformationVbController extends Controller
 {
 
 
-
     // Thêm phương thức để lấy ghi chú cột
     public function getColumnvanBan(Request $request)
     {
@@ -325,7 +324,8 @@ class InformationVbController extends Controller
             ->first(['column_comment', 'is_nullable']);
 
         $columnInfoArray = (array) $columnInfo;
-
+        $columnInfoArray = array_change_key_case($columnInfoArray, CASE_LOWER);
+        // dd($columnInfoArray);
         $columnData[] = [
             'name' => $column,
             'type' => $columnType,
