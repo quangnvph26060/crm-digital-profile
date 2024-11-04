@@ -102,10 +102,10 @@ class HopController extends Controller
             if(!$hopso){
                 return back()->with('error', 'Không tìm thấy hộp số cần chỉnh sửa.');
             }
-            $empty_hoso = HopSoModel::where('id', '!=', $id)->where('phong_id', $request->phong_id)->where('hop_so', $request->hop_so)->first();
+            $empty_hoso = HopSoModel::where('id', '!=', $id)->where('mucluc_id', $request->mucluc_id)->where('hop_so', $request->hop_so)->first();
 
             if($empty_hoso){
-                return back()->with('error', 'Hộp số đã có trong Phông');
+                return back()->with('error', 'Hộp số đã có trong mục lục');
             }
             $hopso->update([
                 'coquan_id' => $request->coquan_id,
