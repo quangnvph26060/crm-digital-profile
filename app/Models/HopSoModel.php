@@ -30,4 +30,6 @@ class HopSoModel extends Model
         return $this->belongsTo(MucLuc::class, 'mucluc_id');
     }
 
+    
+
 }

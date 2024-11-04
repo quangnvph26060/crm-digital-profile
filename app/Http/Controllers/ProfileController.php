@@ -11,6 +11,7 @@ use App\Models\Phong;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Models\Config;
+use App\Models\HopSoModel;
 use App\Models\InformationVb;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -147,6 +148,11 @@ class ProfileController extends Controller
     {
         $muclucdata = MucLuc::where('phong_id', $request->id)->get();
         return response()->json(['status' => "success", 'data' => $muclucdata]);
+    }
+
+    public function HopSoToMucLuc(Request $request){
+        $hopsodata = HopSoModel::where('mucluc_id', $request->id)->get();
+        return response()->json(['status' => "success", 'data' => $hopsodata]);
     }
     /**
      * Show the form for creating a new resource.
@@ -408,7 +414,7 @@ class ProfileController extends Controller
     }
     public function searchMucLuc(Request $request)
     {
-      
+
         $profiles = MucLuc::query();
         if (isset($request->coquan) && $request->coquan != '') {
 
@@ -417,7 +423,7 @@ class ProfileController extends Controller
                 $query->where('phong_id', 'like', '%' . $request->coquan . '%');
             });
         }
-       
+
         $maPhongs = $profiles->pluck('id','ten_mucluc')->unique();
         return response()->json(['status'=>'success','data'=>$maPhongs]);
     }

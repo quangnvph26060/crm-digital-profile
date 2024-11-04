@@ -16,7 +16,7 @@
                         </svg>
                         <span data-key="t-apps">Hồ sơ lưu trữ</span>
                     </a>
-                   
+
                 </li>
                 <li>
                     <a href="{{ route('admin.vanban.index') }}" >
@@ -55,7 +55,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.hopso') }}">
+                                <a href="{{ route('admin.hop.index') }}">
                                     <span data-key="t-chat">Hộp lưu trữ</span>
                                 </a>
                             </li>
@@ -80,7 +80,7 @@
 
 
                     <li>
-                       
+
                         <a href="{{ route('admin.list') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024">
                                 <path fill="currentColor"

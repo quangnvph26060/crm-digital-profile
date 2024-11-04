@@ -18,6 +18,7 @@
                 </div>
             </div>
 
+
             <!-- end page title -->
 
             <div class="row">
@@ -27,11 +28,13 @@
                             <form method="GET">
                                 <div class="row">
                                     {{-- <div class="col-lg-3">
+
                                     <div class="form-group">
                                         <label for="">Tên cơ quan và Mã cơ quan </label>
                                         <input value="{{isset($inputs['name']) ? $inputs['name'] : ''}}" autocomplete="off" name="name" placeholder="Tên cơ quan và mã cơ quan" type="text" class="form-control">
                                     </div>
                                 </div> --}}
+
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label for="">Cơ quan</label>
@@ -44,6 +47,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="form-group">
@@ -57,8 +61,10 @@
                                                 @endforeach
 
 
+
                                             </select>
                                         </div>
+
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="form-group">
@@ -70,6 +76,7 @@
                                                         {{ isset($inputs['coquan']) ? ($inputs['coquan'] == $item->id ? 'selected' : '') : '' }}>
                                                         {{ $item->agency_name }}</option>
                                                 @endforeach
+
 
 
                                             </select>
@@ -103,6 +110,7 @@
                                                 <th>Mục lục</th>
                                                 <th>Hộp số</th>
                                                 <th>Hành động</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>

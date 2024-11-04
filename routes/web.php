@@ -62,7 +62,7 @@ Route::group(["prefix" => "cronjob"], function () {
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'middleware' => 'is-login-admin'], function () {
     Route::get('/thongtinhoso', [CustomColumnController::class, 'index'])->name('thongtinhoso');
     Route::prefix('column')->name('column.')->group(function () {
-       
+
         Route::post('/add', [CustomColumnController::class, 'store'])->name('store');
         Route::delete('/delete/{column}', [CustomColumnController::class, 'deleteColumn'])->name('deleteColumn');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
@@ -70,7 +70,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     //config
     Route::get('/coquan', [ConfigController::class, 'index'])->name('coquan');
     Route::prefix('config')->name('config.')->group(function () {
-    
+
         Route::get('/add-config', [ConfigController::class, 'add'])->name('add');
         Route::get('/edit-config/{id}', [ConfigController::class, 'edit'])->name('edit');
         Route::get('/get-agency-code', [ConfigController::class, 'getAgencyCode'])->name('get-agency-code');
@@ -138,7 +138,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/update-vanban/{id}', [InformationVbController::class, 'update'])->name('update');
         Route::post('/import-vanban', [InformationVbController::class, 'importExcel'])->name('import');
         Route::get('/export-vanban', [InformationVbController::class, 'exportExcel'])->name('export');
-      
+
         Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');
         Route::post('/get-column', [InformationVbController::class, 'getColumnVanBan'])->name('column');
@@ -161,9 +161,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::delete('/delete/{id}', [VanbanFormController::class, 'destroy'])->name('delete.template');
         Route::put('/status/{id}', [VanbanFormController::class, 'updatestatus'])->name('updatestatus.template');
     });
+    Route::prefix('hop')->name('hop.')->group(function () {
+        Route::get('', [HopController::class, 'index'])->name('index');
+        Route::get('add', [HopController::class, 'add'])->name('add');
+        Route::post('add', [HopController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [HopController::class, 'edit'])->name('edit');
+        Route::post('edit/{id}', [HopController::class, 'update'])->name('update');
+        Route::delete('delete/{id}', [HopController::class, 'delete'])->name('delete');
+    });
 
-    Route::get('/hop', [HopController::class, 'index'])->name('hopso');
-    
+
     Route::prefix('form_template')->name('form_template.')->group(function () {
         Route::get('', [TemplateFormController::class, 'index'])->name('index');
         Route::get('add', [TemplateFormController::class, 'create'])->name('add.template');
@@ -282,11 +289,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/{id}/edit', 'UserController@edit')->name('edit');
         Route::post('/{id}/update', 'UserController@update')->name('update');
         Route::get("/{id}/delete", 'UserController@delete')->name("delete");
-    });   
+    });
 
     Route::get('user/list', 'AdminController@list')->name('list');
 	Route::group(["prefix" => "admin", "as" => "admin."], function () {
-    
+
         Route::get('/add', 'AdminController@add')->name('add');
         Route::get('/{id}/edit', 'AdminController@edit')->name('edit');
         Route::post('/{id}/update', 'AdminController@update')->name('update');
