@@ -5,7 +5,6 @@
     .cke_notifications_area {
         display: none;
     }
-
 </style>
 <div class="page-content">
     <div class="container-fluid">
@@ -44,10 +43,13 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label for="example-text-input" class="form-label">Đường dẫn <span class="text-danger">*</span></label>
+                                                <label for="example-text-input" class="form-label">Đường dẫn <span
+                                                        class="text-danger">*</span></label>
                                                 <input value="{{ old('duong_dan') }}"
-                                                    class="form-control  {{ $errors->has('duong_dan') ? 'is-invalid' : '' }}" name="duong_dan" type="file"
-                                                    id="example-text-input" placeholder="Đường dẫn" accept="application/pdf" onchange="previewPDF(event)">
+                                                    class="form-control  {{ $errors->has('duong_dan') ? 'is-invalid' : '' }}"
+                                                    name="duong_dan" type="file" id="example-text-input"
+                                                    placeholder="Đường dẫn" accept="application/pdf"
+                                                    onchange="previewPDF(event)">
                                                 @error('duong_dan')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
@@ -57,7 +59,8 @@
 
                                             <div class="mb-3" id="pdf-preview-container" style="display:none;">
                                                 <label class="form-label">Xem trước PDF:</label>
-                                                <iframe id="pdf-preview" style="width: 100%; height: 850px;" frameborder="0"></iframe>
+                                                <iframe id="pdf-preview" style="width: 100%; height: 850px;"
+                                                    frameborder="0"></iframe>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -70,7 +73,8 @@
                                                         name="ma_co_quan" id="agency_code-select">
                                                         <option value="">Chọn mã cơ quan</option>
                                                         @foreach ($macoquan as $item)
-                                                        <option value="{{ $item->id }}" {{ (isset($vanban) && $vanban->ma_co_quan == $item->id) ? 'selected'
+                                                        <option value="{{ $item->id }}" {{ (isset($vanban) && $vanban->
+                                                            ma_co_quan == $item->id) ? 'selected'
                                                             : '' }}>
                                                             {{ $item->agency_name }} - {{ $item->agency_code }}
                                                         </option>
@@ -107,8 +111,8 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div class="row mb-3">
-                                                <div class="col-lg-6">
+                                            <div class="row mb-3 ">
+                                                <div class="col-lg-6 mb-3">
                                                     <label for="hop_so" class="form-label">Hộp số <span
                                                             class="text-danger">*</span></label>
                                                     <select name="hop_so" id="hop_so-select"
@@ -120,7 +124,7 @@
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6 mb-3">
                                                     <label for="ho_so_so" class="form-label">Hồ sơ số <span
                                                             class="text-danger">*</span></label>
                                                     <select name="ho_so_so" id="ho_so_so-select"
@@ -133,32 +137,53 @@
                                                     @enderror
                                                 </div>
                                             </div>
+
+                                            @foreach ($columns as $key => $column)
                                             <div class="row mb-3">
-                                                <div class="mb-3">
-                                                    <label for="so_va_ki_hieu_van_ban" class="form-label">Số và ký hiệu văn bản<span
-                                                            class="text text-danger">*</span></label>
-                                                    <input value="{{ isset($vanban) ? $vanban->so_va_ki_hieu_van_ban : old('so_va_ki_hieu_van_ban') }}"
-                                                        class="form-control {{ $errors->has('so_va_ki_hieu_van_ban') ? 'is-invalid' : '' }}" name="so_va_ki_hieu_van_ban" type="text"
-                                                        id="so_va_ki_hieu_van_ban" placeholder="Số và ký hiệu văn bản">
-                                                    @error('so_va_ki_hieu_van_ban')
+                                                <div class="col-lg-12 mb-3">
+                                                    <label for="example-text-input-{{ $column['name'] }}"
+                                                        class="form-label">
+                                                        {{ $column['comment'] }} <span class="text text-danger">*</span>
+                                                    </label>
+
+                                                    @if ($column['type'] === 'text')
+                                                    <textarea
+                                                        class="form-control {{ $errors->has($column['name']) ? 'is-invalid' : '' }}"
+                                                        name="{{ $column['name'] }}"
+                                                        id="example-text-input-{{ $column['name'] }}"
+                                                        placeholder="{{ $column['comment'] }}">{{ isset($vanban) ? $vanban->{$column['name']} : old($column['name']) }}</textarea>
+                                                    @else
+                                                    <input
+                                                        value="{{ isset($vanban) ? $vanban->{$column['name']} : old($column['name']) }}"
+                                                        class="form-control {{ $errors->has($column['name']) ? 'is-invalid' : '' }}"
+                                                        name="{{ $column['name'] }}" type="{{ $column['type'] }}"
+                                                        id="example-text-input-{{ $column['name'] }}"
+                                                        placeholder="{{ $column['comment'] }}">
+                                                    @endif
+
+                                                    @error($column['name'])
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
+                                            @endforeach
+
+
+
                                             {{-- @include('admins/pages/vanban/form-add') --}}
-                                            @php
-                                                use Illuminate\Support\Facades\Blade;
+                                            {{-- @php
+                                            use Illuminate\Support\Facades\Blade;
 
-                                                $template = $template_form_vanban->template_form ?? null;
+                                            $template = $template_form_vanban->template_form ?? null;
 
-                                                if (!empty($template)) {
-                                                    $compiled = Blade::compileString($template);
-                                                    eval('?>'.$compiled);
-                                                } else {
-                                                 
-                                                    echo "";
-                                                }
-                                            @endphp
+                                            if (!empty($template)) {
+                                            $compiled = Blade::compileString($template);
+                                            eval('?>'.$compiled);
+                                            } else {
+
+                                            echo "";
+                                            }
+                                            @endphp --}}
                                         </div>
 
                                     </div>
@@ -185,7 +210,6 @@
 <!-- Select2 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
-
     var $jq = jQuery.noConflict();
     $jq(document).ready(function() {
         console.log("Kích hoạt Select2");
@@ -204,8 +228,7 @@
                     '<option value="">Chọn mã phông</option>').val('');
                 $jq('#muc-luc-select').find('option').remove().end().append(
                     '<option value="">Mục lục</option>').val('');
-                $jq('#hop_so-select').find('option').remove().end().append('<option value="">Hộp số</option>')
-                    .val('');
+                $jq('#hop_so-select').find('option').remove().end().append('<option value="">Hộp số</option>').val('');
                 $jq('#ho_so_so-select').find('option').remove().end().append(
                     '<option value="">Hồ sơ số</option>').val('');
                 if (selectedValue) {
@@ -308,8 +331,7 @@
                                                                 '');
                                                             if (
                                                                 selectedMucLucValue) {
-                                                                var url =
-                                                                    "{{ route('hopso-by-mucluc') }}";
+                                                                var url = "{{ route('hopso-by-mucluc') }}";
                                                                 $.ajax({
                                                                     url: url,
                                                                     type: 'GET',
@@ -319,9 +341,10 @@
                                                                         mucluc: selectedMucLucValue
                                                                     },
                                                                     success: function(
+
                                                                         response
                                                                         ) {
-
+                                                                            // console.log(response.data);
                                                                         if (response
                                                                             .status ===
                                                                             'success'
@@ -351,7 +374,7 @@
                                                                                                 .hop_so +
                                                                                                 '">' +
                                                                                                 item
-                                                                                                .hop_so +
+                                                                                                .hopso.hop_so+
                                                                                                 '</option>'
                                                                                                 );
                                                                                     }
@@ -392,11 +415,7 @@
                                                                                                 success: function(
                                                                                                     response
                                                                                                     ) {
-                                                                                                    console
-                                                                                                        .log(
-                                                                                                            response
-                                                                                                            .datass
-                                                                                                            );
+
                                                                                                     if (response
                                                                                                         .status ===
                                                                                                         'success'
@@ -496,7 +515,7 @@
 </script>
 
 <script>
-    CKEDITOR.replace('content', {
+    CKEDITOR.replace('example-text-input-trich_yeu_noi_dung_van_ban', {
             toolbar: [{
                     name: 'document',
                     items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']

@@ -35,7 +35,7 @@ Route::get('/district', function () {
 });
 Route::get('/phong-to-config', [ProfileController::class, 'PhongDetailToConfig'])->name('phong-to-config');
 Route::get('/mucluc-to-phong', [ProfileController::class, 'MucLucDetailToPhong'])->name('mucluc-to-phong');
-Route::get('/hopso-by-mucluc', [ProfileController::class, 'HopSoToMucLuc'])->name('hopso-to-mucluc');
+Route::get('/hopso-by-mucluc-hs', [ProfileController::class, 'HopSoToMucLuc'])->name('hopso-to-mucluc-hs');
 
 Route::get('/phong-by-config_id', [InformationVbController::class, 'PhongByConfigID'])->name('phong-by-config_id');
 Route::get('/mucluc-by-phong_id', [InformationVbController::class, 'MucLucByPhongID'])->name('mucluc-by-phong_id');
@@ -47,5 +47,5 @@ Route::post('/import', [ProfileController::class, 'import'])->name('import');
 Route::get('/hop-so-phong-by-config_id', [HopController::class, 'PhongByConfigID'])->name('hop-so-phong-by-config_id');
 Route::get('/hop-so-mucluc-by-phong_id', [HopController::class, 'MucLucByPhongID'])->name('hop-so-mucluc-by-phong_id');
 
-Route::get('/hopso-by-mucluc', [HopController::class, 'HopSoByMucLuc'])->name('hop-so-mucluc-by-phong_id');
+Route::get('/hopso-by-mucluc-hop', [HopController::class, 'HopSoByMucLuc'])->name('hop-so-mucluc-by-phong_id');
 

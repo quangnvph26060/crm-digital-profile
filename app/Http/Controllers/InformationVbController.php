@@ -24,41 +24,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 class InformationVbController extends Controller
 {
 
-    // public function index(Request $request)
-    // {
-    //     $inputs = $request->all();
 
-    //     $vanban = InformationVb::query();
-    //     $title = "Danh sách văn bản";
-
-    //     // Áp dụng các bộ lọc
-    //     if (isset($request->name) && $request->name != '') {
-    //         $vanban->where('so_va_ki_hieu_van_ban', 'like', '%' . $request->name . '%');
-    //     }
-    //     if (isset($request->phong) && $request->phong != '') {
-    //         $vanban->where('config_id', 'like', '%' . $request->config_id . '%');
-    //     }
-    //     if (isset($request->phong) && $request->phong != '') {
-    //         $vanban->where('ma_phong', 'like', '%' . $request->phong . '%');
-    //     }
-    //     if (isset($request->muc_luc) && $request->muc_luc != '') {
-    //         $vanban->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
-    //     }
-
-    //     // Thêm phân trang ở đây
-    //     $perPage = 10; // Số lượng bản ghi trên mỗi trang
-    //     $vanban = $vanban->orderBy('profile_id', 'asc')->paginate($perPage);
-
-    //     // Lấy ghi chú cho các cột
-    //     $columnComments = $this->getColumnComments('information_vb');
-
-    //     return view("admins.pages.vanban.index", [
-    //         "vanban" => $vanban,
-    //         "title"  => $title,
-    //         "inputs" => $inputs,
-    //         "columnComments" => $columnComments, // Chuyển ghi chú đến view
-    //     ]);
-    // }
 
     // Thêm phương thức để lấy ghi chú cột
     public function getColumnvanBan(Request $request)
@@ -157,12 +123,15 @@ class InformationVbController extends Controller
     public function add()
     {
         $title = "Thêm văn bản";
+        $listcolumns = $this->listcolumn();
+        //  dd($listcolumns);
         $macoquan = Config::all();
         $mamucluc = MucLuc::all();
         return view("admins.pages.vanban.add", [
             "title" => $title,
             'macoquan' => $macoquan,
             'mamucluc' => $mamucluc,
+            'columns' => $listcolumns
         ]);
     }
 
@@ -238,6 +207,7 @@ class InformationVbController extends Controller
     {
 
         $title = "Sửa văn bản";
+        $listcolumns = $this->listcolumn();
         $macoquan = Config::all();
         $mamucluc = MucLuc::all();
         $vanban = InformationVb::find($id);
@@ -247,6 +217,7 @@ class InformationVbController extends Controller
             "vanban" => $vanban,
             'macoquan' => $macoquan,
             'mamucluc' => $mamucluc,
+            'columns' => $listcolumns
         ]);
     }
 
@@ -254,7 +225,7 @@ class InformationVbController extends Controller
     {
 
         $title = "Thông tin chi tiết văn bản";
-
+        $listcolumns = $this->listcolumn();
         $macoquan = Config::all();
         $mamucluc = MucLuc::all();
         $vanban = InformationVb::find($id);
@@ -264,6 +235,8 @@ class InformationVbController extends Controller
             "vanban" => $vanban,
             'macoquan' => $macoquan,
             'mamucluc' => $mamucluc,
+            'columns' => $listcolumns,
+
         ]);
     }
 
@@ -281,7 +254,7 @@ class InformationVbController extends Controller
                 ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
 
             if ($vanban) {
-                return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
+                return back()->with('error', 'Không thể sửa văn bản vì đã tồn tại.');
             }
 
             $profile = Profile::where('ma_phong', $request->ma_phong)
@@ -318,51 +291,53 @@ class InformationVbController extends Controller
         }
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //      dd($request->all());
-    //     $vanban = InformationVb::where('id', '!=', $id)->where('ma_phong', $request->ma_phong)
-    //         ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
-    //         ->where('ho_so_so', $request->ho_so_so)
-    //         ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
-    //     if ($vanban) {
-    //         return back()->with('error', 'Văn bản này đã tồn tại .');
-    //     }
-    //     $profile = Profile::where('ma_phong', $request->ma_phong)
-    //         ->where('ma_muc_luc', $request->ma_mucluc)->where('hop_so', $request->hop_so)->first();
-    //     if (!$profile) {
-    //         return back()->with('error', 'Hồ sơ không tồn tại.');
-    //     }
+    public function listcolumn()
+{
+    $columns = Schema::getColumnListing('information_vb');
 
-    //     $vanbannew = InformationVb::find($id);
-    //     // $vanbannew = new InformationVb();
-    //     $vanbannew->config_id  = $request->config_id;
-    //     $vanbannew->ma_phong = $request->ma_phong;
-    //     $vanbannew->ma_mucluc = $request->ma_mucluc;
-    //     $vanbannew->hop_so = $request->hop_so;
-    //     $vanbannew->ho_so_so = $request->ho_so_so;
-    //     $vanbannew->so_va_ki_hieu_van_ban = $request->so_va_ki_hieu_van_ban;
-    //     $vanbannew->time_vb = $request->time_vb;
-    //     $vanbannew->to_so = $request->to_so;
-    //     $vanbannew->tac_gia = $request->tac_gia;
-    //     $vanbannew->noi_dung = $request->noi_dung;
-    //     $vanbannew->ghi_chu = $request->ghi_chu;
-    //     $vanbannew->status = $request->status;
-    //     $vanbannew->profile_id = $profile->id;
-    //     if ($request->file('duong_dan')) {
-    //         $coquan = Config::find($request->config_id);
-    //         $phong = Phong::find($request->ma_phong);
-    //         $mucluc = MucLuc::find($request->ma_mucluc);
-    //         $hoso = Profile::find($profile->id);
-    //         $file = $request->file('duong_dan');
-    //         $fileName = time() . '/' . $coquan->agency_code . '/' . $phong->ma_phong . '/' . $mucluc->ma_mucluc . '/' . $hoso->hop_so . '/' . $hoso->ho_so_so . '/' . $file->getClientOriginalName();
-    //         $filePath = $file->storeAs('duong_dan', $fileName, 'public');
-    //         $vanbannew->duong_dan =  $filePath;
-    //     }
-    //     $vanbannew->save();
+    $excludedColumns = [
+        'id',
+        'created_at',
+        'updated_at',
+        'ma_co_quan',
+        'ma_phong',
+        'ma_mucluc',
+        'hop_so',
+        'ho_so_so',
+        'duong_dan',
+        'profile_id',
+        'status'
+    ];
 
-    //     return back()->with('success', 'Sửa văn bản thành công');
-    // }
+    $columnData = [];
+    foreach ($columns as $column) {
+        // Bỏ qua các trường trong danh sách loại trừ
+        if (in_array($column, $excludedColumns)) {
+            continue;
+        }
+
+        $columnType = Schema::getColumnType('information_vb', $column);
+
+        $columnInfo = DB::table('information_schema.columns')
+            ->where('table_schema', env('DB_DATABASE'))
+            ->where('table_name', 'information_vb')
+            ->where('column_name', $column)
+            ->first(['column_comment', 'is_nullable']);
+
+        $columnInfoArray = (array) $columnInfo;
+
+        $columnData[] = [
+            'name' => $column,
+            'type' => $columnType,
+            'comment' => $columnInfoArray['column_comment'] ?? '',
+            'is_required' => $columnInfoArray['is_nullable'],
+        ];
+    }
+
+    return $columnData;
+}
+
+
 
 
     public function delete($id)
@@ -431,7 +406,7 @@ class InformationVbController extends Controller
         $coquandata = Profile::where('config_id', $request->id)
             ->where('ma_phong', $request->phongId)
             ->where('ma_muc_luc', $request->mucluc)
-            ->with('config', 'maPhong', 'maMucLuc')
+            ->with('config', 'maPhong', 'maMucLuc', 'hopso')
             ->get()
             ->unique('hop_so')
             ->values()
@@ -511,9 +486,6 @@ class InformationVbController extends Controller
     }
 
 
-
-
-
     public function storecolumn(Request $request)
     {
         // Validate yêu cầu
@@ -563,11 +535,6 @@ class InformationVbController extends Controller
             return back()->withErrors(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()]);
         }
     }
-
-
-
-
-
 
     public function destroy($column)
     {

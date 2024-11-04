@@ -61,4 +61,9 @@ class InformationVb extends Model
     {
         return $this->belongsTo(Profile::class, 'profile_id');
     }
+
+    public function hopso()
+    {
+        return $this->belongsTo(HopSoModel::class, 'hop_so');
+    }
 }

@@ -151,8 +151,8 @@ class ProfileController extends Controller
     }
 
     public function HopSoToMucLuc(Request $request){
-        $hopsodata = HopSoModel::where('mucluc_id', $request->id)->get();
-        return response()->json(['status' => "success", 'data' => $hopsodata]);
+        $muclucdata = HopSoModel::where('mucluc_id', $request->id)->get();
+        return response()->json(['status' => "success", 'data' => $muclucdata]);
     }
     /**
      * Show the form for creating a new resource.
@@ -423,9 +423,8 @@ class ProfileController extends Controller
                 $query->where('phong_id', 'like', '%' . $request->coquan . '%');
             });
         }
-
-        $maPhongs = $profiles->pluck('id','ten_mucluc')->unique();
-        return response()->json(['status'=>'success','data'=>$maPhongs]);
+        $mucluc = $profiles->pluck('id','ten_mucluc')->unique();
+        return response()->json(['status'=>'success','data'=>$mucluc]);
     }
-}
+ }
 

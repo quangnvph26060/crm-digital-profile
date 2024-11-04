@@ -168,6 +168,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('edit/{id}', [HopController::class, 'edit'])->name('edit');
         Route::post('edit/{id}', [HopController::class, 'update'])->name('update');
         Route::delete('delete/{id}', [HopController::class, 'delete'])->name('delete');
+        Route::delete('view/{id}', [HopController::class, 'view'])->name('view');
     });
 
 
