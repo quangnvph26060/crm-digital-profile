@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Config;
+use App\Models\HopSoModel;
 use App\Models\InformationVb;
 use App\Models\MucLuc;
 use App\Models\Phong;
@@ -21,12 +22,13 @@ class VanBanExport implements FromCollection, WithHeadings
             $config = Config::find($profile->config_id);
             $mucluc = MucLuc::find($profile->ma_muc_luc);
             $phong = Phong::find($profile->ma_phong);
+            $hopso = HopSoModel::find($profile->hop_so);
             Log::info($phong);
             $data = [
                 'ma_co_quan' => $config->agency_code,
                 'ma_phong' => $phong->ten_phong,
                 'ma_mucluc' => $mucluc->ma_mucluc,
-                'hop_so' => $profile->hop_so,
+                'hop_so' => $hopso->hop_so,
                 'ho_so_so' => $profile->ho_so_so,
 
             ];

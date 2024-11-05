@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Config;
+use App\Models\HopSoModel;
 use App\Models\InformationVb;
 use App\Models\MucLuc;
 use App\Models\Phong;
@@ -32,10 +33,12 @@ class InformationVbImport implements ToModel, WithHeadingRow
                 $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
                 // dd($phong);
                 $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
+                $hopso = HopSoModel::where('hop_so', $row['hop_so'])->first();
+                Log::info($hopso);
                 // dd($phong);
                 if ($phong && $mucluc) {
                     $profile = Profile::where('config_id', $coquan->id)->where('ma_muc_luc', $mucluc->id)
-                        ->where('hop_so', $row['hop_so'])->where('ho_so_so', $row['ho_so_so'])->first();
+                        ->where('hop_so', $hopso->id)->where('ho_so_so', $row['ho_so_so'])->first();
                     if ($profile) {
                         $vanban = InformationVb::where('so_va_ki_hieu_van_ban', $row['so_va_ki_hieu_van_ban'])->where('ma_phong', $phong->id)->where('profile_id', $profile->id)->first();
                         // dd($vanban);
@@ -45,7 +48,7 @@ class InformationVbImport implements ToModel, WithHeadingRow
                             $vanbannew->ma_co_quan = $coquan->id;
                             $vanbannew->ma_phong = $phong->id;
                             $vanbannew->ma_mucluc = $mucluc->id;
-                            $vanbannew->hop_so = $row['hop_so'];
+                            $vanbannew->hop_so = $hopso->id;
                             $vanbannew->ho_so_so = $row['ho_so_so'];
                             $vanbannew->so_va_ki_hieu_van_ban = $row['so_va_ki_hieu_van_ban'];
                             $vanbannew->profile_id = $profile->id;
