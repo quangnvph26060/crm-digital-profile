@@ -8,6 +8,7 @@ use App\Models\InformationVb;
 use App\Models\MucLuc;
 use App\Models\Phong;
 use App\Models\Profile;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -38,17 +39,25 @@ class VanBanExport implements FromCollection, WithHeadings
             $excludedFields = ['id', 'ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'profile_id', 'status', 'created_at', 'updated_at'];
 
             foreach ($attributes as $key => $value) {
-
                 if (!in_array($key, $excludedFields)) {
                     $text = strip_tags($value);
                     $text = html_entity_decode($text);
-                    $data[$key] = $text;
-                    if($key == 'duong_dan'){
-                        $data[$key] = asset('storage/'.$value);
+
+                    // Kiểm tra nếu giá trị là một ngày hợp lệ với định dạng Y-m-d
+                    $date = DateTime::createFromFormat('Y-m-d', $text);
+                    if ($date && $date->format('Y-m-d') === $text) {
+                        // Chuyển đổi ngày sang định dạng d/m/Y
+                        $data[$key] = $date->format('d/m/Y');
+                    } else {
+                        $data[$key] = $text;
+                    }
+
+                    if ($key == 'duong_dan') {
+                        $data[$key] = asset('storage/' . $value);
                     }
                 }
-
             }
+
 
             return $data;
         });
