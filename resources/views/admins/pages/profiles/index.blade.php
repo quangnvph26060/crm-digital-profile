@@ -317,11 +317,15 @@
                 var selectElement = document.getElementById('hop_so');
 
                 selectElement.innerHTML = '';
-
+                
+                
                 Object.keys(data).forEach(function(key) {
                     var option = document.createElement('option');
-                    option.value = data[key];
+                    option.value = key;
                     option.text = data[key];
+                    if (data[key] == params.hop_so) {
+                        option.selected = true;
+                    }
                     selectElement.add(option);
                 });
 
@@ -498,8 +502,6 @@
         $('#exportExcelBtn').on('click', function() {
             $('<input type="file">').change(function() {
                 var selectedFile = this.files[0];
-                console.log('File đã chọn:', selectedFile);
-
 
                 var formData = new FormData();
                 formData.append('file', selectedFile);
