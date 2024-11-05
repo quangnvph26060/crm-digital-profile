@@ -8,6 +8,7 @@ use App\Models\MucLuc;
 use App\Models\Phong;
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class HopController extends Controller
 {
@@ -140,14 +141,20 @@ class HopController extends Controller
         }
     }
 
-    public function view($id){
+    public function view( $id){
         $title   = "Chi tiết hộp số";
-        $hopso = HopSoModel::find($id);
+        $perPage = 10;
+        $profiles = Profile::where('hop_so', $id)->paginate($perPage);
+
+        // Thêm phân trang ở đây
+        $hopso = HopSoModel::with('maCoQuan', 'maPhong', 'maMucLuc')->find($id);
         if(!$hopso){
             return back()->with('error', 'Không tìm thấy hộp số cần xem.');
         }
-        $profiles = Profile::where('hop_so', $id)->with('config', 'maPhong', 'maMucLuc')->paginate(10);
-        return view('admins.pages.hop.detail', ['title' => $title, 'hopso' => $hopso, 'hoso' => $profiles]);
+
+
+
+        return view('admins.pages.hop.detail', ['title' => $title, 'hopso' => $hopso, 'profiles' => $profiles]);
     }
 
 
@@ -163,7 +170,8 @@ class HopController extends Controller
     public function MucLucByPhongID(Request $request)
     {
 
-        $mucluc = MucLuc::where('phong_id', $request->phongId)->get();
+        Log::info($request->all());
+                $mucluc = MucLuc::where('phong_id', $request->phongId)->get();
 
         return response()->json(['status' => "success", 'data' => $mucluc]);
 
