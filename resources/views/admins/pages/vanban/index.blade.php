@@ -260,7 +260,7 @@
                                                         {{ $item->maPhong->ten_phong ?? "" }} / Mục lục:
                                                         {{ $item->maMucLuc->ten_mucluc ?? "" }} / Hộp số:
                                                         {{ $item->hopso->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} / Hồ
-                                                        sơ: {{ $item->profile->tieu_de_ho_so }}</strong>
+                                                        sơ: {{ $item->profile->tieu_de_ho_so ?? "" }}</strong>
                                                 </td>
                                             </tr>
                                         @endif

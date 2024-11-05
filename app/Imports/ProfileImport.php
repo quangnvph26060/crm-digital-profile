@@ -3,6 +3,8 @@
 namespace App\Imports;
 
 use App\Models\Config;
+use App\Models\HopSoModel;
+use App\Models\MucLuc;
 use App\Models\Phong;
 use App\Models\Profile;
 
@@ -31,61 +33,96 @@ class ProfileImport implements ToModel, WithHeadingRow
                     $existingPhong->ma_phong = $row['ma_phong'];
                     $existingPhong->coquan_id = $existingCoQuan->id;
                     $existingPhong->save();
-                //    \Log::info('mã cơ quan chưa tồn tại');
+
+                    $existingMucLuc = new MucLuc();
+                    $existingMucLuc->ten_mucluc   = $row['ma_muc_luc'];
+                    $existingMucLuc->ma_mucluc    = $row['ma_muc_luc'];
+                    $existingMucLuc->phong_id    = $existingPhong->id;
+                    $existingMucLuc->save();
+
+                    $existingHopSo = new HopSoModel();
+                    $existingHopSo->coquan_id   =  $existingCoQuan->id;
+                    $existingHopSo->phong_id    =  $existingPhong->id;
+                    $existingHopSo->mucluc_id    = $existingMucLuc->id;
+                    $existingHopSo->hop_so    = $row['hop_so'];
+                    $existingHopSo->save();
+
+                    //    \Log::info('mã cơ quan chưa tồn tại');
                 }
             } else {
-              //  \Log::info('mã cơ quan tồn tại');
+                //  \Log::info('mã cơ quan tồn tại');
                 $phongFind = Phong::where('coquan_id', $existingCoQuan->id)->where('ma_phong', $row['ma_phong'])->first();
                 // \Log::info($row['ma_phong']);
                 if (!$phongFind) {
-                  //  \Log::info('mã cơ quan tồn tại nhưng mã phông không tồn tại');
+                    //  \Log::info('mã cơ quan tồn tại nhưng mã phông không tồn tại');
                     $existingPhong = new Phong();
-                    $existingPhong->ten_phong = $row['ma_phong'];
-                    $existingPhong->ma_phong = $row['ma_phong'];
-                    $existingPhong->coquan_id = $existingCoQuan->id;
+                    $existingPhong->ten_phong   = $row['ma_phong'];
+                    $existingPhong->ma_phong    = $row['ma_phong'];
+                    $existingPhong->coquan_id   = $existingCoQuan->id;
                     $existingPhong->save();
+                } else {
+                    $mucluc  = MucLuc::where('phong_id', $phongFind->id)->where('ma_mucluc', $row['ma_muc_luc'])->first();
+                    if (!$mucluc) {
+                        //  \Log::info(' mã mục lục không tồn tại');
+                        $existingMucLuc = new MucLuc();
+                        $existingMucLuc->ten_mucluc     = $row['ma_muc_luc'];
+                        $existingMucLuc->ma_mucluc      = $row['ma_muc_luc'];
+                        $existingMucLuc->phong_id       = $phongFind->id;
+                        $existingMucLuc->save();
+                    } else {
+                        $existingHopSo  = HopSoModel::where('coquan_id', $existingCoQuan->id)->where('phong_id', $phongFind->id)->where('mucluc_id', $mucluc->id)->first();
+                        if(!$existingHopSo){
+                            //  \Log::info(' hộp số không tồn tại');
+                            $existingHopSo = new HopSoModel();
+                            $existingHopSo->coquan_id       = $existingCoQuan->id;
+                            $existingHopSo->phong_id        = $phongFind->id;
+                            $existingHopSo->mucluc_id       = $mucluc->id;
+                            $existingHopSo->hop_so          = $row['hop_so'];
+                            $existingHopSo->save();
+                        }
+                    }
                 }
             }
             if (array_key_exists('ngay_thang_bd_kt', $row)) {
                 $ngay_thang_arr = explode('-', $row['ngay_thang_bd_kt']);
-            }else{
+            } else {
                 $ngay_thang_arr = explode('-', $row['ngay_thang_bd']);
             }
-            
+
             if (count($ngay_thang_arr) === 2) {
                 $ngay_bat_dau = date_create_from_format('d/m/Y', trim($ngay_thang_arr[0]));
                 $ngay_ket_thuc = date_create_from_format('d/m/Y', trim($ngay_thang_arr[1]));
                 Profile::unguard();
                 $data = [
-                    'config_id' => $existingCoQuan->id,
-                    'ma_phong' => $existingPhong->id ?? $phongFind->ma_phong,
-                    'ma_muc_luc' => $row['ma_muc_luc'] ?? null,
-                    'hop_so' => $row['hop_so'] ?? null,
-                    'ho_so_so' => $row['ho_so_so'] ?? null,
-                    'tieu_de_ho_so' => $row['tieu_de_ho_so'] ?? null,
-                    'ngay_bat_dau' => $ngay_bat_dau ? $ngay_bat_dau->format('Y-m-d') : null,
-                    'ngay_ket_thuc' => $ngay_ket_thuc ? $ngay_ket_thuc->format('Y-m-d') : null,
-                    'so_to' => $row['so_to'] ?? null,
-                    'thbq' => $row['thbq'] ?? null,
-                    'ghi_chu' => $row['ghi_chu'] ?? null,
+                    'config_id'        => $existingCoQuan->id,
+                    'ma_phong'         => $existingPhong->id ?? $phongFind->ma_phong,
+                    'ma_muc_luc'       => $existingMucLuc->ma_mucluc ?? null,
+                    'hop_so'           => $existingHopSo->hop_so ?? null,
+                    'ho_so_so'         => $row['ho_so_so'] ?? null,
+                    'tieu_de_ho_so'    => $row['tieu_de_ho_so'] ?? null,
+                    'ngay_bat_dau'     => $ngay_bat_dau ? $ngay_bat_dau->format('Y-m-d') : null,
+                    'ngay_ket_thuc'    => $ngay_ket_thuc ? $ngay_ket_thuc->format('Y-m-d') : null,
+                    'so_to'            => $row['so_to'] ?? null,
+                    'thbq'             => $row['thbq'] ?? null,
+                    'ghi_chu'          => $row['ghi_chu'] ?? null,
                 ];
-             
+
                 $collection1 = collect($data);
                 $collection2 = collect($row);
 
-              
+
                 $mergedArray = $collection1->merge($collection2);
-              
+
                 $arrayData = json_decode($mergedArray, true);
-                
+
                 $fillableFields = (new \App\Models\Profile())->getFillable();
-                  
+
                 $filteredData = array_intersect_key($arrayData, array_flip($fillableFields));
                 $filteredData['config_id'] = $mergedArray['config_id'];
                 $result = new Profile();
                 $result->fill($filteredData);
                 $result->save();
-               
+
                 return $result;
             }
         } catch (\Exception $e) {
