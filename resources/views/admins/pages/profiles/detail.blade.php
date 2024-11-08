@@ -227,7 +227,7 @@
                                                 <th>Tờ số</th>
                                                 {{-- <th>Đường dẫn</th> --}}
                                                 <th>Ghi chú</th>
-                                                <th>Trạng thái</th>
+                                           
                                                 @if (auth('admin')->user()->level === 2)
                                                     <th>Hành động</th>
                                                 @endif
@@ -249,10 +249,10 @@
                                                         <td>{{ $item->to_so }}</td>
                                                         {{-- <td>{{ $item->duong_dan }}</td> --}}
                                                         <td>{{ $item->ghi_chu }}</td>
-                                                        <td>
+                                                        {{-- <td>
 
                                                             {!! $item->getStatus() !!}
-                                                        </td>
+                                                        </td> --}}
                                                         <td class="d-flex gap-1">
                                                             @if (auth('admin')->user()->level === 2)
                                                                 <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"

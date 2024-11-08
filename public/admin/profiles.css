@@ -111,11 +111,14 @@ input[type="checkbox"]:checked+.checkbox-label {
     }
 
     #checkBoxes {
-        background: #ffffff;
+     
         display: none;
         border: 1px #c3d0ce solid;
     }
-
+    .checkboxes {
+        background: #ffffff;
+       
+    }
     #checkBoxes label {
         display: block;
     }

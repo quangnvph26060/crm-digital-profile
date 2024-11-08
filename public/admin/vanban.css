@@ -118,9 +118,11 @@ input[type="checkbox"]:checked+.checkbox-label {
 h1 {
     color: green;
 }
-
-#checkboxes {
+.checkboxes {
     background: #ffffff;
+   
+}
+#checkboxes {
     padding: 5px;  display: none;
 }
 
