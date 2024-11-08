@@ -102,7 +102,7 @@ class ProfileController extends Controller
         return view("admins.pages.profiles.index", [
             "profiles"          => $profiles,
             "fillableFields"    => $fillableFields,
-            "selectedProfiles"   => $selectedProfiles,
+            "selectedProfiles"  => $selectedProfiles,
             "columnComments"    => $columnComments,
             "title"             => $title,
             "inputs"            => $inputs,

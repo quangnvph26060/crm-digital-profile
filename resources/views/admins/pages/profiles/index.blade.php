@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header h-190">
                             <form method="GET">
                                 <div class="row">
                                     <div class="col-lg-2">
@@ -114,7 +114,8 @@
                                 <div class="d-flex  flex-wrap" style="gap: 5px">
                                     <div class="">
 
-                                        <form action="{{ route('admin.profile.export') }}" method="POST" class="float-inline-end">
+                                        <form action="{{ route('admin.profile.export') }}" method="POST"
+                                            class="float-inline-end">
                                             @csrf
                                             <button type="submit" class="btn btn-primary">
                                                 Import Excel
@@ -129,9 +130,9 @@
                                             </button>
                                         </div>
                                     @endif
-                               
-                               
-                                    <div class="col-lg-3 main-option mtop-28" >
+
+
+                                    <div class="col-lg-3 main-option mtop-28">
                                         <label for="column-select">Chọn cột để hiển thị:</label>
                                         <div class="selectBox form-select" id="toggleBtn">
 
@@ -174,14 +175,20 @@
                             @include('globals.alert')
                             <div class="table-rep-plugin">
                                 <div class="table-responsive mb-0" data-pattern="priority-columns">
-                               
+
                                     <!-- Bảng dữ liệu -->
                                     <table id="userTable" class="table table-striped">
                                         <thead>
                                             <tr>
                                                 @if ($profiles && $profiles->first())
                                                     @forelse ($profiles->first()->getAttributes() as $key => $value)
-                                                        @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc' && $key !== "ma_phong")
+                                                        @if (
+                                                            $key !== 'updated_at' &&
+                                                                $key !== 'created_at' &&
+                                                                $key !== 'id' &&
+                                                                $key !== 'config_id' &&
+                                                                $key !== 'ma_muc_luc' &&
+                                                                $key !== 'ma_phong')
                                                             <th class="column-{{ $key }}">
                                                                 {{ $columnComments[$key] ?? $key }}</th>
                                                         @endif
@@ -200,17 +207,23 @@
                                                 @forelse ($profiles as $user)
                                                     <tr>
                                                         @foreach ($user->getAttributes() as $key => $value)
-                                                            @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc' && $key !== "ma_phong")
+                                                            @if (
+                                                                $key !== 'updated_at' &&
+                                                                    $key !== 'created_at' &&
+                                                                    $key !== 'id' &&
+                                                                    $key !== 'config_id' &&
+                                                                    $key !== 'ma_muc_luc' &&
+                                                                    $key !== 'ma_phong')
                                                                 <td class="column-{{ $key }}">
 
                                                                     @if ($key == 'hop_so')
-                                                                    {{ $user->hopso->hop_so ?? "" }}
+                                                                        {{ $user->hopso->hop_so ?? '' }}
                                                                     @else
-                                                                    {{ $value }}
+                                                                        {{ $value }}
                                                                     @endif
 
                                                                 </td>
-                                                                {{-- @if($key == 'hop_so')
+                                                                {{-- @if ($key == 'hop_so')
                                                                 <td class="column-{{ $key }}">
                                                                     {{ $user->hopso->hop_so }}
 
@@ -218,7 +231,7 @@
                                                                 @endif --}}
                                                             @endif
                                                         @endforeach
-                                                        <td class="d-flex gap-1">
+                                                        <td class="d-flex gap-1 justify-content-center">
                                                             @if (auth('admin')->user()->level === 2)
                                                                 <a href="{{ route('admin.profile.edit', ['id' => $user->id]) }}"
                                                                     class="btn btn-warning main-action">
@@ -290,12 +303,24 @@
 
 
         var params = getUrlParams(currentUrl);
-        console.log(params);
 
+        var phong = document.getElementById('phong');
+        var muc_luc = document.getElementById('muc_luc');
+        var hop_so = document.getElementById('hop_so');   
+         console.log(params);
+        if (params && Object.keys(params).length > 0) {
+        
+            
+            if (params.coquan !== "") {
+                phong.disabled = false;
+                muc_luc.disabled = false;
+                hop_so.disabled = false;
+            }
+        }
 
 
         function sendAjaxRequest(selectedValues) {
-            var url = "{{ route('admin.profile.searchHoSo') }}";
+            var url = "{{ route('admin.profile.searchHopSo') }}";
 
             $.ajax({
                 url: url,
@@ -319,20 +344,26 @@
 
                 selectElement.innerHTML = '';
 
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn Hộp Số';
+                selectElement.add(defaultOption);
 
                 Object.keys(data).forEach(function(key) {
                     var option = document.createElement('option');
-                    option.value = key;
-                    option.text = data[key];
+                    option.value = data[key];
+                    option.text = key;
                     if (data[key] == params.hop_so) {
                         option.selected = true;
                     }
                     selectElement.add(option);
                 });
 
+
                 selectElement.disabled = false;
             }
         }
+
         function getSelectedValues() {
             var selectedCoQuan = $('#coquan').val();
             var selectedPhong = $('#phong').val();
@@ -374,7 +405,10 @@
                         var selectElement = document.getElementById('phong');
 
                         selectElement.innerHTML = '';
-
+                        var defaultOption = document.createElement('option');
+                        defaultOption.value = '';
+                        defaultOption.text = 'Chọn Phông';
+                        selectElement.add(defaultOption);
                         Object.keys(data).forEach(function(key) {
                             var option = document.createElement('option');
                             option.value = data[key];
@@ -412,6 +446,11 @@
                         var selectElement = document.getElementById('muc_luc');
 
                         selectElement.innerHTML = '';
+
+                        var defaultOption = document.createElement('option');
+                        defaultOption.value = '';
+                        defaultOption.text = 'Chọn Mục Lục';
+                        selectElement.add(defaultOption);
 
                         Object.keys(data).forEach(function(key) {
                             var option = document.createElement('option');
@@ -527,29 +566,44 @@
     });
 </script>
 <style scoped>
-    .hoso__position{
+    .h-190{
+        height: 190px;
+    }
+    .hoso__position {
         position: relative;
         left: 313px;
         bottom: 52px;
     }
-    .float-inline-end{
+
+    .float-inline-end {
         float: inline-end;
     }
-    .mtop-28{
+
+    .mtop-28 {
         margin-top: -28px !important;
     }
-    .selectBox,.checkboxes{
+
+    .selectBox,
+    .checkboxes {
         width: 300px !important;
     }
-    @media(max-width:768px){
-            .hoso__position{
-                position: unset !important;
-            }
-            .float-inline-end{
-                float: unset;
-            }
-            .mtop-28 {
-    margin-top: 3px !important;
+    td,th {
+    text-align: center !important;
+    vertical-align: middle;
 }
+    @media(max-width:768px) {
+        .hoso__position {
+            position: unset !important;
         }
+        .h-190{
+            height: auto;
+        }
+        .float-inline-end {
+            float: unset;
+        }
+
+        .mtop-28 {
+            margin-top: 3px !important;
+        }
+    }
 </style>
