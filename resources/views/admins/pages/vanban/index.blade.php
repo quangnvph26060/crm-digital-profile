@@ -299,7 +299,7 @@
                                                         <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
                                                     </a>
                                                     <form method="post"
-                                                        action="{{ route('admin.vanban.delete', ['id' => $item->id]) }}"
+                                                        action="{{ route('admin.vanban.deleteview', ['id' => $item->id]) }}"
                                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                                         @csrf
                                                         @method('DELETE')

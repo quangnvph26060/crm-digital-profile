@@ -163,28 +163,30 @@
 
                                     </div>
                                 </div>
-                                <div class="col-lg-12 mt-4">
-                                    <div>
-                                        @if (auth('admin')->user()->level === 2)
-                                        <a href="{{ route('admin.vanban.edit', ['id' => $vanban->id]) }}"
-                                            class="btn btn-warning" style="padding: 8px 15px; margin-right: 10px">
-                                            Sửa văn bản
-                                        </a>
-                                        <form method="post"
-                                            action="{{ route('admin.vanban.delete', ['id' => $vanban->id]) }}"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" style="padding: 8px 15px">
-                                                Xóa văn bản
-                                            </button>
-                                        </form>
-                                        @endif
-                                    </div>
-                                </div>
+
 
                             </div>
                         </form>
+                        <div class=" mt-4" >
+                            <div style="display: flex">
+                                @if (auth('admin')->user()->level === 2)
+                                <a href="{{ route('admin.vanban.edit', ['id' => $vanban->id]) }}"
+                                    class="btn btn-warning" style="padding: 8px 15px; margin-right: 10px">
+                                    Sửa văn bản
+                                </a>
+                                <form method="post"
+                                    action="{{ route('admin.vanban.deleteview', ['id' => $vanban->id]) }}"
+                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" style="padding: 8px 15px">
+                                        Xóa văn bản
+                                    </button>
+                                </form>
+
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -141,11 +141,13 @@ class InformationVbController extends Controller
         $macoquan = Config::all();
         $mamucluc = MucLuc::all();
         $hoso = Profile::find($id);
+        $listcolumns = $this->listcolumn();
         return view("admins.pages.vanban.addbyhoso", [
             "title" => $title,
             'macoquan' => $macoquan,
             'mamucluc' => $mamucluc,
             'hoso' => $hoso,
+            'columns' => $listcolumns
         ]);
     }
 
@@ -348,6 +350,18 @@ class InformationVbController extends Controller
             return back()->with('success', 'Xóa văn bản thành công');
         } else {
             return back()->with('error', 'Văn bản không tồn tại');
+        }
+    }
+    public function deleteview($id)
+    {
+        $vanban = InformationVb::find($id);
+
+        if ($vanban) {
+            $vanban->delete();
+            return redirect()->route('admin.profile.detail', ['id' => $vanban->profile_id])
+                 ->with('success', 'Xóa văn bản thành công');
+        } else {
+            return redirect()->back()->with('success', 'Văn bản không tồn tại');
         }
     }
     public function deletevb($id)
