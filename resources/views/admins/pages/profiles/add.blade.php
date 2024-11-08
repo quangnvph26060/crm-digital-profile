@@ -164,7 +164,18 @@
 
         </div> <!-- container-fluid -->
     </div>
-
+    <style>
+        .select2-selection--single{
+            height: 38px !important;
+            display: flex;
+        }
+        .select2-selection__rendered{
+            height: 38px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px !important;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <!-- Select2 JS -->
