@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\File;
 
 class CustomColumnController extends Controller
 {
+
     private function getColumnData($table)
     {
         $columns = Schema::getColumnListing($table);
@@ -223,7 +224,7 @@ class CustomColumnController extends Controller
     }
     public function editColumnAndUpdateFillable($columnName, $columnType, $isRequired, $column)
     {
-        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới 
+        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới
         switch ($columnType) {
             case "string":
                 $newType  = 'VARCHAR(255)';
@@ -239,20 +240,20 @@ class CustomColumnController extends Controller
         }
         $flag = false;
         Schema::table('profiles', function (Blueprint $table) use ($cleanColumnName, $column, $columnType, $newType, $columnName, $isRequired) {
-            if ($isRequired == "1") {  
+            if ($isRequired == "1") {
                 if($cleanColumnName == $column){
                     DB::statement("UPDATE profiles SET $cleanColumnName = '' WHERE $cleanColumnName IS NULL");
-                } 
-              
+                }
+
                 DB::statement("ALTER TABLE profiles CHANGE $column $cleanColumnName $newType  NOT NULL  COMMENT '$columnName'");
             } else {
                 if($cleanColumnName == $column){
                     DB::statement("UPDATE profiles SET $cleanColumnName = '' WHERE $cleanColumnName IS NULL");
-                } 
-               
+                }
+
                 DB::statement("ALTER TABLE profiles CHANGE $column $cleanColumnName $newType   DEFAULT NULL  COMMENT '$columnName'");
             }
-           
+
         });
         // Cập nhật mảng fillable_fields_profile.php
         $fillableFields = include app_path('Models/fillable_fields_profile.php');
@@ -268,7 +269,7 @@ class CustomColumnController extends Controller
             $fillableFields[] = $cleanColumnName;
             file_put_contents(app_path('Models/fillable_fields_profile.php'), "<?php\n\nreturn " . var_export($fillableFields, true) . ";\n");
         }
-      
+
         return redirect()->route('admin.thongtinhoso')->with('success', 'Cột đã được cập nhật thành công!');
     }
 }

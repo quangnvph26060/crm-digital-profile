@@ -27,7 +27,7 @@
                             <h4 class="card-title">Thông tin hồ sơ</h4>
                         </div> --}}
 
-                        <div class="card-body p-4">
+                        <div class="card-body p-4" style="pointer-events: none;">
                             <form action="{{ route('admin.profile.update', ['id' => $profile->id]) }}" method="POST">
                                 @csrf
                                 <div class="row">
@@ -93,7 +93,7 @@
                                                 <div class="col-lg-3">
                                                     <label for="example-text-input" class="form-label">Hộp số<span
                                                             class="text text-danger">*</span></label>
-                                                    <input required value="{{ $profile->hop_so }}" required
+                                                    <input required value="{{ $profile->hopso->hop_so }}" required
                                                         class="form-control" name="hop_so" type="text"
                                                         id="example-text-input" placeholder="Hộp số">
                                                 </div>

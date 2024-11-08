@@ -632,18 +632,18 @@ class InformationVbController extends Controller
             // chmod($arrayPath, 7777);
         }
     }
-    
+
     public function updateColumn($column, Request $request)
     {
-     
+
         // $request->validate([
         //     'column_name' => 'required|string|max:255',
         //     'column_type' => 'required|in:string,integer,text',
         //     'is_required' => 'required|boolean',
-        // ]);  
-       
+        // ]);
+
         $profiles = $this->getColumnDetail('information_vb', $column);
-    
+
         $columnName = $request->input('column_name');
         $columnType = $request->input('data_type');
         $isRequired = $request->input('is_required');
@@ -653,7 +653,7 @@ class InformationVbController extends Controller
     }
     public function editColumnAndUpdateFillable($columnName, $columnType, $isRequired, $column)
     {
-        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới 
+        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới
         switch ($columnType) {
             case "string":
                 $newType  = 'VARCHAR(255)';
