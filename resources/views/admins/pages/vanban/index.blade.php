@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header h-190">
                         <form method="GET">
                             <div class="row">
                                 <div class="col-lg-3">
@@ -213,131 +213,132 @@
                         </div>
 
 
-                        <div class="mt-4">
-                            @include('globals.alert')
-                        </div>
-                        <div class="card-body" style="overflow-x: auto; max-width: 100%; padding: 20px 0px;">
+                       
+                    </div>
+                    <div class="mt-4">
+                        @include('globals.alert')
+                    </div>
+                    <div class="card-body" style="overflow-x: auto; max-width: 100%; padding: 20px 0px;">
 
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        {{-- @dd($vanban); --}}
-                                        {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
-                                        @if ($vanban && $vanban->first())
-                                            <th>STT</th>
-                                            @foreach ($vanban->first()->getAttributes() as $column => $value)
-                                                @if (
-                                                    !in_array($column, [
-                                                        'ma_co_quan',
-                                                        'ma_mucluc',
-                                                        'hop_so',
-                                                        'ho_so_so',
-                                                        'ma_phong',
-                                                        'created_at',
-                                                        'updated_at',
-                                                        'profile_id',
-                                                        'duong_dan',
-                                                        'id',
-                                                    ]))
-                                                    <th>{{ $columnComments[$column] ?? $column }}</th>
-                                                @endif
-                                            @endforeach
-                                            <th>Thao tác</th>
-                                        @endif
-
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $currentProfileId = null;
-                                        $currentPhong = null;
-                                    @endphp
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
                                     {{-- @dd($vanban); --}}
-                                    @forelse ($vanban as $index => $item)
-                                        @if ($currentProfileId != $item->profile_id || $currentPhong != $item->maPhong)
-                                            @php
-                                                $currentProfileId = $item->profile_id;
-                                                $currentPhong = $item->maPhong;
-                                            @endphp
+                                    {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
+                                    @if ($vanban && $vanban->first())
+                                        <th>STT</th>
+                                        @foreach ($vanban->first()->getAttributes() as $column => $value)
+                                            @if (
+                                                !in_array($column, [
+                                                    'ma_co_quan',
+                                                    'ma_mucluc',
+                                                    'hop_so',
+                                                    'ho_so_so',
+                                                    'ma_phong',
+                                                    'created_at',
+                                                    'updated_at',
+                                                    'profile_id',
+                                                    'duong_dan',
+                                                    'id',
+                                                ]))
+                                                <th>{{ $columnComments[$column] ?? $column }}</th>
+                                            @endif
+                                        @endforeach
+                                        <th>Thao tác</th>
+                                    @endif
 
-                                            <tr class="row-header">
-                                                <td style="padding: 0px 10px"
-                                                    colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']) + 2 }}">
-                                                    <strong>Cơ quan : {{ $item->config->agency_code ?? '' }} / Phông:
-                                                        {{ $item->maPhong->ten_phong ?? '' }} / Mục lục:
-                                                        {{ $item->maMucLuc->ten_mucluc ?? '' }} / Hộp số:
-                                                        {{ $item->hopso->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} /
-                                                        Hồ
-                                                        sơ: {{ $item->profile->tieu_de_ho_so ?? '' }}</strong>
-                                                </td>
-                                            </tr>
-                                        @endif
 
-                                        <tr>
-                                            <th>{{ $index + 1 }}</th>
-                                            @foreach ($item->getAttributes() as $column => $value)
-                                                {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
-                                                @if (
-                                                    !in_array($column, [
-                                                        'ma_co_quan',
-                                                        'ma_mucluc',
-                                                        'hop_so',
-                                                        'ho_so_so',
-                                                        'ma_phong',
-                                                        'created_at',
-                                                        'updated_at',
-                                                        'profile_id',
-                                                        'duong_dan',
-                                                        'id',
-                                                    ]))
-                                                    <td>
-                                                        @if ($column === 'status')
-                                                            {{-- Kiểm tra cột status --}}
-                                                            {!! $value === 'active' ? 'Công khai' : 'Không công khai' !!}
-                                                        @else
-                                                            {!! $value !!}
-                                                        @endif
-                                                    </td>
-                                                @endif
-                                            @endforeach
-                                            <td class="d-flex gap-1">
-                                                @if (auth('admin')->user()->level === 2)
-                                                    <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"
-                                                        class="btn btn-warning">
-                                                        <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
-                                                    </a>
-                                                    <form method="post"
-                                                        action="{{ route('admin.vanban.deleteview', ['id' => $item->id]) }}"
-                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">
-                                                            <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                                <a href="{{ route('admin.vanban.view', ['id' => $item->id]) }}"
-                                                    class="btn btn-primary">
-                                                    <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
-                                                </a>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $currentProfileId = null;
+                                    $currentPhong = null;
+                                @endphp
+                                {{-- @dd($vanban); --}}
+                                @forelse ($vanban as $index => $item)
+                                    @if ($currentProfileId != $item->profile_id || $currentPhong != $item->maPhong)
+                                        @php
+                                            $currentProfileId = $item->profile_id;
+                                            $currentPhong = $item->maPhong;
+                                        @endphp
+
+                                        <tr class="row-header">
+                                            <td style="padding: 0px 10px"
+                                                colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']) + 2 }}">
+                                                <strong>Cơ quan : {{ $item->config->agency_code ?? '' }} / Phông:
+                                                    {{ $item->maPhong->ten_phong ?? '' }} / Mục lục:
+                                                    {{ $item->maMucLuc->ten_mucluc ?? '' }} / Hộp số:
+                                                    {{ $item->hopso->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} /
+                                                    Hồ
+                                                    sơ: {{ $item->profile->tieu_de_ho_so ?? '' }}</strong>
                                             </td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <p> Chưa có dữ liệu</p>
-                                            {{-- <td
-                                            colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at']) }}">
-                                            Không có dữ liệu</td> --}}
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                    @endif
 
-                        <div class="mt-4" style="margin: 0px auto">
-                            {{ $vanban->links() }}
-                        </div>
+                                    <tr>
+                                        <th>{{ $index + 1 }}</th>
+                                        @foreach ($item->getAttributes() as $column => $value)
+                                            {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
+                                            @if (
+                                                !in_array($column, [
+                                                    'ma_co_quan',
+                                                    'ma_mucluc',
+                                                    'hop_so',
+                                                    'ho_so_so',
+                                                    'ma_phong',
+                                                    'created_at',
+                                                    'updated_at',
+                                                    'profile_id',
+                                                    'duong_dan',
+                                                    'id',
+                                                ]))
+                                                <td>
+                                                    @if ($column === 'status')
+                                                        {{-- Kiểm tra cột status --}}
+                                                        {!! $value === 'active' ? 'Công khai' : 'Không công khai' !!}
+                                                    @else
+                                                        {!! $value !!}
+                                                    @endif
+                                                </td>
+                                            @endif
+                                        @endforeach
+                                        <td class="d-flex gap-1">
+                                            @if (auth('admin')->user()->level === 2)
+                                                <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"
+                                                    class="btn btn-warning">
+                                                    <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
+                                                </a>
+                                                <form method="post"
+                                                    action="{{ route('admin.vanban.deleteview', ['id' => $item->id]) }}"
+                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            <a href="{{ route('admin.vanban.view', ['id' => $item->id]) }}"
+                                                class="btn btn-primary">
+                                                <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <p> Chưa có dữ liệu</p>
+                                        {{-- <td
+                                        colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at']) }}">
+                                        Không có dữ liệu</td> --}}
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4" style="margin: 0px auto">
+                        {{ $vanban->links() }}
                     </div>
                     <!-- end card -->
                 </div> <!-- end col -->
@@ -709,9 +710,13 @@
             text-align: center !important;
             vertical-align: middle;
         }
-
+        .h-190{
+        height: 190px;
+    }
         @media(max-width:768px) {
-
+            .h-190{
+                height: auto;
+            }
             .vanban__position,
             .main-checkbox {
                 position: unset !important;
