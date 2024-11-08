@@ -271,7 +271,7 @@ class ProfileController extends Controller
 
             Profile::unguard(); // Bỏ qua fillable để tạo bản ghi
             Profile::create($data);
-            dd($data);
+            // dd($data);
             Profile::reguard();
 
             DB::commit();
