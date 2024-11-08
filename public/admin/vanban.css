@@ -120,6 +120,7 @@ h1 {
 }
 
 #checkboxes {
+    background: #ffffff;
     padding: 5px;  display: none;
 }
 
