@@ -142,11 +142,13 @@ class InformationVbController extends Controller
         $macoquan = Config::all();
         $mamucluc = MucLuc::all();
         $hoso = Profile::find($id);
+        $listcolumns = $this->listcolumn();
         return view("admins.pages.vanban.addbyhoso", [
             "title" => $title,
             'macoquan' => $macoquan,
             'mamucluc' => $mamucluc,
             'hoso' => $hoso,
+            'columns' => $listcolumns
         ]);
     }
 
@@ -351,6 +353,25 @@ class InformationVbController extends Controller
             return redirect()->route('admin.column')->with('error', 'Văn bản không tồn tại');
         }
     }
+
+    public function deleteview($id)
+    {
+        $vanban = InformationVb::find($id);
+
+        if ($vanban) {
+            $vanban->delete();
+            return redirect()->route('admin.profile.detail', ['id' => $vanban->profile_id])
+                 ->with('success', 'Xóa văn bản thành công');
+        } else {
+            return redirect()->back()->with('success', 'Văn bản không tồn tại');
+        }
+    }
+    public function deletevb($id)
+    {
+        $vanban = InformationVb::find($id);
+        return $vanban->delete();
+    }
+
 
     public function importExcel(FileRequest $request)
     {
@@ -613,18 +634,18 @@ class InformationVbController extends Controller
             // chmod($arrayPath, 7777);
         }
     }
-    
+
     public function updateColumn($column, Request $request)
     {
-     
+
         // $request->validate([
         //     'column_name' => 'required|string|max:255',
         //     'column_type' => 'required|in:string,integer,text',
         //     'is_required' => 'required|boolean',
-        // ]);  
-       
+        // ]);
+
         $profiles = $this->getColumnDetail('information_vb', $column);
-    
+
         $columnName = $request->input('column_name');
         $columnType = $request->input('data_type');
         $isRequired = $request->input('is_required');
@@ -634,7 +655,7 @@ class InformationVbController extends Controller
     }
     public function editColumnAndUpdateFillable($columnName, $columnType, $isRequired, $column)
     {
-        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới 
+        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới
         switch ($columnType) {
             case "string":
                 $newType  = 'VARCHAR(255)';
