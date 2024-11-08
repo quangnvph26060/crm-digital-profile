@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class InformationVbController extends Controller
 {
@@ -293,51 +294,51 @@ class InformationVbController extends Controller
     }
 
     public function listcolumn()
-{
-    $columns = Schema::getColumnListing('information_vb');
+    {
+        $columns = Schema::getColumnListing('information_vb');
 
-    $excludedColumns = [
-        'id',
-        'created_at',
-        'updated_at',
-        'ma_co_quan',
-        'ma_phong',
-        'ma_mucluc',
-        'hop_so',
-        'ho_so_so',
-        'duong_dan',
-        'profile_id',
-        'status'
-    ];
+        $excludedColumns = [
+            'id',
+            'created_at',
+            'updated_at',
+            'ma_co_quan',
+            'ma_phong',
+            'ma_mucluc',
+            'hop_so',
+            'ho_so_so',
+            'duong_dan',
+            'profile_id',
+            'status'
+        ];
 
-    $columnData = [];
-    foreach ($columns as $column) {
-        // Bỏ qua các trường trong danh sách loại trừ
-        if (in_array($column, $excludedColumns)) {
-            continue;
+        $columnData = [];
+        foreach ($columns as $column) {
+            // Bỏ qua các trường trong danh sách loại trừ
+            if (in_array($column, $excludedColumns)) {
+                continue;
+            }
+
+            $columnType = Schema::getColumnType('information_vb', $column);
+
+            $columnInfo = DB::table('information_schema.columns')
+                ->where('table_schema', env('DB_DATABASE'))
+                ->where('table_name', 'information_vb')
+                ->where('column_name', $column)
+                ->first(['column_comment', 'is_nullable']);
+
+            $columnInfoArray = (array) $columnInfo;
+            $columnInfoArray = array_change_key_case($columnInfoArray, CASE_LOWER);
+            // dd($columnInfoArray);
+            $columnData[] = [
+                'name' => $column,
+                'type' => $columnType,
+                'comment' => $columnInfoArray['column_comment'] ?? '',
+                'is_required' => $columnInfoArray['is_nullable'],
+            ];
         }
 
-        $columnType = Schema::getColumnType('information_vb', $column);
-
-        $columnInfo = DB::table('information_schema.columns')
-            ->where('table_schema', env('DB_DATABASE'))
-            ->where('table_name', 'information_vb')
-            ->where('column_name', $column)
-            ->first(['column_comment', 'is_nullable']);
-
-        $columnInfoArray = (array) $columnInfo;
-        $columnInfoArray = array_change_key_case($columnInfoArray, CASE_LOWER);
-        // dd($columnInfoArray);
-        $columnData[] = [
-            'name' => $column,
-            'type' => $columnType,
-            'comment' => $columnInfoArray['column_comment'] ?? '',
-            'is_required' => $columnInfoArray['is_nullable'],
-        ];
+        return $columnData;
     }
-
-    return $columnData;
-}
 
 
 
@@ -347,9 +348,9 @@ class InformationVbController extends Controller
         $vanban = InformationVb::find($id);
         if ($vanban) {
             $vanban->delete();
-            return back()->with('success', 'Xóa văn bản thành công');
+            return redirect()->route('admin.column')->with('success', 'Xóa văn bản thành công');
         } else {
-            return back()->with('error', 'Văn bản không tồn tại');
+            return redirect()->route('admin.column')->with('error', 'Văn bản không tồn tại');
         }
     }
     public function deleteview($id)
@@ -402,7 +403,6 @@ class InformationVbController extends Controller
             ->values() // Đảm bảo reindex lại collection sau unique
             ->toArray(); // Chuyển đổi sang dạng mảng
         return response()->json(['status' => "success", 'data' => $coquandata]);
-
     }
 
     public function MucLucByPhongID(Request $request)
@@ -417,7 +417,6 @@ class InformationVbController extends Controller
             ->toArray(); // Chuyển đổi thành mảng
 
         return response()->json(['status' => "success", 'data' => $coquandata]);
-
     }
 
     public function HopSoByMucLuc(Request $request)
@@ -433,8 +432,6 @@ class InformationVbController extends Controller
 
 
         return response()->json(['status' => "success", 'data' => $coquandata]);
-
-
     }
 
     public function HoSoSoByHopSo(Request $request)
@@ -451,64 +448,90 @@ class InformationVbController extends Controller
 
 
         return response()->json(['status' => "success", 'data' => $coquandata]);
-
     }
 
-    public function addcolumn(Request $request)
+    public function addColumn(Request $request)
     {
+        $comment             = $this->getColumnComments('information_vb');
+        $columnData = $this->getColumnData('information_vb');
+        $perPage = 10;
+        $currentPage = $request->input('page', 1);
+        $columnDataPaginated = $this->paginateData($columnData, $perPage, $currentPage);
+
         $title = "Quản lý trường văn bản";
-        $columns = Schema::getColumnListing('information_vb');
+        return view('admins.pages.vanban.addcolumn', compact('title', 'columnDataPaginated', 'comment'));
+    }
+    function getColumnDetail($tableName, $columnName)
+    {
+        $columnInfo = DB::select("SHOW FULL COLUMNS FROM `$tableName` WHERE Field = ?", [$columnName]);
 
+        if (!empty($columnInfo)) {
+            $columnInfo = $columnInfo[0];
+            $columnDetail['name'] = $columnInfo->Field;
+            $columnDetail['type'] = $columnInfo->Type;
+            $columnDetail['comment'] = $columnInfo->Comment;
+            $columnDetail['nullable'] = $columnInfo->Null === 'YES' ? true : false;
+            return $columnDetail;
+        } else {
+            // Xử lý khi không có kết quả trả về
+            return redirect()->back()->with('error', 'Cập nhật không thành công.');
+        }
+    }
+    private function getColumnData($table)
+    {
+        $columns = Schema::getColumnListing($table);
         $columnData = [];
-        $excludedColumns = ['ma_co_quan', 'id', 'ma_phong', 'ma_mucluc', 'hop_so', 'ho_so_so'];
+
         foreach ($columns as $column) {
-            // Lấy kiểu dữ liệu của cột
-            if (in_array($column, $excludedColumns)) {
-                continue;
-            }
-            $columnType = Schema::getColumnType('information_vb', $column);
-
-            // Lấy ghi chú cho cột
-            $columnInfo = DB::table('information_schema.columns')
-                ->where('table_schema', env('DB_DATABASE')) // Lấy database từ file .env
-                ->where('table_name', 'information_vb')
+            $columnType = Schema::getColumnType($table, $column);
+            $isRequired = DB::table('information_schema.columns')
+                ->where('table_schema', env('DB_DATABASE'))
+                ->where('table_name', $table)
                 ->where('column_name', $column)
-                ->first(['column_comment', 'is_nullable']);
-
-            // Chuyển stdClass thành mảng và kiểm tra giá trị nếu có
-            $columnInfoArray = (array) $columnInfo;
-
-            // Xác định tính bắt buộc của trường
-            $isRequired = isset($columnInfoArray['is_nullable']) && $columnInfoArray['is_nullable'] === 'NO' ? 'Có' : 'Không';
+                ->value('is_nullable');
 
             $columnData[] = [
                 'name' => $column,
                 'type' => $columnType,
-                'comment' => $columnInfoArray['column_comment'] ?? '', // Chuyển thành chuỗi nếu null
-                'is_required' => $isRequired, // Bắt buộc
+                'is_required' => $isRequired === 'NO' ? 'Có' : 'Không',
             ];
         }
 
-        // Phân trang dữ liệu
-        $perPage = 10; // Số lượng cột trên mỗi trang
-        $currentPage = $request->input('page', 1);
+        return $columnData;
+    }
+    private function paginateData($data, $perPage, $currentPage)
+    {
         $offset = ($currentPage - 1) * $perPage;
-        $total = count($columnData);
-        $columnDataPaginated = array_slice($columnData, $offset, $perPage);
+        $total = count($data);
+        $paginatedData = array_slice($data, $offset, $perPage);
 
-        // Tạo một đối tượng LengthAwarePaginator để hỗ trợ phân trang
-        $columnDataPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $columnDataPaginated,
+        foreach ($paginatedData as $key => $item) {
+            if ($item["name"] === "created_at" || $item["name"] === "id" || $item["name"] === "updated_at") {
+                unset($paginatedData[$key]);
+            }
+        }
+
+        return new LengthAwarePaginator(
+            $paginatedData,
             $total,
             $perPage,
             $currentPage,
-            ['path' => $request->url(), 'query' => $request->query()]
+            ['path' => request()->url(), 'query' => request()->query()]
         );
-
-        return view('admins.pages.vanban.addcolumn', compact('title', 'columnDataPaginated'));
     }
+    public function editColumn($column, Request $request)
+    {
+        $title               = 'Cập nhật trường văn bản';
+        $perPage             = 10;
 
+        $information_vb      = $this->getColumnDetail('information_vb', $column);
+        $comment             = $this->getColumnComments('information_vb');
+        $columnData          = $this->getColumnData('information_vb');
 
+        $currentPage         = $request->input('page', 1);
+        $columnDataPaginated = $this->paginateData($columnData, $perPage, $currentPage);
+        return view('admins.pages.vanban.editcolumn', compact('title', 'columnDataPaginated', 'comment', 'information_vb'));
+    }
     public function storecolumn(Request $request)
     {
         // Validate yêu cầu
@@ -606,7 +629,74 @@ class InformationVbController extends Controller
 
             // Ghi lại nội dung file
             file_put_contents($arrayPath, "<?php\n\nreturn " . var_export($array, true) . ";\n");
-            chmod($arrayPath, 7777);
+            // chmod($arrayPath, 7777);
         }
+    }
+
+    public function updateColumn($column, Request $request)
+    {
+
+        // $request->validate([
+        //     'column_name' => 'required|string|max:255',
+        //     'column_type' => 'required|in:string,integer,text',
+        //     'is_required' => 'required|boolean',
+        // ]);
+
+        $profiles = $this->getColumnDetail('information_vb', $column);
+
+        $columnName = $request->input('column_name');
+        $columnType = $request->input('data_type');
+        $isRequired = $request->input('is_required');
+
+        $result = $this->editColumnAndUpdateFillable($columnName, $columnType, $isRequired, $profiles['name']);
+        return $result;
+    }
+    public function editColumnAndUpdateFillable($columnName, $columnType, $isRequired, $column)
+    {
+        $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới
+        switch ($columnType) {
+            case "string":
+                $newType  = 'VARCHAR(255)';
+                break;
+            case "integer":
+                $newType  = 'INT';
+                break;
+            case "text":
+                $newType  = 'TEXT';
+                break;
+            default:
+                $newType = 'VARCHAR(255)';
+        }
+        Schema::table('information_vb', function (Blueprint $table) use ($cleanColumnName, $column, $columnType, $newType, $columnName, $isRequired) {
+            if ($isRequired == "1") {
+                if ($cleanColumnName == $column) {
+                    DB::statement("UPDATE information_vb SET $cleanColumnName = '' WHERE $cleanColumnName IS NULL");
+                }
+
+                DB::statement("ALTER TABLE information_vb CHANGE $column $cleanColumnName $newType  NOT NULL  COMMENT '$columnName'");
+            } else {
+                if ($cleanColumnName == $column) {
+                    DB::statement("UPDATE information_vb SET $cleanColumnName = '' WHERE $cleanColumnName IS NULL");
+                }
+
+                DB::statement("ALTER TABLE information_vb CHANGE $column $cleanColumnName $newType   DEFAULT NULL  COMMENT '$columnName'");
+            }
+        });
+        // Cập nhật mảng fillable_fields_profile.php
+        $fillableFields = include app_path('Models/array_vanban.php');
+        $fillableFields = array_values(array_unique($fillableFields));
+
+        // Xóa "ghi_chu" nếu đã tồn tại trong mảng
+        $index = array_search($column, $fillableFields);
+        if ($index !== false) {
+            unset($fillableFields[$index]);
+        }
+
+        if (!in_array($cleanColumnName, $fillableFields)) {
+            $fillableFields[] = $cleanColumnName;
+            file_put_contents(app_path('Models/array_vanban.php'), "<?php\n\nreturn " . var_export($fillableFields, true) . ";\n");
+        }
+
+        return redirect()->route('admin.column')->with('success', 'Cột đã được cập nhật thành công!');
     }
 }
