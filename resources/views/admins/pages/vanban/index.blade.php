@@ -96,7 +96,7 @@
 
                             </div>
                             <div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 mt-2">
                                     <div class="form-group">
                                         <label for="" style="opacity: 0">1</label> <br>
                                         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
@@ -113,7 +113,7 @@
                             </div>
 
                         </form>
-                        <div class="row mt-3">
+                        <div class="row mt-3 vanban__position">
                             <div class="form-group">
                                 <!-- Nút Import -->
                                 @if (auth('admin')->user()->level === 2)
@@ -165,45 +165,46 @@
                                 <a href="{{ route('admin.vanban.export') }}" class="btn btn-success">Export Excel</a>
 
                             </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-lg-3 main-option">
-                                <label for="column-select">Chọn cột để hiển thị:</label>
-                                <div class="selectBox form-select" id="toggleBtn">
-
-                                    <option>Chọn cột</option>
-
-                                    <div class="overSelect"></div>
-                                </div>
-                                <div class="checkboxes" id="checkboxes">
-                                    <form id="applyForm" action="{{ route('admin.vanban.column') }}" method="post">
-                                        <input type="hidden" id="selectedValuesInput" name="selectedValues">
-                                        @csrf
-                                        @if ($fillableFields)
-                                            @forelse ($fillableFields as $key => $value)
-                                                @if ($value !== 'ma_co_quan' && $value !== 'ma_phong' && $value !== 'ma_mucluc' && $value !== 'hop_so'&& $value !== 'ho_so_so' && $value !== 'profile_id')
-                                                    @php
-                                                        $isChecked = in_array($value, $selectedProfiles);
-                                                    @endphp
-                                                    <label>
-                                                        <input type="checkbox" style="margin-right: 5px"
-                                                            value="{{ $value }}"
-                                                            {{ $isChecked ? 'checked' : '' }}>
-                                                        {{ $columnComments[$value] ?? $key }}
-                                                    </label>
-                                                @endif
-                                            @empty
+                            <div class=" mt-2">
+                                <div class="col-lg-3 main-option main-checkbox">
+                                    <label for="column-select">Chọn cột để hiển thị:</label>
+                                    <div class="selectBox form-select" id="toggleBtn">
+    
+                                        <option>Chọn cột</option>
+    
+                                        <div class="overSelect"></div>
+                                    </div>
+                                    <div class="checkboxes" id="checkboxes">
+                                        <form id="applyForm" action="{{ route('admin.vanban.column') }}" method="post">
+                                            <input type="hidden" id="selectedValuesInput" name="selectedValues">
+                                            @csrf
+                                            @if ($fillableFields)
+                                                @forelse ($fillableFields as $key => $value)
+                                                    @if ($value !== 'ma_co_quan' && $value !== 'ma_phong' && $value !== 'ma_mucluc' && $value !== 'hop_so'&& $value !== 'ho_so_so' && $value !== 'profile_id')
+                                                        @php
+                                                            $isChecked = in_array($value, $selectedProfiles);
+                                                        @endphp
+                                                        <label>
+                                                            <input type="checkbox" style="margin-right: 5px"
+                                                                value="{{ $value }}"
+                                                                {{ $isChecked ? 'checked' : '' }}>
+                                                            {{ $columnComments[$value] ?? $key }}
+                                                        </label>
+                                                    @endif
+                                                @empty
+                                                    <label>Không có dữ liệu</label>
+                                                @endforelse
+                                            @else
                                                 <label>Không có dữ liệu</label>
-                                            @endforelse
-                                        @else
-                                            <label>Không có dữ liệu</label>
-                                        @endif
-                                        <button id="applyBtn"
-                                            class="btn btn-primary"style="margin-top: 10px;">Lưu</button>
-                                    </form>
+                                            @endif
+                                            <button id="applyBtn"
+                                                class="btn btn-primary"style="margin-top: 10px;">Lưu</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                     
 
                         <div class="mt-4">
                             @include('globals.alert')
@@ -620,4 +621,27 @@
             @endif
         });
     </script>
+    <style scoped>
+        .vanban__position{
+            position: relative;
+            left: 329px;
+            bottom: 54px;
+        }
+        .float-inline-end{
+            float: inline-end;
+        }
+        .mtop-28{
+            margin-top: -28px !important;
+        }
+        .main-checkbox{
+            position: relative;
+            left: 270px;
+            bottom: 74px;
+        }
+        @media(max-width:768px){
+            .vanban__position, .main-checkbox{
+                position: unset !important;
+            }
+        }
+    </style>
 @endsection

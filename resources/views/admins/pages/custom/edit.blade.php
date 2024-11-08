@@ -52,7 +52,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group mt-3">
-                                        <button type="submit" class="btn btn-primary mt-2 mb-2">Thêm Cột</button>
+                                        <button type="submit" class="btn btn-primary mt-2 mb-2">Cập nhật</button>
                                     </div>
                                 </form>
                         </div>

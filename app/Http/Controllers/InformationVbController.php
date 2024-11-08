@@ -351,11 +351,6 @@ class InformationVbController extends Controller
             return redirect()->route('admin.column')->with('error', 'Văn bản không tồn tại');
         }
     }
-    public function deletevb($id)
-    {
-        $vanban = InformationVb::find($id);
-        return $vanban->delete();
-    }
 
     public function importExcel(FileRequest $request)
     {

@@ -60,8 +60,7 @@
                                 </div>
 
 
-                                <button type="submit" class="btn btn-primary">Thêm
-                                    cột</button>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </form>
                         </div>
                         

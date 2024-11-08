@@ -93,7 +93,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8">
+                                    <div class="col-lg-8 mt-2">
                                         <div class="form-group">
                                             <label for="" style="opacity: 0">1</label> <br>
                                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm
@@ -110,11 +110,11 @@
                                     </div>
                                 </div>
                             </form>
-                            <div class="col-lg-6 mt-2">
-                                <div class="row">
-                                    <div class="col-lg-2">
+                            <div class="col-lg-6 mt-2 hoso__position">
+                                <div class="d-flex  flex-wrap" style="gap: 5px">
+                                    <div class="">
 
-                                        <form action="{{ route('admin.profile.export') }}" method="POST">
+                                        <form action="{{ route('admin.profile.export') }}" method="POST" class="float-inline-end">
                                             @csrf
                                             <button type="submit" class="btn btn-primary">
                                                 Import Excel
@@ -122,13 +122,51 @@
                                         </form>
                                     </div>
                                     @if (auth('admin')->user()->level === 2)
-                                        <div class="col-lg-2">
+                                        <div class="">
                                             <button class="btn btn-success" id="exportExcelBtn">
                                                 <input type="file" style="display: none">
                                                 Export Excel
                                             </button>
                                         </div>
                                     @endif
+                               
+                               
+                                    <div class="col-lg-3 main-option mtop-28" >
+                                        <label for="column-select">Chọn cột để hiển thị:</label>
+                                        <div class="selectBox form-select" id="toggleBtn">
+
+                                            <option>Chọn cột</option>
+
+                                            <div class="overSelect"></div>
+                                        </div>
+                                        <div class="checkboxes" id="checkboxes">
+                                            <form id="applyForm" action="{{ route('column') }}" method="post">
+                                                <input type="hidden" id="selectedValuesInput" name="selectedValues">
+                                                @csrf
+                                                @if ($fillableFields)
+                                                    @forelse ($fillableFields as $key => $value)
+                                                        @if ($value !== 'config_id' && $value !== 'ma_muc_luc')
+                                                            @php
+                                                                $isChecked = in_array($value, $selectedProfiles);
+                                                            @endphp
+                                                            <label>
+                                                                <input type="checkbox" style="margin-right: 5px"
+                                                                    value="{{ $value }}"
+                                                                    {{ $isChecked ? 'checked' : '' }}>
+                                                                {{ $columnComments[$value] ?? $key }}
+                                                            </label>
+                                                        @endif
+                                                    @empty
+                                                        <label>Không có dữ liệu</label>
+                                                    @endforelse
+                                                @else
+                                                    <label>Không có dữ liệu</label>
+                                                @endif
+                                                <button id="applyBtn"
+                                                    class="btn btn-primary"style="margin-top: 10px;">Lưu</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -136,44 +174,7 @@
                             @include('globals.alert')
                             <div class="table-rep-plugin">
                                 <div class="table-responsive mb-0" data-pattern="priority-columns">
-                                    <div class="row">
-                                        <div class="col-lg-3 main-option">
-                                            <label for="column-select">Chọn cột để hiển thị:</label>
-                                            <div class="selectBox form-select" id="toggleBtn">
-
-                                                <option>Chọn cột</option>
-
-                                                <div class="overSelect"></div>
-                                            </div>
-                                            <div class="checkboxes" id="checkboxes">
-                                                <form id="applyForm" action="{{ route('column') }}" method="post">
-                                                    <input type="hidden" id="selectedValuesInput" name="selectedValues">
-                                                    @csrf
-                                                    @if ($fillableFields)
-                                                        @forelse ($fillableFields as $key => $value)
-                                                            @if ($value !== 'config_id' && $value !== 'ma_muc_luc')
-                                                                @php
-                                                                    $isChecked = in_array($value, $selectedProfiles);
-                                                                @endphp
-                                                                <label>
-                                                                    <input type="checkbox" style="margin-right: 5px"
-                                                                        value="{{ $value }}"
-                                                                        {{ $isChecked ? 'checked' : '' }}>
-                                                                    {{ $columnComments[$value] ?? $key }}
-                                                                </label>
-                                                            @endif
-                                                        @empty
-                                                            <label>Không có dữ liệu</label>
-                                                        @endforelse
-                                                    @else
-                                                        <label>Không có dữ liệu</label>
-                                                    @endif
-                                                    <button id="applyBtn"
-                                                        class="btn btn-primary"style="margin-top: 10px;">Lưu</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                               
                                     <!-- Bảng dữ liệu -->
                                     <table id="userTable" class="table table-striped">
                                         <thead>
@@ -525,3 +526,30 @@
         });
     });
 </script>
+<style scoped>
+    .hoso__position{
+        position: relative;
+        left: 313px;
+        bottom: 52px;
+    }
+    .float-inline-end{
+        float: inline-end;
+    }
+    .mtop-28{
+        margin-top: -28px !important;
+    }
+    .selectBox,.checkboxes{
+        width: 300px !important;
+    }
+    @media(max-width:768px){
+            .hoso__position{
+                position: unset !important;
+            }
+            .float-inline-end{
+                float: unset;
+            }
+            .mtop-28 {
+    margin-top: 3px !important;
+}
+        }
+</style>
