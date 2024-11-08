@@ -180,7 +180,7 @@
                                             <tr>
                                                 @if ($profiles && $profiles->first())
                                                     @forelse ($profiles->first()->getAttributes() as $key => $value)
-                                                        @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
+                                                        @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc' && $key !== "ma_phong")
                                                             <th class="column-{{ $key }}">
                                                                 {{ $columnComments[$key] ?? $key }}</th>
                                                         @endif
@@ -199,7 +199,7 @@
                                                 @forelse ($profiles as $user)
                                                     <tr>
                                                         @foreach ($user->getAttributes() as $key => $value)
-                                                            @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc')
+                                                            @if ($key !== 'updated_at' && $key !== 'created_at' && $key !== 'id' && $key !== 'config_id' && $key !== 'ma_muc_luc' && $key !== "ma_phong")
                                                                 <td class="column-{{ $key }}">
 
                                                                     @if ($key == 'hop_so')
@@ -291,7 +291,7 @@
         var params = getUrlParams(currentUrl);
         console.log(params);
 
-       
+
 
         function sendAjaxRequest(selectedValues) {
             var url = "{{ route('admin.profile.searchHoSo') }}";
@@ -317,8 +317,8 @@
                 var selectElement = document.getElementById('hop_so');
 
                 selectElement.innerHTML = '';
-                
-                
+
+
                 Object.keys(data).forEach(function(key) {
                     var option = document.createElement('option');
                     option.value = key;

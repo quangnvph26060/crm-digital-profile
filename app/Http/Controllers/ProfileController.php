@@ -225,11 +225,13 @@ class ProfileController extends Controller
      */
     public function storeProfile(Request $request)
     {
+
         DB::beginTransaction();
 
         try {
+            DB::rollback();
             $data = $request->except('_token');
-            //   dd($data);
+            // dd($data);
             $macoquan = $this->checkExistence(Config::class, $request->config_id, 'Không tìm thấy mã cơ quan.');
 
             $maphong = Phong::where('id', $request->ma_phong)
@@ -248,6 +250,16 @@ class ProfileController extends Controller
                 ->where('ho_so_so', $request->ho_so_so)
                 ->first();
             $hopso = HopSoModel::find($request->hop_so);
+            if (!$hopso) {
+                DB::rollback();
+                $hopso = HopSoModel::create([
+                    'coquan_id' => $request->config_id,
+                    'phong_id' => $request->ma_phong,
+                    'mucluc_id' => $request->ma_muc_luc,
+                    'hop_so' => $request->hop_so,
+                ]);
+            }
+
             if ($result_profile) {
                 DB::rollback();
                 return back()->with('error', 'Đã có hồ sơ trong hộp này');
@@ -256,11 +268,11 @@ class ProfileController extends Controller
 
             $data['config_id'] = $request->config_id;
             $data['hop_so'] = $hopso->id;
+
             Profile::unguard(); // Bỏ qua fillable để tạo bản ghi
             Profile::create($data);
+            dd($data);
             Profile::reguard();
-
-
 
             DB::commit();
             return back()->with('success', 'Thêm hồ sơ thành công');
@@ -380,6 +392,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $profile = $this->checkExistence(Profile::class, $id, 'Không tìm thấy thông tin hồ sơ.');
         $data = $request->except('_token');
         $fillableFields = (new Profile)->getFillable();
@@ -399,14 +412,29 @@ class ProfileController extends Controller
      */
     public function deleteHoso($id)
     {
-        $vanban = Profile::find($id);
-        if ($vanban) {
-            $vanban->delete();
-            return back()->with('success', 'Xóa văn bản thành công');
+        $hoso = Profile::find($id);
+        if ($hoso) {
+            $vanban = InformationVb::where('profile_id', $id)->count();
+            if ($vanban > 0) {
+                InformationVb::where('profile_id', $id)->delete();
+            }
+            $hoso->delete();
+            return back()->with('success', 'Xóa hồ sơ thành công');
         } else {
-            return back()->with('error', 'Văn bản không tồn tại');
+            return back()->with('error', 'Hồ sơ không tồn tại');
         }
     }
+    public function deleteprofile($id)
+    {
+        $vanban = InformationVb::where('profile_id', $id)->count();
+        if ($vanban > 0) {
+            InformationVb::where('profile_id', $id)->delete();
+        }
+        $hoso = Profile::find($id);
+        // dd($hoso);
+         $hoso->delete();
+    }
+
     public function import(Request $request)
     {
         if (!$request->hasFile('file')) {

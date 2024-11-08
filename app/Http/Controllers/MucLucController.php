@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\HopSoModel;
 use App\Models\MucLuc;
 use App\Models\Phong;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class MucLucController extends Controller
         if (isset($request->phong) && $request->phong != '') {
             $configs->where(function ($query) use ($request) {
                 $query->where('phong_id', 'like', '%' . $request->phong . '%');
-                   
+
             });
         }
 
@@ -30,7 +31,7 @@ class MucLucController extends Controller
         return view("admins.pages.mucluc.list", [
             "mucluc" => $configs,
             "title"  => $title,
-            "inputs" => $inputs,  
+            "inputs" => $inputs,
             "coquan" => $coquan,
 
         ]);
@@ -127,14 +128,36 @@ class MucLucController extends Controller
         $config->save();
     }
 
-    public function delete($userId)
+    public function delete($id)
     {
-        $config = MucLuc::find($userId);
+        $config = MucLuc::find($id);
         if ($config) {
+            $count = HopSoModel::where('mucluc_id', $id)->count();
+            if($count>0){
+                $profiles = HopSoModel::where('mucluc_id', $id)->get();
+                foreach ($profiles as $item) {
+                    $profile = new HopController();
+                    $profile->deletehop($item->id);
+                }
+            }
             $config->delete();
             return back()->with('success', 'Xóa mục lục thành công');
         }
         return back()->with('error', 'Mục lục không tồn tại');
+    }
+
+    public function deletemucluc($id)
+    {
+        $hopso = HopSoModel::where('mucluc_id', $id)->get();
+        if ($hopso->count() > 0) {
+           $profiles = HopSoModel::where('mucluc_id', $id)->get();
+                foreach ($profiles as $item) {
+                    $profile = new HopController();
+                    $profile->deletehop($item->id);
+                }
+        }
+        $mucluc = MucLuc::find($id);
+        return $mucluc->delete();
     }
 
     public function getAgencyCode(Request $request)

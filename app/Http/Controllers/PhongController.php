@@ -16,20 +16,20 @@ class PhongController extends Controller
     {
         $inputs = $request->all();
         $configs = Phong::query();
-       
+
         // if (isset($request->name) && $request->name != '') {
         //     $configs->where(function($query) use ($request) {
         //         $query->where('ten_phong', 'like', '%' . $request->name . '%')
         //               ->orWhere('ma_phong', 'like', '%' . $request->name . '%');
-                 
+
         //     });
         // }
 
         if (isset($request->coquan) && $request->coquan != '') {
             $configs->where(function($query) use ($request) {
                 $query->where('coquan_id', 'like', '%' . $request->coquan . '%');
-                    
-                 
+
+
             });
         }
         // Thêm phân trang ở đây
@@ -38,7 +38,7 @@ class PhongController extends Controller
 
         $title   = "Danh sách Phông";
         $coquan = Config::all();
-        
+
         return view("admins.pages.phong.list", [
             "phong" => $configs,
             "title"  => $title,
@@ -156,17 +156,38 @@ class PhongController extends Controller
     // }
     public function delete($userId)
     {
-        $profiles = Profile::where('ma_phong',$userId)->first();
-        if($profiles){
-            return back()->with('error', 'Mã phông này còn liên quan đền hồ sơ');
-        }
-        $config = Phong::find($userId);
 
+        $config = Phong::find($userId);
         if ($config) {
+            $count = MucLuc::where('phong_id', $userId)->count();
+            if($count>0){
+
+                $profiles = MucLuc::where('phong_id', $userId)->get();
+                foreach ($profiles as $item) {
+                    $profile = new MucLucController();
+                    $profile->deletemucluc($item->id);
+                }
+
+            }
+
             $config->delete();
             return back()->with('success', 'Xóa phông thành công');
         }
         return back()->with('error', 'Phông không tồn tại');
+    }
+    public function deletephong($id)
+    {
+        $mucluc = MucLuc::where('phong_id', $id)->get();
+        if ($mucluc->count() > 0) {
+            $profiles = Profile::where('hop_so', $id)->get();
+                foreach ($profiles as $item) {
+                    $muc = new MucLucController();
+                    $muc->deletemucluc($item->id);
+                }
+
+        }
+        $phong = Phong::find($id);
+        return $phong->delete();
     }
 
     public function getAgencyCode(Request $request)
