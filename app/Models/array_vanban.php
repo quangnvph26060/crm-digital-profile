@@ -14,6 +14,4 @@ return array (
   10 => 'ghi_chu',
   11 => 'duong_dan',
   12 => 'profile_id',
-  13 => 'status',
-  14 => 'a_b_c',
 );
