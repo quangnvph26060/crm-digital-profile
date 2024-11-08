@@ -179,7 +179,7 @@ class PhongController extends Controller
     {
         $mucluc = MucLuc::where('phong_id', $id)->get();
         if ($mucluc->count() > 0) {
-            $profiles = Profile::where('hop_so', $id)->get();
+            $profiles = MucLuc::where('phong_id', $id)->get();
                 foreach ($profiles as $item) {
                     $muc = new MucLucController();
                     $muc->deletemucluc($item->id);
