@@ -460,8 +460,12 @@ class InformationVbController extends Controller
         $columns = Schema::getColumnListing('information_vb');
 
         $columnData = [];
+        $excludedColumns = ['ma_co_quan', 'id', 'ma_phong', 'ma_mucluc', 'hop_so', 'ho_so_so'];
         foreach ($columns as $column) {
             // Lấy kiểu dữ liệu của cột
+            if (in_array($column, $excludedColumns)) {
+                continue;
+            }
             $columnType = Schema::getColumnType('information_vb', $column);
 
             // Lấy ghi chú cho cột

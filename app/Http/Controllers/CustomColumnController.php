@@ -14,12 +14,16 @@ use Illuminate\Support\Facades\File;
 class CustomColumnController extends Controller
 {
     public function index(Request $request)
-    {   
-        // tên cột db 
+    {
+        // tên cột db
         $columns = Schema::getColumnListing('profiles');
-       
+
         $columnData = [];
+        $excludedColumns = ['id', 'config_id', 'ma_phong', 'ma_muc_luc', 'hop_so', 'ho_so_so'];
         foreach ($columns as $column) {
+            if (in_array($column, $excludedColumns)) {
+                continue;
+            }
             // Lấy kiểu dữ liệu của cột
             $columnType = Schema::getColumnType('profiles', $column);
 
@@ -30,7 +34,7 @@ class CustomColumnController extends Controller
             //     ->where('column_name', $column)
             //     ->value('column_comment');
             $comment =  $this->getColumnComments('profiles');
-          //  
+          //
             // Kiểm tra xem cột có được yêu cầu không
             $isRequired = DB::table('information_schema.columns')
                 ->where('table_schema', env('DB_DATABASE'))
