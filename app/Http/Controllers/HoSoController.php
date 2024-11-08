@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class HoSoController extends Controller
 {
-   
+
     public function showTemplate(Request $request)
     {
         $inputs = $request->all();

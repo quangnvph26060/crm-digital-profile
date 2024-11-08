@@ -9,6 +9,7 @@ use App\Models\Phong;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Stmt\Foreach_;
 
 class HopController extends Controller
 {
@@ -127,18 +128,40 @@ class HopController extends Controller
         try{
             $hopso = HopSoModel::find($id);
             if(!$hopso){
-                return back()->with('error', 'Không tìm thấy hộp số cần chỉnh sửa.');
+
+                return back()->with('error', 'Không tìm thấy hộp số cần xóa.');
             }
 
             $count = Profile::where('hop_so', $id)->count();
             if($count>0){
-                return back()->with('error', 'Hộp số đã có người đăng ký dữ liệu, không thể xóa.');
+
+                $profiles = Profile::where('hop_so', $id)->get();
+                foreach ($profiles as $item) {
+                    $profile = new ProfileController();
+                    $profile->deleteprofile($item->id);
+                }
+
             }
             $hopso->delete();
             return back()->with('success', 'Xóa thành công');
         }catch (\Exception $e) {
             return back()->with('error', 'Đã xảy ra lỗi: ' . $e->getMessage());
         }
+    }
+
+    public function deletehop($id)
+    {
+
+        if (Profile::where('hop_so', $id)->count() > 0) {
+            $profiles = Profile::where('hop_so', $id)->get();
+                foreach ($profiles as $item) {
+                    $profile = new ProfileController();
+                    $profile->deleteprofile($item->id);
+                }
+        }
+        $hopso = HopSoModel::find($id);
+
+        $hopso->delete();
     }
 
     public function view( $id){

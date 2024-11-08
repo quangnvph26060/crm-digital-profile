@@ -15,18 +15,18 @@ class ConfigController extends Controller
     {
         $inputs = $request->all();
         $configs = Config::query();
-        
+
         if (isset($request->name) && $request->name != '') {
             $configs->where(function($query) use ($request) {
                 $query->where('agency_name', 'like', '%' . $request->name . '%')
                       ->orWhere('agency_code', 'like', '%' . $request->name . '%');
             });
         }
-        
+
         // Thêm phân trang ở đây
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $configs = $configs->paginate($perPage);
-        
+
         $title   = "Danh sách cơ quan";
         return view("admins.pages.config.list", [
             "config" => $configs,
@@ -107,25 +107,35 @@ class ConfigController extends Controller
         $config->agency_code = $request->agency_code;
         $config->save();
     }
-    
+
     public function delete($userId)
     {
-        $phong = Phong::where('coquan_id',$userId)->first();
-        if($phong){
-            return back()->with('success', 'Mã cơ quan này còn liên quan đền phông');
-        }
-        $profiles = Profile::where('config_id',$userId)->first();
-        if($profiles){
-            return back()->with('success', 'Mã cơ quan này còn liên quan đền hồ sơ');
-        }
-       
+
         $config = Config::find($userId);
         if ($config) {
+            $count = Phong::where('coquan_id', $userId)->count();
+            if($count>0){
+
+                $profiles = Phong::where('coquan_id', $userId)->get();
+                foreach ($profiles as $item) {
+                    $profile = new PhongController();
+                    $profile->deletephong($item->id);
+                }
+
+            }
             $config->delete();
             return back()->with('success', 'Xóa cơ quan thành công');
         }
         return back()->with('error', 'Cơ quan không tồn tại');
     }
+
+    public function deletecoquan($userId)
+    {
+        $config = Config::find($userId);
+           return $config->delete();
+
+    }
+
 
     public function getAgencyCode(Request $request)
     {
