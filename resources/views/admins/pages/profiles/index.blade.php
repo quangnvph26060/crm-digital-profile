@@ -307,7 +307,7 @@
         var phong = document.getElementById('phong');
         var muc_luc = document.getElementById('muc_luc');
         var hop_so = document.getElementById('hop_so');   
-         console.log(params);
+       
         if (params && Object.keys(params).length > 0) {
         
             

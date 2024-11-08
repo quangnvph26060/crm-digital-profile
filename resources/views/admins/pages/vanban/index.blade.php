@@ -169,18 +169,25 @@
                                 <div class="col-lg-3 main-option main-checkbox">
                                     <label for="column-select">Chọn cột để hiển thị:</label>
                                     <div class="selectBox form-select" id="toggleBtn">
-    
+
                                         <option>Chọn cột</option>
-    
+
                                         <div class="overSelect"></div>
                                     </div>
                                     <div class="checkboxes" id="checkboxes">
-                                        <form id="applyForm" action="{{ route('admin.vanban.column') }}" method="post">
+                                        <form id="applyForm" action="{{ route('admin.vanban.column') }}"
+                                            method="post">
                                             <input type="hidden" id="selectedValuesInput" name="selectedValues">
                                             @csrf
                                             @if ($fillableFields)
                                                 @forelse ($fillableFields as $key => $value)
-                                                    @if ($value !== 'ma_co_quan' && $value !== 'ma_phong' && $value !== 'ma_mucluc' && $value !== 'hop_so'&& $value !== 'ho_so_so' && $value !== 'profile_id')
+                                                    @if (
+                                                        $value !== 'ma_co_quan' &&
+                                                            $value !== 'ma_phong' &&
+                                                            $value !== 'ma_mucluc' &&
+                                                            $value !== 'hop_so' &&
+                                                            $value !== 'ho_so_so' &&
+                                                            $value !== 'profile_id')
                                                         @php
                                                             $isChecked = in_array($value, $selectedProfiles);
                                                         @endphp
@@ -204,7 +211,7 @@
                                 </div>
                             </div>
                         </div>
-                     
+
 
                         <div class="mt-4">
                             @include('globals.alert')
@@ -257,11 +264,12 @@
                                             <tr class="row-header">
                                                 <td style="padding: 0px 10px"
                                                     colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']) + 2 }}">
-                                                    <strong>Cơ quan : {{ $item->config->agency_code ?? "" }} / Phông:
-                                                        {{ $item->maPhong->ten_phong ?? "" }} / Mục lục:
-                                                        {{ $item->maMucLuc->ten_mucluc ?? "" }} / Hộp số:
-                                                        {{ $item->hopso->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} / Hồ
-                                                        sơ: {{ $item->profile->tieu_de_ho_so ?? "" }}</strong>
+                                                    <strong>Cơ quan : {{ $item->config->agency_code ?? '' }} / Phông:
+                                                        {{ $item->maPhong->ten_phong ?? '' }} / Mục lục:
+                                                        {{ $item->maMucLuc->ten_mucluc ?? '' }} / Hộp số:
+                                                        {{ $item->hopso->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} /
+                                                        Hồ
+                                                        sơ: {{ $item->profile->tieu_de_ho_so ?? '' }}</strong>
                                                 </td>
                                             </tr>
                                         @endif
@@ -341,6 +349,40 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            function getUrlParams(url) {
+                var params = {};
+                var urlParts = url.split("?");
+
+                if (urlParts.length > 1) {
+                    var queryString = urlParts[1];
+                    var paramArray = queryString.split("&");
+
+                    paramArray.forEach(function(param) {
+                        var keyValue = param.split("=");
+                        params[keyValue[0]] = keyValue[1];
+                    });
+                }
+
+                return params;
+            }
+            var currentUrl = window.location.href;
+
+
+            var params = getUrlParams(currentUrl);
+            var phong = document.getElementById('phong');
+            var muc_luc = document.getElementById('muc_luc');
+            var hop_so = document.getElementById('hop_so');
+
+            if (params && Object.keys(params).length > 0) {
+
+
+                if (params.coquan !== "") {
+                    phong.disabled = false;
+                    muc_luc.disabled = false;
+                    hop_so.disabled = false;
+                }
+            }
+
             function getSelectedValues() {
                 var selectedCoQuan = $('#coquan').val();
                 var selectedPhong = $('#phong').val();
@@ -354,7 +396,7 @@
             }
 
             function sendAjaxRequest(selectedValues) {
-                var url = "{{ route('admin.profile.searchHoSo') }}";
+                var url = "{{ route('admin.profile.searchHopSo') }}";
 
                 $.ajax({
                     url: url,
@@ -375,13 +417,21 @@
                 if (response.status === 'success') {
                     var data = response.data;
                     var selectElement = document.getElementById('hop_so');
-                    console.log(data);
+
                     selectElement.innerHTML = '';
+
+                    var defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.text = 'Chọn Hộp Số';
+                    selectElement.add(defaultOption);
 
                     Object.keys(data).forEach(function(key) {
                         var option = document.createElement('option');
                         option.value = data[key];
-                        option.text = data[key];
+                        option.text = key;
+                        if (data[key] == params.hop_so) {
+                            option.selected = true;
+                        }
                         selectElement.add(option);
                     });
 
@@ -421,11 +471,17 @@
                             var selectElement = document.getElementById('phong');
 
                             selectElement.innerHTML = '';
-
+                            var defaultOption = document.createElement('option');
+                            defaultOption.value = '';
+                            defaultOption.text = 'Chọn Phông';
+                            selectElement.add(defaultOption);
                             Object.keys(data).forEach(function(key) {
                                 var option = document.createElement('option');
                                 option.value = data[key];
                                 option.text = key;
+                                if (data[key] == params.phong) {
+                                    option.selected = true;
+                                }
                                 selectElement.add(option);
                             });
 
@@ -457,13 +513,20 @@
 
                             selectElement.innerHTML = '';
 
+                            var defaultOption = document.createElement('option');
+                            defaultOption.value = '';
+                            defaultOption.text = 'Chọn Mục Lục';
+                            selectElement.add(defaultOption);
+
                             Object.keys(data).forEach(function(key) {
                                 var option = document.createElement('option');
                                 option.value = data[key];
                                 option.text = key;
+                                if (data[key] == params.muc_luc) {
+                                    option.selected = true;
+                                }
                                 selectElement.add(option);
                             });
-
                             selectElement.disabled = false;
 
 
@@ -611,10 +674,9 @@
                 });
             });
         });
-
     </script>
     <script>
-         document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             @if ($errors->any())
                 var importModal = new bootstrap.Modal(document.getElementById('importModal'));
                 importModal.show();
@@ -622,24 +684,36 @@
         });
     </script>
     <style scoped>
-        .vanban__position{
+        .vanban__position {
             position: relative;
             left: 329px;
             bottom: 54px;
         }
-        .float-inline-end{
+
+        .float-inline-end {
             float: inline-end;
         }
-        .mtop-28{
+
+        .mtop-28 {
             margin-top: -28px !important;
         }
-        .main-checkbox{
+
+        .main-checkbox {
             position: relative;
             left: 270px;
             bottom: 74px;
         }
-        @media(max-width:768px){
-            .vanban__position, .main-checkbox{
+
+        td,
+        th {
+            text-align: center !important;
+            vertical-align: middle;
+        }
+
+        @media(max-width:768px) {
+
+            .vanban__position,
+            .main-checkbox {
                 position: unset !important;
             }
         }
