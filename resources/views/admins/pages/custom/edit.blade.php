@@ -29,27 +29,26 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-
-                                <form action="{{ route('admin.column.store') }}" method="post" class="">
+                                <form action="{{ route('admin.column.updateColumn',['column'=>$profiles['name']]) }}" method="post" class="">
                                     @csrf
                                     <div class="form-group mt-3 ">
                                         <label for="column_name">Tên Cột</label>
-                                        <input type="text" class="form-control" id="column_name" name="column_name" placeholder="Ví dụ: Mô Tả (mo_ta)" required>
+                                        <input type="text" class="form-control" id="column_name" name="column_name" value="{{old('column_name') ?? $profiles['comment']}}" placeholder="Ví dụ: Mô Tả (mo_ta)" required>
                                     </div>
                                     <div class="form-group mt-3">
                                         <label for="column_type">Kiểu Dữ Liệu</label>
                                         <select class="form-control" id="column_type" name="column_type" required>
-                                            <option value="string">Chuỗi (string)</option>
-                                            <option value="integer">Số Nguyên (integer)</option>
-                                            <option value="text">Văn Bản (text)</option>
+                                            <option value="string" {{ $profiles['type'] === "varchar(255)" ? "selected" : "" }}>Chuỗi (string)</option>
+                                            <option value="integer" {{ $profiles['type'] === "int" ? "selected" : "" }}>Số Nguyên (integer)</option>
+                                            <option value="text" {{ $profiles['type'] === "text" ? "selected" : "" }}>Văn Bản (text)</option>
                                             <!-- Thêm các kiểu dữ liệu khác nếu cần -->
                                         </select>
                                     </div>
                                     <div class=" form-group mt-3">
                                         <label for="is_required" class="form-label">Yêu cầu bắt buộc</label>
                                         <select name="is_required" id="is_required" class="form-select">
-                                            <option value="1">Có</option>
-                                            <option value="0" selected>Không</option>
+                                            <option value="1" {{$profiles['nullable'] === true ? "selected" : ""}}>Có</option>
+                                            <option value="0" {{$profiles['nullable'] !== true ? "" : "selected"}}>Không</option>
                                         </select>
                                     </div>
                                     <div class="form-group mt-3">

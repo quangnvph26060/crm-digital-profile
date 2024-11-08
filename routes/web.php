@@ -60,37 +60,39 @@ Route::group(["prefix" => "cronjob"], function () {
     Route::get("/set-kpi", "CronjobController@setKpiAuto");
 });
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'middleware' => 'is-login-admin'], function () {
-    Route::get('/thongtinhoso', [CustomColumnController::class, 'index'])->name('thongtinhoso');
+    Route::get('/thongtinhoso', [CustomColumnController::class, 'index'])->name('thongtinhoso')->middleware("role-admin");
     Route::prefix('column')->name('column.')->group(function () {
 
         Route::post('/add', [CustomColumnController::class, 'store'])->name('store');
+        Route::post('/update/{column}', [CustomColumnController::class, 'updateColumn'])->name('updateColumn');
         Route::delete('/delete/{column}', [CustomColumnController::class, 'deleteColumn'])->name('deleteColumn');
+        Route::get('/edit/{column}', [CustomColumnController::class, 'editColumn'])->name('editColumn');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
     //config
-    Route::get('/coquan', [ConfigController::class, 'index'])->name('coquan');
+    Route::get('/coquan', [ConfigController::class, 'index'])->name('coquan')->middleware("role-admin");
     Route::prefix('config')->name('config.')->group(function () {
 
         Route::get('/add-config', [ConfigController::class, 'add'])->name('add');
-        Route::get('/edit-config/{id}', [ConfigController::class, 'edit'])->name('edit');
+        Route::get('/edit-config/{id}', [ConfigController::class, 'edit'])->name('edit')->middleware("role-admin");
         Route::get('/get-agency-code', [ConfigController::class, 'getAgencyCode'])->name('get-agency-code');
         Route::post('/add-config', [ConfigController::class, 'store'])->name('store');
-        Route::delete('delete/{id}', [ConfigController::class, 'delete'])->name('delete');
+        Route::delete('delete/{id}', [ConfigController::class, 'delete'])->name('delete')->middleware("role-admin");
         Route::post('/update-config/{id}', [ConfigController::class, 'update'])->name('update');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
     Route::prefix('mucluc')->name('mucluc.')->group(function () {
-        Route::get('', [MucLucController::class, 'index'])->name('index');
+        Route::get('', [MucLucController::class, 'index'])->name('index')->middleware("role-admin");
         Route::get('/add-mucluc', [MucLucController::class, 'add'])->name('add');
-        Route::get('/edit-mucluc/{id}', [MucLucController::class, 'edit'])->name('edit');
+        Route::get('/edit-mucluc/{id}', [MucLucController::class, 'edit'])->name('edit')->middleware("role-admin");
         Route::get('/get-agency-code', [MucLucController::class, 'getAgencyCode'])->name('get-agency-code');
         Route::post('/add-mucluc', [MucLucController::class, 'store'])->name('store');
-        Route::delete('delete/{id}', [MucLucController::class, 'delete'])->name('delete');
+        Route::delete('delete/{id}', [MucLucController::class, 'delete'])->name('delete')->middleware("role-admin");
         Route::post('/update-mucluc/{id}', [MucLucController::class, 'update'])->name('update');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
     });
     Route::prefix('phong')->name('phong.')->group(function () {
-        Route::get('', [PhongController::class, 'index'])->name('index');
+        Route::get('', [PhongController::class, 'index'])->name('index')->middleware("role-admin");
         Route::get('/add-phong', [PhongController::class, 'add'])->name('add');
         Route::get('/edit-phong/{id}', [PhongController::class, 'edit'])->name('edit');
         Route::get('/get-agency-code', [PhongController::class, 'getAgencyCode'])->name('get-agency-code');
@@ -106,12 +108,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/search-phong', [ProfileController::class, 'searchPhong'])->name('searchPhong');
         Route::get('/search-mucluc', [ProfileController::class, 'searchMucLuc'])->name('searchMucLuc');
         Route::get('/search-hopso', [ProfileController::class, 'searchHopSo'])->name('searchHopSo');
-        Route::get('/add-config', [ProfileController::class, 'add'])->name('add');
-        Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit');
+        Route::get('/add-config', [ProfileController::class, 'add'])->name('add')->middleware("role-admin");
+        Route::get('/edit-config/{id}', [ProfileController::class, 'edit'])->name('edit')->middleware("role-admin");
         Route::get('/detail-config/{id}', [ProfileController::class, 'detail'])->name('detail');
         Route::get('/get-agency-code', [ProfileController::class, 'getAgencyCode'])->name('get-agency-code');
         Route::post('/add-config', [ProfileController::class, 'storeProfile'])->name('storeProfile');
-        Route::delete('deleteHoso/{id}', [ProfileController::class, 'deleteHoso'])->name('delete.hoso');
+        Route::delete('deleteHoso/{id}', [ProfileController::class, 'deleteHoso'])->name('delete.hoso')->middleware("role-admin");
         Route::post('/update-config/{id}', [ProfileController::class, 'update'])->name('update');
         Route::post('/export', [ProfileController::class, 'export'])->name('export');
         // Route::get('/client/{id}', [ConfigController::class, 'showClientInfor'])->name('show');
@@ -127,12 +129,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::delete('/delete/{id}', [HoSoController::class, 'destroy'])->name('delete.template');
     });
 
-    Route::get('/thongtinvanban', [InformationVbController::class, 'addcolumn'])->name('column');
+    Route::get('/thongtinvanban', [InformationVbController::class, 'addcolumn'])->name('column')->middleware("role-admin");
     Route::prefix('vanban')->name('vanban.')->group(function () {
         Route::get('index', [InformationVbController::class, 'index'])->name('index');
         Route::get('/add-vanban', [InformationVbController::class, 'add'])->name('add');
         Route::get('/add-vanban-by-hoso/{id}', [InformationVbController::class, 'addbyhoso'])->name('addbyhoso');
-        Route::get('/edit-vanban/{id}', [InformationVbController::class, 'edit'])->name('edit');
+        Route::get('/edit-vanban/{id}', [InformationVbController::class, 'edit'])->name('edit')->middleware("role-admin");
         Route::get('/view-vanban/{id}', [InformationVbController::class, 'view'])->name('view');
         Route::post('/add-vanban', [InformationVbController::class, 'store'])->name('store');
         Route::delete('delete/{id}', [InformationVbController::class, 'delete'])->name('delete');
@@ -140,12 +142,15 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/import-vanban', [InformationVbController::class, 'importExcel'])->name('import');
         Route::get('/export-vanban', [InformationVbController::class, 'exportExcel'])->name('export');
 
-        Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn');
+        Route::post('/add-column', [InformationVbController::class, 'storecolumn'])->name('addcolumn')->middleware("role-admin");
         Route::delete('/columns/delete/{column}', [InformationVbController::class, 'destroy'])->name('delete.column');
         Route::post('/get-column', [InformationVbController::class, 'getColumnVanBan'])->name('column');
+        Route::get('/edit/{column}', [InformationVbController::class, 'editColumn'])->name('editColumn')->middleware("role-admin");
+        Route::post('/update/{column}', [InformationVbController::class, 'updateColumn'])->name('updateColumn');
 
         Route::get('/template-vanban', [VanBanController::class, 'indexTemplate'])->name('indexTemplate');
         Route::post('/template-vanban', [VanBanController::class, 'storeTemplate'])->name('storeTemplates');
+
     });
 
     // Route::prefix('form')->name('form.')->group(function () {
@@ -163,12 +168,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::put('/status/{id}', [VanbanFormController::class, 'updatestatus'])->name('updatestatus.template');
     });
     Route::prefix('hop')->name('hop.')->group(function () {
-        Route::get('', [HopController::class, 'index'])->name('index');
-        Route::get('add', [HopController::class, 'add'])->name('add');
+        Route::get('', [HopController::class, 'index'])->name('index')->middleware("role-admin");
+        Route::get('add', [HopController::class, 'add'])->name('add')->middleware("role-admin");
         Route::post('add', [HopController::class, 'store'])->name('store');
         Route::get('edit/{id}', [HopController::class, 'edit'])->name('edit');
         Route::post('edit/{id}', [HopController::class, 'update'])->name('update');
-        Route::delete('delete/{id}', [HopController::class, 'delete'])->name('delete');
+        Route::delete('delete/{id}', [HopController::class, 'delete'])->name('delete')->middleware("role-admin");
         Route::get('view/{id}', [HopController::class, 'view'])->name('view');
         Route::get('/add-hoso-by-hopso/{id}', [HopController::class, 'addbyhopso'])->name('addbyhopso');
     });
@@ -294,14 +299,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get("/{id}/delete", 'UserController@delete')->name("delete");
     });
 
-    Route::get('user/list', 'AdminController@list')->name('list');
+    Route::get('user/list', 'AdminController@list')->name('list')->middleware("role-admin");
 	Route::group(["prefix" => "admin", "as" => "admin."], function () {
 
-        Route::get('/add', 'AdminController@add')->name('add');
-        Route::get('/{id}/edit', 'AdminController@edit')->name('edit');
+        Route::get('/add', 'AdminController@add')->name('add')->middleware("role-admin");
+        Route::get('/{id}/edit', 'AdminController@edit')->name('edit')->middleware("role-admin");
         Route::post('/{id}/update', 'AdminController@update')->name('update');
         Route::post('/store', 'AdminController@store')->name('store');
-        Route::get("/{id}/delete", 'AdminController@delete')->name("delete");
+        Route::get("/{id}/delete", 'AdminController@delete')->name("delete")->middleware("role-admin");
     });
 
     Route::group(["prefix" => "notification", "as" => "notification.", "middleware" => "role-admin"], function () {

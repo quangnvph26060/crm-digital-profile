@@ -28,7 +28,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <form action="{{ route('admin.vanban.addcolumn') }}"
+                                <form action="{{ route('admin.vanban.updateColumn',['column'=> $information_vb['name']]) }}"
                                 method="POST" class="container mt-4">
                                 @csrf
 
@@ -36,7 +36,7 @@
                                     <label for="column_name" class="form-label">Tên
                                         cột:</label>
                                     <input type="text" class="form-control"
-                                        name="column_name" id="column_name" placeholder="Ví dụ: Mô tả (mo_ta)" required>
+                                        name="column_name" id="column_name" placeholder="Ví dụ: Mô tả (mo_ta)" required value="{{old('column_name') ?? $information_vb['comment']}}">
                                 </div>
 
                                 <div class="mb-3">
@@ -44,9 +44,9 @@
                                         liệu:</label>
                                     <select name="data_type" id="data_type"
                                         class="form-select" required>
-                                        <option value="varchar">VARCHAR(255)</option>
-                                        <option value="int">INT</option>
-                                        <option value="text">TEXT</option>
+                                        <option value="string" {{ $information_vb['type'] === "varchar(255)" ? "selected" : "" }}>Chuỗi (string)</option>
+                                        <option value="integer" {{ $information_vb['type'] === "int" ? "selected" : "" }}>Số Nguyên (integer)</option>
+                                        <option value="text" {{ $information_vb['type'] === "text" ? "selected" : "" }}>Văn Bản (text)</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -54,8 +54,8 @@
                                         buộc:</label>
                                     <select name="is_required" id="is_required"
                                         class="form-select">
-                                        <option value="1">Có</option>
-                                        <option value="0" selected>Không</option>
+                                        <option value="1" {{$information_vb['nullable'] === true ? "selected" : ""}}>Có</option>
+                                        <option value="0" {{$information_vb['nullable'] !== true ? "" : "selected"}}>Không</option>
                                     </select>
                                 </div>
 
@@ -64,15 +64,11 @@
                                     cột</button>
                             </form>
                         </div>
-
                         
-
                         </div>
                         <div class="container mt-5">
                             @include('admins/pages/vanban/tablecolumn', ['title' => $title, 'columnDataPaginated' => $columnDataPaginated, 'comment' => $comment])
                         </div>
-
-
 
                     </div>
                     <!-- end card -->
