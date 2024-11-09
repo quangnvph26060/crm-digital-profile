@@ -34,7 +34,7 @@ class ProfileController extends Controller
         // Lưu giá trị vào Session
         $request->session()->put($cacheKey, $duplicateValues);
 
-        return back()->with('success', 'Chỉnh sửa thành công');
+        return back();
     }
 
     public function index(Request $request)
@@ -84,6 +84,7 @@ class ProfileController extends Controller
         $selectedProfiles = [];
         if (session()->has($cacheKey)) {
             $duplicateValues = session($cacheKey);
+            // dd($duplicateValues)
             $selectedProfiles = $duplicateValues;
             $mergedArray = array_unique(array_merge($fillable, $selectedProfiles));
             if (count($mergedArray) > 1) {
