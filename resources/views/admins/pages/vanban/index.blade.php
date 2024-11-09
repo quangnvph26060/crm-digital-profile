@@ -543,7 +543,34 @@
             }
             $('#coquan').on('change', function() {
                 var selectedCoQuan = $('#coquan').val();
+            if(selectedCoQuan === ""){
+                var selectElement = document.getElementById('muc_luc');
+                selectElement.innerHTML = '';
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn Mục Lục';
+                selectElement.add(defaultOption);
+                selectElement.disabled = true;
+
+                var selectElement1 = document.getElementById('phong');
+                selectElement1.innerHTML = '';
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn phông';
+                selectElement1.add(defaultOption);
+                selectElement1.disabled = true;
+
+                var selectElement2 = document.getElementById('hop_so');
+                selectElement2.innerHTML = '';
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn Hộp số';
+                selectElement2.add(defaultOption);
+                selectElement2.disabled = true;
+            }else{
                 searchPhong(selectedCoQuan);
+            }
+            
             });
             $('#phong').on('change', function() {
                 var selectedMucLuc = $('#phong').val();

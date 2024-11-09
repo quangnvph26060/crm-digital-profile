@@ -245,9 +245,17 @@
         }
         $('#coquan').on('change', function() {
             var selectedCoQuan = $('#coquan').val();
-            console.log(selectedCoQuan);
-
-            searchPhong(selectedCoQuan);
+            if(selectedCoQuan === ""){
+                var selectElement1 = document.getElementById('phong');
+                selectElement1.innerHTML = '';
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn phông';
+                selectElement1.add(defaultOption);
+                selectElement1.disabled = true;
+            }else{
+                searchPhong(selectedCoQuan);
+            }
         });
     });
 </script>

@@ -309,12 +309,15 @@
         var hop_so = document.getElementById('hop_so');   
        
         if (params && Object.keys(params).length > 0) {
-        
+            
             
             if (params.coquan !== "") {
                 phong.disabled = false;
                 muc_luc.disabled = false;
                 hop_so.disabled = false;
+            }else{
+                console.log('rỗng');
+                
             }
         }
 
@@ -477,7 +480,35 @@
         }
         $('#coquan').on('change', function() {
             var selectedCoQuan = $('#coquan').val();
-            searchPhong(selectedCoQuan);
+            if(selectedCoQuan === ""){
+                var selectElement = document.getElementById('muc_luc');
+                selectElement.innerHTML = '';
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn Mục Lục';
+                selectElement.add(defaultOption);
+                selectElement.disabled = true;
+
+                var selectElement1 = document.getElementById('phong');
+                selectElement1.innerHTML = '';
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn phông';
+                selectElement1.add(defaultOption);
+                selectElement1.disabled = true;
+
+                var selectElement2 = document.getElementById('hop_so');
+                selectElement2.innerHTML = '';
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Chọn Hộp số';
+                selectElement2.add(defaultOption);
+                selectElement2.disabled = true;
+            }else{
+                searchPhong(selectedCoQuan);
+            }
+            
+            
         });
         $('#phong').on('change', function() {
             var selectedMucLuc = $('#phong').val();

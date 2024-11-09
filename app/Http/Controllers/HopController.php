@@ -52,7 +52,7 @@ class HopController extends Controller
 
         $title   = "Danh sách hộp số";
         $coquan = Config::all();
-
+        
         return view("admins.pages.hop.list", [
             "hopso" => $configs,
             "title"  => $title,
