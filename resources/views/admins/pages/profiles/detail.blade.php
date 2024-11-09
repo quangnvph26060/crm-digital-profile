@@ -211,76 +211,117 @@
                                             <i class="fas fa-plus"></i> Thêm mới
                                         </a>
                                     </div>
-                                    <table id="tech-companies-1" class="table table-striped">
+                                    <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>STT</th>
-                                                {{-- <th>Mã Cơ quan</th>
-                                                <th>Mã Phông</th>
-                                                <th>Mã mục lục</th> --}}
-                                                {{-- <th>Hộp số</th>
-                                                <th>Hồ sơ số</th> --}}
-                                                <th>Số và ký hiệu văn bản</th>
-                                                <th>Ngày tháng văn bản</th>
-                                                <th>Tác giả</th>
-                                                <th>Nội dung văn bản</th>
-                                                <th>Tờ số</th>
-                                                {{-- <th>Đường dẫn</th> --}}
-                                                <th>Ghi chú</th>
-                                           
-                                                @if (auth('admin')->user()->level === 2)
-                                                    <th>Hành động</th>
+                                                {{-- @dd($vanban); --}}
+                                                {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
+                                                @if ($vanban && $vanban->first())
+                                                    <th>STT</th>
+                                                    @foreach ($vanban->first()->getAttributes() as $column => $value)
+                                                        @if (
+                                                            !in_array($column, [
+                                                                'ma_co_quan',
+                                                                'ma_mucluc',
+                                                                'hop_so',
+                                                                'ho_so_so',
+                                                                'ma_phong',
+                                                                'created_at',
+                                                                'updated_at',
+                                                                'profile_id',
+                                                                'duong_dan',
+                                                                'id',
+                                                            ]))
+                                                            <th>{{ $columnComments[$column] ?? $column }}</th>
+                                                        @endif
+                                                    @endforeach
+                                                    <th>Thao tác</th>
                                                 @endif
+
+
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($vanban as $index =>  $item )
-                                                    <tr>
-                                                        <td>{{$loop->index + 1 }}</td>
-                                                        {{-- <td>{{ $item->config->agency_code }}</td>
-                                                        <td> {{ $item->maPhong->ten_phong  ?? ''}} - {{ $item->maPhong->ma_phong ?? '' }}</td>
-                                                        <td>{{ $item->maMucLuc->ten_mucluc }} - {{ $item->maMucLuc->ma_mucluc }}</td> --}}
-                                                            {{-- <td>{{ $item->hop_so }}</td>
-                                                            <td>{{ $item->ho_so_so }}</td> --}}
-                                                        <td>{{ $item->so_va_ki_hieu_van_ban }}</td>
-                                                        <td>{{ $item->ngay_thang_van_ban	 }}</td>
-                                                        <td>{{ $item->tac_gia_van_ban }}</td>
-                                                        <td>{!! $item->trich_yeu_noi_dung_van_ban !!}</td>
-                                                        <td>{{ $item->to_so }}</td>
-                                                        {{-- <td>{{ $item->duong_dan }}</td> --}}
-                                                        <td>{{ $item->ghi_chu }}</td>
-                                                        {{-- <td>
+                                            @php
+                                                $currentProfileId = null;
+                                                $currentPhong = null;
+                                            @endphp
+                                            {{-- @dd($vanban); --}}
+                                            @forelse ($vanban as $index => $item)
+                                                {{-- @if ($currentProfileId != $item->profile_id || $currentPhong != $item->maPhong)
+                                                    @php
+                                                        $currentProfileId = $item->profile_id;
+                                                        $currentPhong = $item->maPhong;
+                                                    @endphp
 
-                                                            {!! $item->getStatus() !!}
-                                                        </td> --}}
-                                                        <td class="d-flex gap-1">
-                                                            @if (auth('admin')->user()->level === 2)
-                                                                <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"
-                                                                    class="btn btn-warning">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 21h16M5.666 13.187A2.278 2.278 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.278 2.278 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001l-9.507 9.52Z"/></svg>
-
-                                                                </a>
-                                                                <form method="post"
-                                                                    action="{{ route('admin.vanban.delete', ['id' => $item->id]) }}"
-                                                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger">
-
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 26 26"><path fill="currentColor" d="M11.5-.031c-1.958 0-3.531 1.627-3.531 3.594V4H4c-.551 0-1 .449-1 1v1H2v2h2v15c0 1.645 1.355 3 3 3h12c1.645 0 3-1.355 3-3V8h2V6h-1V5c0-.551-.449-1-1-1h-3.969v-.438c0-1.966-1.573-3.593-3.531-3.593h-3zm0 2.062h3c.804 0 1.469.656 1.469 1.531V4H10.03v-.438c0-.875.665-1.53 1.469-1.53zM6 8h5.125c.124.013.247.031.375.031h3c.128 0 .25-.018.375-.031H20v15c0 .563-.437 1-1 1H7c-.563 0-1-.437-1-1V8zm2 2v12h2V10H8zm4 0v12h2V10h-2zm4 0v12h2V10h-2z"/></svg>
-
-                                                                    </button>
-                                                                </form>
-                                                             @endif
-                                                             <a href="{{ route('admin.vanban.view', ['id' => $item->id]) }}"
-                                                                class="btn btn-primary">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M0 4.13v1.428a.5.5 0 0 0 .725.446l.886-.446l.377-.19L2 5.362l1.404-.708l.07-.036l.662-.333l.603-.304a.5.5 0 0 0 0-.893l-.603-.305l-.662-.333l-.07-.036L2 1.706l-.012-.005l-.377-.19l-.886-.447A.5.5 0 0 0 0 1.51v2.62ZM7.25 2a.75.75 0 0 0 0 1.5h7a.25.25 0 0 1 .25.25v8.5a.25.25 0 0 1-.25.25h-9.5a.25.25 0 0 1-.25-.25V6.754a.75.75 0 0 0-1.5 0v5.496c0 .966.784 1.75 1.75 1.75h9.5A1.75 1.75 0 0 0 16 12.25v-8.5A1.75 1.75 0 0 0 14.25 2h-7Zm-.5 4a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5ZM6 9.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 0 1.5h-3.5A.75.75 0 0 1 6 9.25Z" clip-rule="evenodd"/></svg>
-
-                                                            </a>
+                                                    <tr class="row-header">
+                                                        <td style="padding: 0px 10px"
+                                                            colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at', 'profile_id', 'duong_dan', 'id']) + 2 }}">
+                                                            <strong>Cơ quan : {{ $item->config->agency_code ?? "" }} / Phông:
+                                                                {{ $item->maPhong->ten_phong ?? "" }} / Mục lục:
+                                                                {{ $item->maMucLuc->ten_mucluc ?? "" }} / Hộp số:
+                                                                {{ $item->hopso->hop_so }} / Hồ sơ số: {{ $item->ho_so_so }} / Hồ
+                                                                sơ: {{ $item->profile->tieu_de_ho_so ?? "" }}</strong>
                                                         </td>
                                                     </tr>
+                                                @endif --}}
+
+                                                <tr>
+                                                    <th>{{ $index + 1 }}</th>
+                                                    @foreach ($item->getAttributes() as $column => $value)
+                                                        {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
+                                                        @if (
+                                                            !in_array($column, [
+                                                                'ma_co_quan',
+                                                                'ma_mucluc',
+                                                                'hop_so',
+                                                                'ho_so_so',
+                                                                'ma_phong',
+                                                                'created_at',
+                                                                'updated_at',
+                                                                'profile_id',
+                                                                'duong_dan',
+                                                                'id',
+                                                            ]))
+                                                            <td>
+                                                                @if ($column === 'status')
+                                                                    {{-- Kiểm tra cột status --}}
+                                                                    {!! $value === 'active' ? 'Công khai' : 'Không công khai' !!}
+                                                                @else
+                                                                    {!! $value !!}
+                                                                @endif
+                                                            </td>
+                                                        @endif
+                                                    @endforeach
+                                                    <td class="d-flex gap-1">
+                                                        @if (auth('admin')->user()->level === 2)
+                                                            <a href="{{ route('admin.vanban.edit', ['id' => $item->id]) }}"
+                                                                class="btn btn-warning">
+                                                                <img src="{{ asset('svg/detail.svg') }}" alt="SVG Image">
+                                                            </a>
+                                                            <form method="post"
+                                                                action="{{ route('admin.vanban.deleteview', ['id' => $item->id]) }}"
+                                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">
+                                                                    <img src="{{ asset('svg/delete.svg') }}" alt="SVG Image">
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                        <a href="{{ route('admin.vanban.view', ['id' => $item->id]) }}"
+                                                            class="btn btn-primary">
+                                                            <img src="{{ asset('svg/edit.svg') }}" alt="SVG Image">
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                             @empty
-                                                    <tr>Chưa có dữ liệu</tr>
+                                                <tr>
+                                                    <p> Chưa có dữ liệu</p>
+                                                    {{-- <td
+                                                    colspan="{{ count($item->getAttributes()) - count(['ma_co_quan', 'ma_mucluc', 'hop_so_so', 'ho_so_so', 'ma_phong', 'created_at', 'updated_at']) }}">
+                                                    Không có dữ liệu</td> --}}
+                                                </tr>
                                             @endforelse
                                         </tbody>
                                     </table>

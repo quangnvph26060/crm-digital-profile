@@ -371,6 +371,7 @@ class ProfileController extends Controller
         $profile = Profile::find($id);
         $mamucluc = MucLuc::all();
         $title   = "Xem hồ sơ";
+        $columnComments = $this->getColumnComments('information_vb');
         return view(
             'admins.pages.profiles.detail',
             [
@@ -379,7 +380,8 @@ class ProfileController extends Controller
                 'macoquan' => $macoquan,
                 'mamucluc' => $mamucluc,
                 'profiles' => $profiles,
-                'vanban' => $vanban
+                'vanban' => $vanban,
+                'columnComments' => $columnComments,
             ]
         );
     }
