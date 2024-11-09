@@ -347,7 +347,7 @@
                         selectElementHoSoSo.append('<option value="">Hồ sơ số</option>');
                         response.data.forEach(function(item) {
                             var isSelected = item.hop_so == selectedHopSo ? 'selected' : '';
-                            selectElementHopSo.append('<option value="' + item.hop_so + '" ' + isSelected + '>' + item.hop_so + '</option>');
+                            selectElementHopSo.append('<option value="' + item.hop_so + '" ' + isSelected + '>' + item.hopso.hop_so + '</option>');
                         });
 
                         // Gắn sự kiện change cho Hộp Số sau khi đổ dữ liệu
