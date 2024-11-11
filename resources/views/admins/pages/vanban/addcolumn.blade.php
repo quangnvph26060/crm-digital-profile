@@ -44,9 +44,11 @@
                                         liệu:</label>
                                     <select name="data_type" id="data_type"
                                         class="form-select" required>
-                                        <option value="varchar">VARCHAR(255)</option>
-                                        <option value="int">INT</option>
-                                        <option value="text">TEXT</option>
+                                        <option value="varchar">Chuỗi (String)</option>
+                                        <option value="int">Số Nguyên(integer)</option>
+                                        <option value="text">Văn Bản (text)</option>
+                                        <option value="date">Thời Gian (date)</option>
+                                        
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -65,7 +67,7 @@
                             </form>
                         </div>
 
-                        
+
 
                         </div>
                         <div class="container mt-5">

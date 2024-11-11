@@ -42,6 +42,7 @@
                                             <option value="string">Chuỗi (string)</option>
                                             <option value="integer">Số Nguyên (integer)</option>
                                             <option value="text">Văn Bản (text)</option>
+                                            <option value="date">Thời Gian (date)</option>
                                             <!-- Thêm các kiểu dữ liệu khác nếu cần -->
                                         </select>
                                     </div>

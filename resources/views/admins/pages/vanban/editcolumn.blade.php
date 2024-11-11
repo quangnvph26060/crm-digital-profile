@@ -47,6 +47,7 @@
                                         <option value="string" {{ $information_vb['type'] === "varchar(255)" ? "selected" : "" }}>Chuỗi (string)</option>
                                         <option value="integer" {{ $information_vb['type'] === "int" ? "selected" : "" }}>Số Nguyên (integer)</option>
                                         <option value="text" {{ $information_vb['type'] === "text" ? "selected" : "" }}>Văn Bản (text)</option>
+                                        <option value="date" {{ $information_vb['type'] === "date" ? "selected" : "" }}>Ngày (date)</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -63,7 +64,7 @@
                                 <button type="submit" class="btn btn-primary">Cập nhật</button>
                             </form>
                         </div>
-                        
+
                         </div>
                         <div class="container mt-5">
                             @include('admins/pages/vanban/tablecolumn', ['title' => $title, 'columnDataPaginated' => $columnDataPaginated, 'comment' => $comment])
