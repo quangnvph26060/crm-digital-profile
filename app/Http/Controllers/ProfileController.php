@@ -456,7 +456,7 @@ class ProfileController extends Controller
     }
     public function export()
     {
-        return Excel::download(new ProfileExport, 'users.xlsx');
+        return Excel::download(new ProfileExport, 'Hoso.xlsx');
     }
     public function searchHoSo(Request $request)
     {
