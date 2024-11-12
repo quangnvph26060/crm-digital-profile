@@ -31,8 +31,9 @@ class InformationVbImport implements ToModel, WithHeadingRow
             $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
             if ($coquan) {
                 $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
+                
                 // dd($phong);
-                $mucluc = MucLuc::where('ten_mucluc', $row['ma_muc_luc'])->first();
+                $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
                 $hopso = HopSoModel::where('hop_so', $row['hop_so'])->first();
                 Log::info($hopso);
                 // dd($phong);
@@ -58,7 +59,7 @@ class InformationVbImport implements ToModel, WithHeadingRow
                                     continue;
                                 }
                                 $vanbannew->$key = $value;
-                                Log::info($key);
+                               // Log::info($key);
                                 if($key == 'ngay_thang_van_ban'){
                                     $vanbannew->$key = Carbon::createFromFormat('d/m/Y', $row[$key])->format('Y-m-d');
                                 }

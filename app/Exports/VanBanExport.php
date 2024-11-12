@@ -27,7 +27,7 @@ class VanBanExport implements FromCollection, WithHeadings
             Log::info($phong);
             $data = [
                 'ma_co_quan' => $config->agency_code,
-                'ma_phong' => $phong->ten_phong,
+                'ma_phong' => $phong->ma_phong,
                 'ma_mucluc' => $mucluc->ma_mucluc,
                 'hop_so' => $hopso->hop_so,
                 'ho_so_so' => $profile->ho_so_so,
