@@ -112,24 +112,58 @@
                             </form>
                             <div class="col-lg-6 mt-2 hoso__position">
                                 <div class="d-flex  flex-wrap" style="gap: 5px">
+                                    @if (auth('admin')->user()->level === 2)
                                     <div class="">
+                                        <button class="btn btn-primary" style="margin-right: 20px"
+                                            data-bs-toggle="modal" data-bs-target="#importModal">
+                                            Import Excel
+                                        </button>
+                                    </div>
+                                    @endif
 
+                                <!-- Modal -->
+                                <div class="modal fade @if ($errors->any()) show @endif" id="importModal"
+                                    tabindex="-1" aria-labelledby="importModalLabel"
+                                    aria-hidden="{{ $errors->any() ? 'false' : 'true' }}">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="importModalLabel">Import File</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Form Import -->
+                                                <form id="importForm" enctype="multipart/form-data">
+                                                    <div class="mb-3">
+                                                        <label for="importFile" class="form-label">Chọn file Excel</label>
+                                                        <input class="form-control @error('file') is-invalid @enderror" type="file" id="importFile" name="file" required>
+                                                        @error('file')
+                                                            <div class="invalid-feedback d-block">
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="button" id="exportExcelBtn" class="btn btn-primary">Import</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                    <div class="">
                                         <form action="{{ route('admin.profile.export') }}" method="POST"
                                             class="float-inline-end">
                                             @csrf
-                                            <button type="submit" class="btn btn-primary">
-                                                Import Excel
+                                            <button type="submit" class="btn btn-success">
+                                                Export Excel
                                             </button>
                                         </form>
                                     </div>
-                                    @if (auth('admin')->user()->level === 2)
-                                        <div class="">
-                                            <button class="btn btn-success" id="exportExcelBtn">
-                                                <input type="file" style="display: none">
-                                                Export Excel
-                                            </button>
-                                        </div>
-                                    @endif
 
 
                                     <div class="col-lg-3 main-option mtop-28">
@@ -306,18 +340,18 @@
 
         var phong = document.getElementById('phong');
         var muc_luc = document.getElementById('muc_luc');
-        var hop_so = document.getElementById('hop_so');   
-       
+        var hop_so = document.getElementById('hop_so');
+
         if (params && Object.keys(params).length > 0) {
-            
-            
+
+
             if (params.coquan !== "") {
                 phong.disabled = false;
                 muc_luc.disabled = false;
                 hop_so.disabled = false;
             }else{
                 console.log('rỗng');
-                
+
             }
         }
 
@@ -507,8 +541,8 @@
             }else{
                 searchPhong(selectedCoQuan);
             }
-            
-            
+
+
         });
         $('#phong').on('change', function() {
             var selectedMucLuc = $('#phong').val();
@@ -570,31 +604,39 @@
         });
     });
     $(document).ready(function() {
-        $('#exportExcelBtn').on('click', function() {
-            $('<input type="file">').change(function() {
-                var selectedFile = this.files[0];
+    $('#exportExcelBtn').on('click', function() {
+        // Lấy file từ input có sẵn
+        var selectedFile = $('#importFile')[0].files[0];
 
-                var formData = new FormData();
-                formData.append('file', selectedFile);
-                var url = "{{ route('import') }}";
+        // Kiểm tra nếu người dùng đã chọn file
+        if (selectedFile) {
+            var formData = new FormData();
+            formData.append('file', selectedFile);
 
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        console.log('Kết quả:', response);
+            // Lấy URL từ route Laravel
+            var url = "{{ route('import') }}";
 
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Đã xảy ra lỗi khi gửi file.');
-                    }
-                });
-            }).click();
-        });
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('Kết quả:', response);
+                    // Xử lý logic thành công ở đây
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Đã xảy ra lỗi khi gửi file.');
+                }
+            });
+        } else {
+            alert("Vui lòng chọn một file trước khi import.");
+        }
     });
+});
+
 </script>
 <style scoped>
     .h-190{
