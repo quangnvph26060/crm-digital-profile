@@ -16,11 +16,14 @@ class ProfileExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $profiles = Profile::with('config')->get();
+        $profiles = Profile::with('config','hopso','maMucLuc','maPhong')->get();
 
         $profiles->transform(function ($profile) {
             $profile->config_id = $profile->config->agency_code;
             $profile->ngay_bat_dau = date('d/m/Y', strtotime($profile->ngay_bat_dau)) . ' - ' . date('d/m/Y', strtotime($profile->ngay_ket_thuc));
+            $profile->ma_phong  = $profile->maPhong->ma_phong;
+            $profile->hop_so  = $profile->hopso->hop_so;
+            $profile->ma_muc_luc  = $profile->maMucLuc->ma_mucluc;
             unset($profile->ngay_ket_thuc); 
             return $profile;
         });
