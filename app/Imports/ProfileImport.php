@@ -78,7 +78,7 @@ class ProfileImport implements ToModel, WithHeadingRow
                    //   \Log::info('phong ton tai');
                     $mucluc  = MucLuc::where('phong_id', $phongFind->id)->where('ma_mucluc', $row['ma_muc_luc'])->first();
                     if (!$mucluc) {
-                        //   \Log::info(' mã mục lục không tồn tại');
+                        //   \Log::info(' mã mục lục không tồn tại ');
                         $existingMucLuc = new MucLuc();
                         $existingMucLuc->ten_mucluc     = $row['ma_muc_luc'];
                         $existingMucLuc->ma_mucluc      = $row['ma_muc_luc'];
@@ -91,7 +91,8 @@ class ProfileImport implements ToModel, WithHeadingRow
                         $existingHopSo->mucluc_id    = $existingMucLuc->id;
                         $existingHopSo->hop_so    = $row['hop_so'];
                         $existingHopSo->save();
-
+                         
+                        $existingHoSoQuery = false;
 
 
                     } else {
