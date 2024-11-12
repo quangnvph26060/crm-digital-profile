@@ -88,7 +88,7 @@ class InformationVbController extends Controller
                 $vanban->select($mergedArray);
             }
         }
-       
+
         $perPage = 10; // Số lượng bản ghi trên mỗi trang
         $vanban = $vanban->orderBy('profile_id', 'asc')->paginate($perPage);
 
@@ -390,7 +390,7 @@ class InformationVbController extends Controller
 
     public function exportExcel()
     {
-        $fileDownload = Excel::download(new VanBanExport, 'vanban.xlsx');
+        $fileDownload = Excel::download(new VanBanExport, 'Vanban.xlsx');
 
         session()->flash('success', 'Dữ liệu đã xuất thành công');
 
