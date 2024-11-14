@@ -73,7 +73,6 @@ class InformationVbController extends Controller
             $vanban->where('hop_so', 'like', '%' . $request->hop_so . '%');
         }
 
-        $vanban = $vanban->orderBy('created_at', 'desc');
         // Thêm phân trang ở đây
         $fillable = ['id', 'profile_id']; //  các cột mặc định phải có
 
@@ -167,7 +166,7 @@ class InformationVbController extends Controller
             $vanban = InformationVb::where('ma_phong', $request->ma_phong)
                 ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
                 ->where('ho_so_so', $request->ho_so_so)
-                ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
+                ->where('so_van_ban', $request->so_van_ban)->first();
 
             if ($vanban) {
                 return back()->with('error', 'Không thể thêm văn bản vì đã tồn tại.');
@@ -255,7 +254,7 @@ class InformationVbController extends Controller
             $vanban = InformationVb::where('id', '!=', $id)->where('ma_phong', $request->ma_phong)
                 ->where('ma_mucluc', $request->ma_mucluc)->where('hop_so', $request->hop_so)
                 ->where('ho_so_so', $request->ho_so_so)
-                ->where('so_va_ki_hieu_van_ban', $request->so_va_ki_hieu_van_ban)->first();
+                ->where('so_van_ban', $request->so_van_ban)->first();
 
             if ($vanban) {
                 return back()->with('error', 'Không thể sửa văn bản vì đã tồn tại.');

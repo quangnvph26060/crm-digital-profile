@@ -213,7 +213,7 @@
                         </div>
 
 
-                       
+
                     </div>
                     <div class="mt-4">
                         @include('globals.alert')
@@ -226,7 +226,7 @@
                                     {{-- @dd($vanban); --}}
                                     {{-- Hiển thị tiêu đề cho các cột bạn muốn --}}
                                     @if ($vanban && $vanban->first())
-                                        <th>STT</th>
+
                                         @foreach ($vanban->first()->getAttributes() as $column => $value)
                                             @if (
                                                 !in_array($column, [
@@ -277,7 +277,7 @@
                                     @endif
 
                                     <tr>
-                                        <th>{{ $index + 1 }}</th>
+
                                         @foreach ($item->getAttributes() as $column => $value)
                                             {{-- Kiểm tra xem cột có nằm trong danh sách cần ẩn không --}}
                                             @if (
@@ -570,7 +570,7 @@
             }else{
                 searchPhong(selectedCoQuan);
             }
-            
+
             });
             $('#phong').on('change', function() {
                 var selectedMucLuc = $('#phong').val();
