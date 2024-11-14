@@ -22,15 +22,15 @@ class FileRequest extends FormRequest
      * @return array
      */
     public function rules()
-{
-    $rules = [
-        'importexcel' => 'required|file|mimes:xlsx,xls',
-    ];
+    {
+        $maxFileSize = 10; // Kích thước tối đa cho phép, đơn vị: MB
 
+        $rules = [
+            'importexcel' => 'required|file|mimes:xlsx,xls|max:' . ($maxFileSize * 1024) // Chuyển đổi sang kilobytes
+        ];
 
-    return $rules;
-}
-
+        return $rules;
+    }
 
     public function messages(){
         return __('request.messages');
