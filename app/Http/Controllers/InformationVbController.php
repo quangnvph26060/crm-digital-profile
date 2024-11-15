@@ -349,9 +349,9 @@ class InformationVbController extends Controller
         $vanban = InformationVb::find($id);
         if ($vanban) {
             $vanban->delete();
-            return redirect()->route('admin.column')->with('success', 'Xóa văn bản thành công');
+            return redirect()->back()->with('success', 'Xóa văn bản thành công');
         } else {
-            return redirect()->route('admin.column')->with('error', 'Văn bản không tồn tại');
+            return redirect()->back()->with('error', 'Văn bản không tồn tại');
         }
     }
 
@@ -374,7 +374,7 @@ class InformationVbController extends Controller
     }
 
 
-    public function importExcel(FileRequest $request)
+    public function importExcel(Request $request)
     {
         try {
 
