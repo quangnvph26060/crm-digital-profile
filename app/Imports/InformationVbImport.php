@@ -48,8 +48,10 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithChunkReading, 
                 //    Log::info($hopso);
                 // dd($phong);
                 if ($phong && $mucluc && $hopso ) {
+                        
                     $profile = Profile::where('config_id', $coquan->id)->where('ma_muc_luc', $mucluc->id)
-                        ->where('hop_so', $hopso->id)->where('ho_so_so', $row['ho_so_so'])->first();
+                    ->where('ma_phong', $phong->id)->where('hop_so', $hopso->id)->where('ho_so_so', $row['ho_so_so'])->first();
+                       
                     if ($profile) {
                         $vanban = InformationVb::where('so_van_ban', $row['so_van_ban'])->where('ma_phong', $phong->id)->where('profile_id', $profile->id)->first();
                         // dd($vanban);
