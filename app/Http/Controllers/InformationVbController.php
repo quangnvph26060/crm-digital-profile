@@ -379,7 +379,7 @@ class InformationVbController extends Controller
     {
         try {
 
-            // Excel::import(new InformationVbImport, $request->file('importexcel'));
+          //   Excel::import(new InformationVbImport, $request->file('importexcel'));
             $file = $request->file('importexcel');
             $filePath = $file->store('imports');
     

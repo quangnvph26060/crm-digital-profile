@@ -17,7 +17,6 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 
 class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
@@ -25,43 +24,35 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
 
     public function collection(Collection $rows)
     {
+       
         try {
-            \DB::beginTransaction();
             foreach ($rows as $row) {
-              //  Log::info($row);
-                // $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
-                $allCoQuan = Cache::remember('all_coquan', 600, function () {
-                    return Config::all()->keyBy('agency_code');
-                });
-                
-                $coquan = $allCoQuan->get(trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])));
-
+             
+                $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
+            
                 if ($coquan) {
-                    // $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
-
-                    $maPhongList = $rows->pluck('ma_phong')->unique();
-                    $allPhong = Phong::whereIn('ma_phong', $maPhongList)->get()->groupBy('ma_phong');
-                    $phong = $allPhong->get($row['ma_phong'])->firstWhere('coquan_id', $coquan->id);
-
-                    $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'] ?? "")->first();
+                    $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
+                    $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
                     $hopso = HopSoModel::where('hop_so', $row['hop_so'])->first();
 
                     if ($phong && $mucluc && $hopso) {
+                       
                         $profile = Profile::where('config_id', $coquan->id)
                             ->where('ma_muc_luc', $mucluc->id)
                             ->where('ma_phong', $phong->id)
                             ->where('hop_so', $hopso->id)
                             ->where('ho_so_so', $row['ho_so_so'])
                             ->first();
-
+                        
                         if ($profile) {
-                            Log::info($row['so_van_ban']);
+                           
                             $vanban = InformationVb::where('so_van_ban', $row['so_van_ban'])
                                 ->where('ma_phong', $phong->id)
                                 ->where('profile_id', $profile->id)
                                 ->first();
 
                             if (!$vanban) {
+                              
                                 $data = [
                                     'ma_co_quan' => $coquan->id,
                                     'ma_phong' => $phong->id,
@@ -84,40 +75,35 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
                                     }
                                 }
 
-                                // if (file_exists($row['duong_dan_file'])) {
-                                //     $fileName = time() . '/' . $row['ma_co_quan'] . '/' . $row['ma_phong'] . '/' . $row['ma_muc_luc'] . '/' . $row['hop_so'] . '/' . $row['ho_so_so'] . '-' . basename($row['duong_dan_file']);
-                                //     $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($row['duong_dan_file']), $fileName);
-                                //     $data['duong_dan'] = $filePath;
-                                // }
                                 if (file_exists($row['duong_dan_file'])) {
                                     $fileName = time() . '/' . $row['ma_co_quan'] . '/' . $row['ma_phong'] . '/' . $row['ma_muc_luc'] . '/' . $row['hop_so'] . '/' . $row['ho_so_so'] . '-' . basename($row['duong_dan_file']);
                                     $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($row['duong_dan_file']), $fileName);
                                     $data['duong_dan'] = $filePath;
                                 }
-                                
+
                                 $this->batchData[] = $data;
 
                                 // Khi batch đủ 1000 bản ghi thì insert
                                 if (count($this->batchData) >= $this->batchSize()) {
-                                    // InformationVb::insert($this->batchData);
                                     InformationVb::query()->insert($this->batchData);
                                     $this->batchData = []; // Reset batch
                                 }
                             }
                         }
+                        // else{
+                        //     Log::error('Không có hồ sơ này');
+                        // }
                     }
                 }
             }
 
             // Insert các bản ghi còn lại
             if (!empty($this->batchData)) {
-                // InformationVb::insert($this->batchData);
+              
                 InformationVb::query()->insert($this->batchData);
                 $this->batchData = [];
             }
-            \DB::commit();
         } catch (\Exception $e) {
-            \DB::rollBack();
             Log::error('Lỗi trong hàm collection: ' . $e->getMessage() . ' at line ' . $e->getLine());
         }
     }
@@ -129,6 +115,6 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
 
     public function batchSize(): int
     {
-        return 5000; // Chèn 1000 bản ghi mỗi lần
+        return 500; // Chèn 1000 bản ghi mỗi lần
     }
 }
