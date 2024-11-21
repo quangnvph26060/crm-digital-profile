@@ -55,6 +55,7 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
                             ->first();
 
                         if ($profile) {
+                            Log::info($row['so_van_ban']);
                             $vanban = InformationVb::where('so_van_ban', $row['so_van_ban'])
                                 ->where('ma_phong', $phong->id)
                                 ->where('profile_id', $profile->id)
