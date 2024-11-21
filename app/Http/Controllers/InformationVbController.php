@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FileRequest;
 use App\Http\Requests\InformationRequest;
 use App\Imports\InformationVbImport;
+use App\Jobs\ProcessData;
 use App\Models\Config;
 use App\Models\InformationVb;
 use App\Models\MucLuc;
@@ -378,7 +379,12 @@ class InformationVbController extends Controller
     {
         try {
 
-            Excel::import(new InformationVbImport, $request->file('importexcel'));
+            // Excel::import(new InformationVbImport, $request->file('importexcel'));
+            $file = $request->file('importexcel');
+            $filePath = $file->store('imports');
+    
+            // Đẩy job vào hàng đợi
+            ProcessData::dispatch($filePath);
             return back()->with('success', 'Dữ liệu đã được nhập thành công');
         } catch (\Exception $e) {
             Log::info($e->getMessage());
