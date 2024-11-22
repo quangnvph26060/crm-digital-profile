@@ -17,8 +17,9 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
-class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
+class InformationVbImport implements  ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts, WithCalculatedFormulas
 {
     protected $batchData = []; // Tạm lưu dữ liệu batch
 
@@ -27,7 +28,7 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
        
         try {
             foreach ($rows as $row) {
-             
+                Log::info($row['so_van_ban']);
                 $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
             
                 if ($coquan) {
@@ -44,7 +45,7 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
                             ->where('ho_so_so', $row['ho_so_so'])
                             ->first();
                         
-                        if ($profile) {
+                        if ($profile) { 
                            
                             $vanban = InformationVb::where('so_van_ban', $row['so_van_ban'])
                                 ->where('ma_phong', $phong->id)
@@ -60,7 +61,8 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
                                     'hop_so' => $hopso->id,
                                     'ho_so_so' => $row['ho_so_so'],
                                     'stt' => $row['stt'],
-                                    'so_van_ban' => $row['so_van_ban'],
+                                    // 'so_van_ban' => $row['so_van_ban'],
+                                    'so_van_ban' => (substr($row['so_van_ban'], 0, 1) === '=') ? "'" . $row['so_van_ban'] : $row['so_van_ban'],
                                     'ky_hieu_van_ban' => $row['ky_hieu_van_ban'],
                                     'profile_id' => $profile->id,
                                     'ngay_thang_van_ban' => Carbon::createFromFormat('d/m/Y', $row['ngay_thang_van_ban'])->format('Y-m-d'),
