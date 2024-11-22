@@ -103,8 +103,8 @@ class MucLucController extends Controller
     {
         return MucLuc::where('phong_id', $request->phong_id)
             ->where(function ($query) use ($request) {
-                $query->where('ma_mucluc', $request->ma_mucluc)
-                    ->orWhere('ten_mucluc', $request->ten_mucluc);
+                $query->where('ma_mucluc', $request->ma_mucluc);
+                    // ->orWhere('ten_mucluc', $request->ten_mucluc);
             })
             ->first();
     }
