@@ -47,8 +47,10 @@ class ProcessData implements ShouldQueue
             
             // Import file
           //  \Log::info($this->filePath);
-           Excel::import(new InformationVbImport, $this->filePath);
-       
+        //    Excel::import(new InformationVbImport, $this->filePath);
+        $import = Excel::import(new InformationVbImport, $this->filePath);
+        // Nếu file là CSV và sử dụng dấu phân cách khác (ví dụ: dấu chấm phẩy)
+        Excel::import(new InformationVbImport, $this->filePath)->withDelimiter(';');
             $endTime = now();
             \Log::info("Import thành công: {$this->filePath}. Thời gian thực hiện: " . $startTime->diffInSeconds($endTime) . " giây.");
         } catch (\Exception $e) {
