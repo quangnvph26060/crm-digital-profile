@@ -222,9 +222,12 @@
                                                                 $key !== 'id' &&
                                                                 $key !== 'config_id' &&
                                                                 $key !== 'ma_muc_luc' &&
-                                                                $key !== 'ma_phong')
-                                                            <th class="column-{{ $key }}">
-                                                                {{ $columnComments[$key] ?? $key }}</th>
+                                                                $key !== 'ma_phong'
+                                                                &&  $key !== 'ngay_ket_thuc')
+
+                                                            <th class="column-{{ $key }}"> {{ $columnComments[$key] ?? $key }}</th>
+                                                               
+
                                                         @endif
                                                     @empty
                                                         <option value="">Không có dữ liệu</option>
@@ -247,13 +250,17 @@
                                                                     $key !== 'id' &&
                                                                     $key !== 'config_id' &&
                                                                     $key !== 'ma_muc_luc' &&
-                                                                    $key !== 'ma_phong')
+                                                                    $key !== 'ma_phong' &&  $key !== 'ngay_ket_thuc')
                                                                 <td class="column-{{ $key }}">
 
                                                                     @if ($key == 'hop_so')
                                                                         {{ $user->hopso->hop_so ?? '' }}
                                                                     @else
-                                                                        {{ $value }}
+                                                                         @if($key == 'ngay_bat_dau')
+                                                                            {{ $value }} - {{$user->ngay_ket_thuc}}
+                                                                        @else 
+                                                                            {{ $value }} 
+                                                                        @endif
                                                                     @endif
 
                                                                 </td>
@@ -290,7 +297,7 @@
                                                         </td>
                                                     </tr>
                                                 @empty
-                                                    <p>không có dữ liệu</p>
+                                                    {{-- <p>không có dữ liệu</p> --}}
                                                 @endforelse
                                             @else
                                                 <option value="">Không có dữ liệu</option>

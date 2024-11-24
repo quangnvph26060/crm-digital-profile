@@ -3,12 +3,12 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
+                <a href="{{ url()->current() }}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{asset('libs/assets_/images/SGO VIET NAM.png')}}" alt="" height="24">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('libs/assets_/images/SGO VIET NAM.png')}}" alt="" height="24"> <span class="logo-txt">SGO VIET NAM</span>
+                        <img src="{{asset('libs/assets_/images/SGO VIET NAM.png')}}" alt="" height="24"> <span class="logo-txt">QUẢN LÝ HỒ SƠ</span>
                     </span>
                 </a>
 

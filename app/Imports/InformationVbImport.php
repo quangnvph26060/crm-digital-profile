@@ -18,42 +18,38 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
-class InformationVbImport implements  ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts, WithCalculatedFormulas
+class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts, WithCalculatedFormulas, WithCustomCsvSettings
 {
     protected $batchData = []; // Tạm lưu dữ liệu batch
 
     public function collection(Collection $rows)
     {
-       
         try {
             foreach ($rows as $row) {
-                Log::info($row['so_van_ban']);
                 $coquan = Config::where('agency_code', trim(str_replace(["\n", "\r"], '', $row['ma_co_quan'])))->first();
-            
                 if ($coquan) {
-                    $phong = Phong::where('ma_phong', $row['ma_phong'])->where('coquan_id', $coquan->id)->first();
+                    $phong = Phong::where('ma_phong', $row['ma_phong'])->first();
                     $mucluc = MucLuc::where('ma_mucluc', $row['ma_muc_luc'])->first();
                     $hopso = HopSoModel::where('hop_so', $row['hop_so'])->first();
-
+              
                     if ($phong && $mucluc && $hopso) {
-                       
+                      
                         $profile = Profile::where('config_id', $coquan->id)
                             ->where('ma_muc_luc', $mucluc->id)
                             ->where('ma_phong', $phong->id)
                             ->where('hop_so', $hopso->id)
                             ->where('ho_so_so', $row['ho_so_so'])
                             ->first();
-                        
-                        if ($profile) { 
-                           
+                        if ($profile) {
                             $vanban = InformationVb::where('so_van_ban', $row['so_van_ban'])
                                 ->where('ma_phong', $phong->id)
                                 ->where('profile_id', $profile->id)
                                 ->first();
 
                             if (!$vanban) {
-                              
+
                                 $data = [
                                     'ma_co_quan' => $coquan->id,
                                     'ma_phong' => $phong->id,
@@ -70,8 +66,15 @@ class InformationVbImport implements  ToCollection, WithHeadingRow, WithChunkRea
 
                                 foreach ($row as $key => $value) {
                                     if (Schema::hasColumn('information_vb', $key) && !in_array($key, [
-                                        'ma_co_quan', 'ma_phong', 'ma_mucluc', 'hop_so', 'ho_so_so', 'stt',
-                                        'so_van_ban', 'ky_hieu_van_ban', 'ngay_thang_van_ban'
+                                        'ma_co_quan',
+                                        'ma_phong',
+                                        'ma_mucluc',
+                                        'hop_so',
+                                        'ho_so_so',
+                                        'stt',
+                                        'so_van_ban',
+                                        'ky_hieu_van_ban',
+                                        'ngay_thang_van_ban'
                                     ])) {
                                         $data[$key] = $value;
                                     }
@@ -101,7 +104,7 @@ class InformationVbImport implements  ToCollection, WithHeadingRow, WithChunkRea
 
             // Insert các bản ghi còn lại
             if (!empty($this->batchData)) {
-              
+
                 InformationVb::query()->insert($this->batchData);
                 $this->batchData = [];
             }
@@ -117,6 +120,12 @@ class InformationVbImport implements  ToCollection, WithHeadingRow, WithChunkRea
 
     public function batchSize(): int
     {
-        return 500; // Chèn 1000 bản ghi mỗi lần
+        return 1000; // Chèn 1000 bản ghi mỗi lần
+    }
+    public function getCsvSettings(): array
+    {
+        return [
+            'delimiter' => ';', // Đặt dấu phân cách CSV tại đây
+        ];
     }
 }

@@ -50,7 +50,6 @@ class InformationVbController extends Controller
         $configdata = Config::all();
         $vanban = InformationVb::query();
         $title = "Danh sách văn bản";
-
         // Áp dụng các bộ lọc
         if (isset($request->name) && $request->name != '') {
             $vanban->where('so_va_ki_hieu_van_ban', 'like', '%' . $request->name . '%');

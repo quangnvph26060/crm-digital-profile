@@ -1,6 +1,6 @@
 @extends('auths.layouts.index')
 
-@section('title', 'Đăng nhập Ship Viêt')
+@section('title', 'Đăng nhập Admin')
 
 @section('content')
 <div class="col-xxl-5 col-lg-4 col-md-5">

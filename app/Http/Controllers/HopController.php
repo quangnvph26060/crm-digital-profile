@@ -17,7 +17,6 @@ class HopController extends Controller
     {
         $inputs = $request->all();
         $configs = HopSoModel::query();
-
         // if (isset($request->name) && $request->name != '') {
         //     $configs->where(function($query) use ($request) {
         //         $query->where('ten_phong', 'like', '%' . $request->name . '%')
@@ -33,16 +32,16 @@ class HopController extends Controller
             });
         }
 
-        if (isset($request->ma_phong) && $request->ma_phong != '') {
+        if (isset($request->phong) && $request->phong != '') {
             $configs->where(function($query) use ($request) {
-                $query->where('phong_id', 'like', '%' . $request->ma_phong . '%');
+                $query->where('phong_id', 'like', '%' . $request->phong . '%');
 
             });
         }
 
-        if (isset($request->ma_mucluc) && $request->ma_mucluc != '') {
+        if (isset($request->muc_luc) && $request->muc_luc != '') {
             $configs->where(function($query) use ($request) {
-                $query->where('mucluc_id', 'like', '%' . $request->ma_mucluc . '%');
+                $query->where('mucluc_id', 'like', '%' . $request->muc_luc . '%');
 
             });
         }
