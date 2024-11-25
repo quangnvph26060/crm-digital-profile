@@ -51,6 +51,7 @@ class ProfileImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
                     //    \Log::info('mã cơ quan chưa tồn tại');
                 }
             } else {
+                    // Log::info((substr($row['hop_so'], 0, 1) === '=') ? "'" . $row['hop_so'] : $row['hop_so']);
                   //Log::info('mã cơ quan tồn tại');
                 $phongFind = Phong::where('coquan_id', $existingCoQuan->id)->where('ma_phong', $row['ma_phong'])->first();
                 // \Log::info($row['ma_phong']);
@@ -74,7 +75,7 @@ class ProfileImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
                     $existingHopSo->mucluc_id    = $existingMucLuc->id;
                     $existingHopSo->hop_so    = (substr($row['hop_so'], 0, 1) === '=') ? "'" . $row['hop_so'] : $row['hop_so'];
                     $existingHopSo->save();
-
+                   
                 } else {
                      // Log::info('phong ton tai');
                     $mucluc  = MucLuc::where('phong_id', $phongFind->id)->where('ma_mucluc', $row['ma_muc_luc'])->first();
@@ -115,7 +116,7 @@ class ProfileImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
                                //Log::info(' hộp số tồn tại');
                           
                             if ($existingCoQuan && $phongFind && $mucluc && $existingHopSo) {
-                              
+                                
                                 $existingHoSoQuery = Profile::where('config_id', $existingCoQuan->id)
                                     ->where('ma_phong', $phongFind->id)
                                     ->where('ma_muc_luc', $mucluc->id)
@@ -180,7 +181,7 @@ class ProfileImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
                     'thbq'             => $row['thbq'] ?? null,
                     'ghi_chu'          => $row['ghi_chu'] ?? null,
                 ];
-               
+                // Log::info($data);
                 $collection1 = collect($data);
                 $collection2 = collect($row);
 
@@ -196,9 +197,11 @@ class ProfileImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
                 $filteredData['config_id'] = $mergedArray['config_id'];  
                 $result = new Profile();
                 // nếu mã cơ quan, phông, mục lục hộp số, hồ sơ số đã có rồi thì thôi
+               
                 if($existingHoSoQuery){
                     $filteredData = [];
-                }
+                } 
+                // Log::info($filteredData);
                 $result->fill($filteredData);
                 $result->save();
 

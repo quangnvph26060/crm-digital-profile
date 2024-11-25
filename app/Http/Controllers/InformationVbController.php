@@ -9,6 +9,7 @@ use App\Http\Requests\InformationRequest;
 use App\Imports\InformationVbImport;
 use App\Jobs\ProcessData;
 use App\Models\Config;
+use App\Models\HopSoModel;
 use App\Models\InformationVb;
 use App\Models\MucLuc;
 use App\Models\Phong;
@@ -70,6 +71,7 @@ class InformationVbController extends Controller
             $vanban->where('ma_mucluc', 'like', '%' . $request->muc_luc . '%');
         }
         if (isset($request->hop_so) && $request->hop_so != '') {
+            // $hopso = HopSoModel::find($request->hop_so);
             $vanban->where('hop_so', 'like', '%' . $request->hop_so . '%');
         }
 

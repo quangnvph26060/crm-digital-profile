@@ -535,7 +535,7 @@ class ProfileController extends Controller
                 $query->where('mucluc_id', 'like', '%' . $request->mucluc . '%');
             });
         }
-        $hopso = $profiles->pluck('id', 'hop_so')->unique();
+         $hopso = $profiles->pluck('id', 'hop_so');
         return response()->json(['status' => 'success', 'data' => $hopso]);
     }
 }

@@ -392,7 +392,7 @@
                 return {
                     coquan: selectedCoQuan,
                     phong: selectedPhong,
-                    muc_luc: selectedMucLuc
+                    mucluc: selectedMucLuc
                 };
             }
 
@@ -581,7 +581,7 @@
             // Xử lý sự kiện thay đổi
             $('#coquan, #phong, #muc_luc').on('change', function() {
                 var selectedValues = getSelectedValues();
-                if (selectedValues.coquan && selectedValues.phong && selectedValues.muc_luc) {
+                if (selectedValues.coquan && selectedValues.phong && selectedValues.mucluc) {
                     sendAjaxRequest(selectedValues);
                 }
             });

@@ -411,10 +411,11 @@
         function getSelectedValues() {
             var selectedCoQuan = $('#coquan').val();
             var selectedPhong = $('#phong').val();
-
+            var selectedMucLuc = $('#muc_luc').val();
             return {
                 coquan: selectedCoQuan,
                 phong: selectedPhong,
+                mucluc: selectedMucLuc,
             };
         }
         // Lấy giá trị khi trang được tải lại
