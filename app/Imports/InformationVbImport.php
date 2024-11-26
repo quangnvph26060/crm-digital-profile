@@ -47,28 +47,31 @@ class InformationVbImport implements ToCollection, WithHeadingRow, WithChunkRead
                                     //     ->where('hop_so', $hopso->id)
                                     //     ->where('ho_so_so', $row['ho_so_so'])
                                     //     ->first();
+                                     $hososo = (substr($row['ho_so_so'], 0, 1) === '=') ? "'" . $row['ho_so_so'] : $row['ho_so_so'];
+                                    //   $hososo = $row['ho_so_so'];
+                                    // Log::info( $hososo . "/" . $mucluc->id );
                                     $profile = Profile::where([
                                         ['config_id', '=', $coquan->id],
                                         ['ma_muc_luc', '=', $mucluc->id],
                                         ['ma_phong', '=', $phong->id],
                                         ['hop_so', '=', $hopso->id],
-                                        ['ho_so_so', '=', $row['ho_so_so']],
+                                        ['ho_so_so', '=', $hososo],
                                     ])->first();
                                         // Log::info('config_id: '.$coquan->id . " ma_muc_luc: " . $mucluc->id . " ma_phong: " . $phong->id . " hopso: " . $hopso->id . ' ho_so_so: ' . $row['ho_so_so']);
                                     if ($profile) {
                                         $vanban = InformationVb::where('so_van_ban', $row['so_van_ban'])
+                                            ->where('ma_co_quan', $coquan->id)     
                                             ->where('ma_phong', $phong->id)
-                                            ->where('profile_id', $profile->id)
+                                            ->where('ma_mucluc', $mucluc->id)
+                                            ->where('hop_so', $hopso->id)
                                             ->first();
-
                                         if (!$vanban) {
-
                                             $data = [
                                                 'ma_co_quan' => $coquan->id,
                                                 'ma_phong' => $phong->id,
                                                 'ma_mucluc' => $mucluc->id,
                                                 'hop_so' => $hopso->id,
-                                                'ho_so_so' => $row['ho_so_so'],
+                                                'ho_so_so' => $hososo,
                                                 'stt' => $row['stt'],
                                                 // 'so_van_ban' => $row['so_van_ban'],
                                                 'so_van_ban' => (substr($row['so_van_ban'], 0, 1) === '=') ? "'" . $row['so_van_ban'] : $row['so_van_ban'],
