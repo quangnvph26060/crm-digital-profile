@@ -44,17 +44,18 @@ class ProcessData implements ShouldQueue
     {
         try {
             $startTime = now();
-            
-            // Import file
-          //  \Log::info($this->filePath);
-        //    Excel::import(new InformationVbImport, $this->filePath);
-     //   $import = Excel::import(new InformationVbImport, $this->filePath);
-        // Nếu file là CSV và sử dụng dấu phân cách khác (ví dụ: dấu chấm phẩy)
-        Excel::import(new InformationVbImport, $this->filePath);
+            Excel::import(new InformationVbImport, $this->filePath);
             $endTime = now();
             \Log::info("Import thành công: {$this->filePath}. Thời gian thực hiện: " . $startTime->diffInSeconds($endTime) . " giây.");
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            \Log::error("Lỗi dữ liệu không hợp lệ: " . json_encode($e->failures()));
         } catch (\Exception $e) {
-            \Log::error("Lỗi khi import file {$this->filePath}: " . $e->getMessage());
+            \Log::error("Lỗi không xác định khi import file {$this->filePath}: " . $e->getMessage());
         }
+        
+    }
+    public function retryUntil()
+    {
+        return now()->addMinutes(10);
     }
 }
