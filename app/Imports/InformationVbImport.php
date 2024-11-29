@@ -70,7 +70,7 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
                                         'profile_id' => $profile->id,
                                         'ngay_thang_van_ban' => Carbon::createFromFormat('d/m/Y', $row['ngay_thang_van_ban'])->format('Y-m-d'),
                                     ];
-                                    Log::info('data: ' . $data);
+                                    // Log::info('data: ' . $data);
                                     // Thêm các trường dữ liệu còn lại vào $data
                                     foreach ($row as $key => $value) {
                                         if (Schema::hasColumn('information_vb', $key) && !in_array($key, [
@@ -95,13 +95,13 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
                                         $data['duong_dan'] = $filePath;
                                     }
     
-                                    $this->batchData[] = $data;
-    
+                                    // $this->batchData[] = $data;
+                                    InformationVb::query()->insert($data);
                                     // Nếu batch đủ kích thước thì thực hiện chèn
-                                    if (count($this->batchData) >= $this->batchSize()) {
-                                        InformationVb::query()->insert($this->batchData);
-                                        $this->batchData = []; // Reset batch
-                                    }
+                                    // if (count($this->batchData) >= $this->batchSize()) {
+                                    //     InformationVb::query()->insert($this->batchData);
+                                    //     $this->batchData = []; // Reset batch
+                                    // }
                                 }
                             }
                         }
@@ -110,10 +110,10 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
             }
     
             // Chèn các bản ghi còn lại
-            if (!empty($this->batchData)) {
-                InformationVb::query()->insert($this->batchData);
-                $this->batchData = [];
-            }
+            // if (!empty($this->batchData)) {
+            //     InformationVb::query()->insert($this->batchData);
+            //     $this->batchData = [];
+            // }
         } catch (\Exception $e) {
             Log::error('Lỗi trong hàm collection: ' . $e->getMessage() . ' at line ' . $e->getLine());
         }
@@ -132,9 +132,9 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
     {
         return [
             'delimiter' => ';', // Dấu phân tách
-            'enclosure' => '"',  // Thường là dấu " (dấu ngoặc kép)
-            'escape_character' => '\\', // Ký tự escape, nếu có
-            'inputEncoding' => 'UTF-8', // Đảm bảo tệp có mã hóa UTF-8
+            // 'enclosure' => '"',  // Thường là dấu " (dấu ngoặc kép)
+            // 'escape_character' => '\\', // Ký tự escape, nếu có
+            // 'inputEncoding' => 'UTF-8', // Đảm bảo tệp có mã hóa UTF-8
         ];
     }
     
