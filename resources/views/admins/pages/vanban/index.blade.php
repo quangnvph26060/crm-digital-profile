@@ -712,6 +712,173 @@
         });
     </script>
     <style scoped>
+        .table th,
+.table td {
+    min-width: 70px;
+    /* Đặt độ rộng tối thiểu cho cột */
+}
+
+.row-header {
+    border: none;
+    /* Loại bỏ border cho hàng */
+    background-color: #f0f0f0;
+    /* Thay đổi màu nền để dễ phân biệt */
+    font-weight: bold;
+    /* Làm cho văn bản đậm */
+}
+
+.row-header td {
+    padding: 10px 0;
+    /* Tùy chỉnh khoảng cách */
+}
+
+.row-header {
+    border: none;
+    /* Loại bỏ border cho hàng */
+    background-color: #f0f0f0;
+    /* Thay đổi màu nền để dễ phân biệt */
+    font-weight: bold;
+    /* Làm cho văn bản đậm */
+}
+
+.row-header td {
+    padding: 10px 0;
+    /* Tùy chỉnh khoảng cách */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Style cho checkbox */
+/* input[type="checkbox"] {
+    display: none;
+} */
+
+/* CSS cho dropdown chọn cột */
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+}
+
+.main-action {
+    height: 32px;
+}
+
+.select-wrapper select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    cursor: pointer;
+}
+
+.select-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    background-color: #fff;
+}
+
+.select-options.open {
+    display: block;
+}
+
+.select-options option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.select-options option:hover {
+    background-color: #e9e9e9;
+}
+
+.select-options option:checked {
+    background-color: #a8dadc;
+    color: white;
+}
+
+/* Style cho label của checkbox */
+.checkbox-label {
+    display: inline-block;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-right: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style khi checkbox được chọn */
+input[type="checkbox"]:checked+.checkbox-label {
+    background-color: #3498db;
+    color: white;
+}
+
+.main-option {
+    flex-direction: column;
+    display: flex;
+}
+
+h1 {
+    color: green;
+}
+.checkboxes {
+    background: #ffffff;
+   
+}
+#checkboxes {
+    padding: 5px;  display: none;
+}
+
+.multipleSelection {
+    width: 300px;
+    background-color: #BCC2C1;
+}
+#applyForm{
+    display: flex;
+    flex-direction: column;
+}
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkBoxes {
+    display: none !important;
+    border: 1px #c3d0ce solid;
+}
+
+#checkBoxes label {
+    display: block;
+}
+
+#checkBoxes label:hover {
+    background-color: #1794e4;
+    color: white;
+    /* Added text color for better visibility */
+}
         .vanban__position {
             position: relative;
             left: 329px;

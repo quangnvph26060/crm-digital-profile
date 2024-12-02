@@ -8,7 +8,8 @@
                         <img src="{{asset('libs/assets_/images/SGO VIET NAM.png')}}" alt="" height="24">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('libs/assets_/images/SGO VIET NAM.png')}}" alt="" height="24"> <span class="logo-txt">QUẢN LÝ HỒ SƠ</span>
+                        {{-- <img src="{{asset('libs/assets_/images/SGO VIET NAM.png')}}" alt="" height="24"> --}}
+                         <span class="logo-txt">QUẢN LÝ HỒ SƠ</span>
                     </span>
                 </a>
 
