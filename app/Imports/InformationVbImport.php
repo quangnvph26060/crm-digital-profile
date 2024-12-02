@@ -69,6 +69,7 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
                                         'ky_hieu_van_ban' => $row['ky_hieu_van_ban'],
                                         'profile_id' => $profile->id,
                                         'ngay_thang_van_ban' => Carbon::createFromFormat('d/m/Y', $row['ngay_thang_van_ban'])->format('Y-m-d'),
+                                        'duong_dan' => $row['duong_dan_file'],
                                     ];
                                     // Log::info('data: ' . $data);
                                     // Thêm các trường dữ liệu còn lại vào $data
@@ -89,11 +90,11 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
                                     }
     
                                     // Xử lý tệp đính kèm
-                                    if (file_exists($row['duong_dan_file'])) {
-                                        $fileName = time() . '/' . $row['ma_co_quan'] . '/' . $row['ma_phong'] . '/' . $row['ma_muc_luc'] . '/' . $row['hop_so'] . '/' . $row['ho_so_so'] . '-' . basename($row['duong_dan_file']);
-                                        $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($row['duong_dan_file']), $fileName);
-                                        $data['duong_dan'] = $filePath;
-                                    }
+                                    // if (file_exists($row['duong_dan_file'])) {
+                                    //     $fileName = time() . '/' . $row['ma_co_quan'] . '/' . $row['ma_phong'] . '/' . $row['ma_muc_luc'] . '/' . $row['hop_so'] . '/' . $row['ho_so_so'] . '-' . basename($row['duong_dan_file']);
+                                    //     $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($row['duong_dan_file']), $fileName);
+                                    //     $data['duong_dan'] = $filePath;
+                                    // }
     
                                     // $this->batchData[] = $data;
                                     InformationVb::query()->insert($data);
