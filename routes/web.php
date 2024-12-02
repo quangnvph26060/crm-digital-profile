@@ -52,10 +52,10 @@ Route::post('/get-column', [ProfileController::class, 'getColumnHoSo'])->name('c
 // Route::post('/reset-password/{token}', 'AuthController@postResetPassword')->name('post-reset-password');
 
 // Route::get('/verify/{token}', 'AuthController@verifyEmail')->name('verify-email');
-
-Route::get('', 'AuthController@loginFormAdmin')->name('login-admin');
-Route::post('', 'AuthController@postLoginAdmin')->name('post-login-admin');
-
+Route::middleware(['guest'])->group(function () {
+    Route::get('', 'AuthController@loginFormAdmin')->name('login-admin');
+    Route::post('', 'AuthController@postLoginAdmin')->name('post-login-admin');
+});
 Route::group(["prefix" => "cronjob"], function () {
     Route::get("/set-kpi", "CronjobController@setKpiAuto");
 });

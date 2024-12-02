@@ -8,6 +8,8 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\Auths\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -16,6 +18,8 @@ class AuthController extends Controller
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
+
+        $this->middleware('guest')->only(['loginFormAdmin', 'postLoginAdmin']);
     }
 
     public function loginForm()
@@ -25,6 +29,10 @@ class AuthController extends Controller
 
     public function loginFormAdmin()
     {
+        if (auth('admin')->check()) {
+            session()->regenerate();
+            return redirect()->back();
+        }
         return view('admins.pages.auths.login');
     }
 
