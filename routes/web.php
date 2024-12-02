@@ -33,8 +33,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('dang-ky-mien-phi', [ClientController::class, 'addByLink'])->name('addByLink');
-Route::get("/thong-tin-du-an-seo", "CustomerController@customerForm")->name("customer-form");
+// Route::get('dang-ky-mien-phi', [ClientController::class, 'addByLink'])->name('addByLink');
+// Route::get("/thong-tin-du-an-seo", "CustomerController@customerForm")->name("customer-form");
 Route::post("/store-customer", "CustomerController@storeCustomer")->name("store-customer");
 Route::get("/admin/customer/list", "CustomerController@getListCustomer")->name("customer-list")->middleware("is-login-admin","role-admin");
 Route::get("/admin/customer/{id}/detail", "CustomerController@getDetailCustomer")->name("detail-customer")->middleware("is-login-admin");
@@ -180,44 +180,44 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     });
 
 
-    Route::prefix('form_template')->name('form_template.')->group(function () {
-        Route::get('', [TemplateFormController::class, 'index'])->name('index');
-        Route::get('add', [TemplateFormController::class, 'create'])->name('add.template');
-        Route::post('store', [TemplateFormController::class,'store'])->name('store.template');
-        Route::get('edit/{id}', [TemplateFormController::class,'edit'])->name('edit.template');
-        Route::post('update/{id}', [TemplateFormController::class,'update'])->name('update.template');
-        Route::delete('/delete/{id}', [TemplateFormController::class, 'destroy'])->name('delete.template');
-        Route::put('/status/{id}', [TemplateFormController::class, 'updatestatus'])->name('updatestatus.template');
-    });
+    // Route::prefix('form_template')->name('form_template.')->group(function () {
+    //     Route::get('', [TemplateFormController::class, 'index'])->name('index');
+    //     Route::get('add', [TemplateFormController::class, 'create'])->name('add.template');
+    //     Route::post('store', [TemplateFormController::class,'store'])->name('store.template');
+    //     Route::get('edit/{id}', [TemplateFormController::class,'edit'])->name('edit.template');
+    //     Route::post('update/{id}', [TemplateFormController::class,'update'])->name('update.template');
+    //     Route::delete('/delete/{id}', [TemplateFormController::class, 'destroy'])->name('delete.template');
+    //     Route::put('/status/{id}', [TemplateFormController::class, 'updatestatus'])->name('updatestatus.template');
+    // });
 
 
-    Route::prefix('receipt')->name('receipt.')->group(function () {
-        Route::get('', [ReceiptController::class, 'index'])->name('index');
-        Route::get('/client/{id}', [ReceiptController::class, 'showClientInfor'])->name('show');
-        Route::get('search', [ReceiptController::class, 'search'])->name('search');
-        Route::get('add', [ReceiptController::class, 'add'])->name('add');
-        Route::post('store', [ReceiptController::class, 'store'])->name('store');
-        Route::get('customer-search', [ReceiptController::class, 'searchCustomer'])->name('searchCustomer');
-        Route::get('export-pdf/{id}', [ReceiptController::class, 'exportPDF'])->name('export_pdf');
-        Route::delete('delete/{id}', [ReceiptController::class, 'delete'])->name('delete');
-    });
-    Route::prefix('zalo')->name('zalo.')->group(function () {
-        Route::prefix('oa')->name('oa.')->group(function () {
-            Route::get('', [ZaloController::class, 'index'])->name('index');
-            Route::get('/get-active-oa-name', [ZaloController::class, 'getActiveOaName'])->name('getActiveOaName');
-            Route::post('/update-oa-status/{oaId}', [ZaloController::class, 'updateOaStatus'])->name('updateOaStatus');
-            Route::post('/refresh-access-token', [ZaloController::class, 'refreshAccessToken'])->name('refreshAccessToken');
-        });
-        Route::prefix('message')->name('message.')->group(function () {
-            Route::get('', [ZnsMessageController::class, 'znsMessage'])->name('znsmessage');
-            Route::get('/quota', [ZnsMessageController::class, 'znsQuota'])->name('znsQuota');
-        });
-        Route::prefix('template')->name('template.')->group(function () {
-            Route::get('', [OaTemplateController::class, 'templateIndex'])->name('znsTemplate');
-            Route::get('refresh', [OaTemplateController::class, 'refreshTemplates'])->name('znsTemplateRefresh');
-            Route::get('detail', [OaTemplateController::class, 'getTemplateDetail'])->name('znsTemplateDetail');
-        });
-    });
+    // Route::prefix('receipt')->name('receipt.')->group(function () {
+    //     Route::get('', [ReceiptController::class, 'index'])->name('index');
+    //     Route::get('/client/{id}', [ReceiptController::class, 'showClientInfor'])->name('show');
+    //     Route::get('search', [ReceiptController::class, 'search'])->name('search');
+    //     Route::get('add', [ReceiptController::class, 'add'])->name('add');
+    //     Route::post('store', [ReceiptController::class, 'store'])->name('store');
+    //     Route::get('customer-search', [ReceiptController::class, 'searchCustomer'])->name('searchCustomer');
+    //     Route::get('export-pdf/{id}', [ReceiptController::class, 'exportPDF'])->name('export_pdf');
+    //     Route::delete('delete/{id}', [ReceiptController::class, 'delete'])->name('delete');
+    // });
+    // Route::prefix('zalo')->name('zalo.')->group(function () {
+    //     Route::prefix('oa')->name('oa.')->group(function () {
+    //         Route::get('', [ZaloController::class, 'index'])->name('index');
+    //         Route::get('/get-active-oa-name', [ZaloController::class, 'getActiveOaName'])->name('getActiveOaName');
+    //         Route::post('/update-oa-status/{oaId}', [ZaloController::class, 'updateOaStatus'])->name('updateOaStatus');
+    //         Route::post('/refresh-access-token', [ZaloController::class, 'refreshAccessToken'])->name('refreshAccessToken');
+    //     });
+    //     Route::prefix('message')->name('message.')->group(function () {
+    //         Route::get('', [ZnsMessageController::class, 'znsMessage'])->name('znsmessage');
+    //         Route::get('/quota', [ZnsMessageController::class, 'znsQuota'])->name('znsQuota');
+    //     });
+    //     Route::prefix('template')->name('template.')->group(function () {
+    //         Route::get('', [OaTemplateController::class, 'templateIndex'])->name('znsTemplate');
+    //         Route::get('refresh', [OaTemplateController::class, 'refreshTemplates'])->name('znsTemplateRefresh');
+    //         Route::get('detail', [OaTemplateController::class, 'getTemplateDetail'])->name('znsTemplateDetail');
+    //     });
+    // });
     Route::prefix('client')->name('client.')->group(function () {
         Route::get('', [ClientController::class, 'index'])->name('index');
         Route::get('search', [ClientController::class, 'search'])->name('search');
@@ -228,26 +228,26 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::put('update/{id}', [ClientController::class, 'update'])->name('update');
         Route::post('storeByLink', [ClientController::class, 'storeByLink'])->name('storeByLink');
     });
-    Route::prefix('bill')->name('bill.')->group(function () {
-        Route::get('', [BillController::class, 'index'])->name('index');
-        Route::get('/client/{id}', [BillController::class, 'showClientInfor'])->name('show');
-        Route::get('search', [BillController::class, 'search'])->name('search');
-        Route::get('add', [BillController::class, 'add'])->name('add');
-        Route::post('store', [BillController::class, 'store'])->name('store');
-        Route::get('customer-search', [BillController::class, 'searchCustomer'])->name('searchCustomer');
-        Route::get('export-pdf/{id}', [BillController::class, 'exportPDF'])->name('export_pdf');
-        Route::delete('delete/{id}', [BillController::class, 'delete'])->name('delete');
-    });
-    Route::prefix('paymentslip')->name('paymentslip.')->group(function () {
-        Route::get('', [PaymentSlipController::class, 'index'])->name('index');
-        Route::get('/client/{id}', [PaymentSlipController::class, 'showClientInfor'])->name('show');
-        Route::get('search', [PaymentSlipController::class, 'search'])->name('search');
-        Route::get('add', [PaymentSlipController::class, 'add'])->name('add');
-        Route::post('store', [PaymentSlipController::class, 'store'])->name('store');
-        Route::get('customer-search', [PaymentSlipController::class, 'searchCustomer'])->name('searchCustomer');
-        Route::get('export-pdf/{id}', [PaymentSlipController::class, 'exportPDF'])->name('export_pdf');
-        Route::delete('delete/{id}', [PaymentSlipController::class, 'delete'])->name('delete');
-    });
+    // Route::prefix('bill')->name('bill.')->group(function () {
+    //     Route::get('', [BillController::class, 'index'])->name('index');
+    //     Route::get('/client/{id}', [BillController::class, 'showClientInfor'])->name('show');
+    //     Route::get('search', [BillController::class, 'search'])->name('search');
+    //     Route::get('add', [BillController::class, 'add'])->name('add');
+    //     Route::post('store', [BillController::class, 'store'])->name('store');
+    //     Route::get('customer-search', [BillController::class, 'searchCustomer'])->name('searchCustomer');
+    //     Route::get('export-pdf/{id}', [BillController::class, 'exportPDF'])->name('export_pdf');
+    //     Route::delete('delete/{id}', [BillController::class, 'delete'])->name('delete');
+    // });
+    // Route::prefix('paymentslip')->name('paymentslip.')->group(function () {
+    //     Route::get('', [PaymentSlipController::class, 'index'])->name('index');
+    //     Route::get('/client/{id}', [PaymentSlipController::class, 'showClientInfor'])->name('show');
+    //     Route::get('search', [PaymentSlipController::class, 'search'])->name('search');
+    //     Route::get('add', [PaymentSlipController::class, 'add'])->name('add');
+    //     Route::post('store', [PaymentSlipController::class, 'store'])->name('store');
+    //     Route::get('customer-search', [PaymentSlipController::class, 'searchCustomer'])->name('searchCustomer');
+    //     Route::get('export-pdf/{id}', [PaymentSlipController::class, 'exportPDF'])->name('export_pdf');
+    //     Route::delete('delete/{id}', [PaymentSlipController::class, 'delete'])->name('delete');
+    // });
     Route::get('/logout', 'DashboardController@logout')->name('logout');
     Route::get('/', 'DashboardController@dashboard')->name('dashboard')->middleware("role-admin");
 
@@ -277,19 +277,19 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::post('/comment', 'MissionController@storeComment')->name('store-comment')->middleware("role-admin");
     });
 
-    Route::group(['prefix' => 'project', 'as' => 'project.'], function () {
-        Route::get('/list', 'ProjectController@list')->name('list');
-        Route::get('/add', 'ProjectController@add')->name('add');
-        Route::post('/store', 'ProjectController@store')->name('store');
-        Route::get('/{id}/edit', 'ProjectController@edit')->name('edit');
-        Route::post('/{id}/update', 'ProjectController@update')->name('update');
-        Route::get('/{id}/import', 'ProjectController@getViewImport')->name('import');
-        Route::post('{id}/import', 'ProjectController@storeImport')->name('store-import');
-        Route::post('{id}/store-handle', 'ProjectController@storeHandle')->name('store-handle');
-        Route::get('/{id}/add-mission', 'ProjectController@getViewAddMission')->name('add-mission');
-        Route::post('/{id}/store-mission', 'ProjectController@storeMission')->name('store-mission');
-        Route::get('/{id}/export', 'ProjectController@export')->name('export');
-    });
+    // Route::group(['prefix' => 'project', 'as' => 'project.'], function () {
+    //     Route::get('/list', 'ProjectController@list')->name('list');
+    //     Route::get('/add', 'ProjectController@add')->name('add');
+    //     Route::post('/store', 'ProjectController@store')->name('store');
+    //     Route::get('/{id}/edit', 'ProjectController@edit')->name('edit');
+    //     Route::post('/{id}/update', 'ProjectController@update')->name('update');
+    //     Route::get('/{id}/import', 'ProjectController@getViewImport')->name('import');
+    //     Route::post('{id}/import', 'ProjectController@storeImport')->name('store-import');
+    //     Route::post('{id}/store-handle', 'ProjectController@storeHandle')->name('store-handle');
+    //     Route::get('/{id}/add-mission', 'ProjectController@getViewAddMission')->name('add-mission');
+    //     Route::post('/{id}/store-mission', 'ProjectController@storeMission')->name('store-mission');
+    //     Route::get('/{id}/export', 'ProjectController@export')->name('export');
+    // });
 
     Route::group(["prefix" => "user", "as" => "user.", "middleware" => "role-admin"], function () {
         Route::get('/list', 'UserController@list')->name('list');
@@ -347,56 +347,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         Route::get('/list', "SaralyController@list")->name("list");
     });
 
-    Route::group(["prefix" => "news", "as" => "news.", "middleware" => "role-admin"], function () {
-        Route::get("/list", "NewsController@list")->name("list");
-        Route::get("/add", "NewsController@add")->name("add");
-        Route::post("/store", "NewsController@store")->name("store");
-        Route::get("/{newsId}/edit", "NewsController@edit")->name("edit");
-        Route::post("/{newsId}/update", "NewsController@update")->name("update");
-        Route::get("/{newsId}/delete", "NewsController@delete")->name("delete");
-    });
+    // Route::group(["prefix" => "news", "as" => "news.", "middleware" => "role-admin"], function () {
+    //     Route::get("/list", "NewsController@list")->name("list");
+    //     Route::get("/add", "NewsController@add")->name("add");
+    //     Route::post("/store", "NewsController@store")->name("store");
+    //     Route::get("/{newsId}/edit", "NewsController@edit")->name("edit");
+    //     Route::post("/{newsId}/update", "NewsController@update")->name("update");
+    //     Route::get("/{newsId}/delete", "NewsController@delete")->name("delete");
+    // });
 
     Route::get('/overview', "OverViewController@overview")->name("overview")->middleware('role-admin');
 });
-// Route::group(['prefix' => 'customer', 'namespace' => 'Customer', 'as' => 'customer.'], function () {
-//     Route::get('/logout', function () {
-//         auth()->logout();
-
-//         return redirect()->route('login');
-//     })->name('logout');
-//        Route::get('/', 'HomeController@index')->name('index')->middleware('auth');
-//     Route::post('/userinfo', 'HomeController@store')->name('store')->name('store');
-//     //Route::get('/attendance', 'AttendanceController@index')->name("attendance");
-//     Route::group(["prefix" => "attendance", "as" => "attendance."], function () {
-//         Route::get("/", "AttendanceController@index")->name("index");
-//         Route::get("/check-in", "AttendanceController@checkIn")->name("check-in");
-//         Route::get("/check-out", "AttendanceController@checkOut")->name("check-out");
-//         Route::post("/update-note", "AttendanceController@updateNote")->name("update-note");
-//         Route::post("/update-status", "AttendanceController@updateStatus")->name("update-status");
-//     });
-//     Route::group(["prefix" => "fanpage", "as" => "fanpage."], function () {
-//         Route::get('/list', 'FanpageController@list')->name("list");
-//         Route::post('/store', 'FanpageController@store')->name("store");
-//         Route::get('/{id}/delete', 'FanpageController@delete')->name('delete');
-//     });
-//     Route::group(['prefix' => 'mission', 'as' => 'mission.'], function () {
-//         Route::get('/', 'MissionController@getListMission')->name('list');
-//         Route::post('/{id}/update', 'MissionController@update')->name('update');
-//         Route::get('/{id}/comments', 'MissionController@getListCommentById');
-//         Route::post('/comment', 'MissionController@storeComment')->name('comment');
-//     });
-//     Route::get("/them-viec", 'MissionController@addJob')->name("add-job");
-//     Route::post("/store-job", "MissionController@storeJob")->name("store-job");
-// });
-
-// Route::get('/{code}', 'Customer\FanpageController@detail')->name("customer.fanpage.track");
-// Route::group(["prefix" => "customer", "as" => "customer."], function () {
-//     Route::get("/list", "CustomerController@listCustomer")->name("list");
-//     Route::get("/create", "CustomerController@createCustomer")->name("create");
-//     Route::post("/store", "CustomerController@store")->name("store");
-// });
-// Route::group(["prefix" => "news", "as" => "news."], function () {
-//     Route::get("/{newsId}/detail", "Admin\NewsController@detail")->name("detail");
-// });
-
-

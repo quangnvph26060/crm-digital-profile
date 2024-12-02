@@ -45,11 +45,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(Repository $setConfig)
     {
         Paginator::useBootstrap();
-        $notifications = Notification::whereNull('user_id')
-                                     ->whereNull('admin_id')
-                                     ->where('status', 0)
-                                     ->get();
-        View::share("notifications", $notifications);
+        // $notifications = Notification::whereNull('user_id')
+        //                              ->whereNull('admin_id')
+        //                              ->where('status', 0)
+        //                              ->get();
+        // View::share("notifications", $notifications);
 
 
         $template_form_hoso = TemplateFormHoSo::where('status', 'active')->first();
