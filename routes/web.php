@@ -39,8 +39,8 @@ Route::post("/store-customer", "CustomerController@storeCustomer")->name("store-
 Route::get("/admin/customer/list", "CustomerController@getListCustomer")->name("customer-list")->middleware("is-login-admin","role-admin");
 Route::get("/admin/customer/{id}/detail", "CustomerController@getDetailCustomer")->name("detail-customer")->middleware("is-login-admin");
 Route::get("/admin/customer/{id}/delete", "CustomerController@delete")->name("delete-customer")->middleware("is-login-admin");
-Route::get('/', 'AuthController@loginForm')->name('login');
-Route::post('/login', 'AuthController@postLogin')->name('post-login');
+// Route::get('/', 'AuthController@loginForm')->name('login');
+// Route::post('/login', 'AuthController@postLogin')->name('post-login');
 Route::post('/get-column', [ProfileController::class, 'getColumnHoSo'])->name('column');
 // Route::get('/register', 'AuthController@registerForm')->name('register');
 // Route::post('/register', 'AuthController@postRegister')->name('post-register');
@@ -53,8 +53,8 @@ Route::post('/get-column', [ProfileController::class, 'getColumnHoSo'])->name('c
 
 // Route::get('/verify/{token}', 'AuthController@verifyEmail')->name('verify-email');
 
-Route::get('admin/login', 'AuthController@loginFormAdmin')->name('login-admin');
-Route::post('/admin/login', 'AuthController@postLoginAdmin')->name('post-login-admin');
+Route::get('', 'AuthController@loginFormAdmin')->name('login-admin');
+Route::post('', 'AuthController@postLoginAdmin')->name('post-login-admin');
 
 Route::group(["prefix" => "cronjob"], function () {
     Route::get("/set-kpi", "CronjobController@setKpiAuto");
