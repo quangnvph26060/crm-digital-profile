@@ -82,7 +82,7 @@ class InformationVbController extends Controller
         $selectedProfiles = [];
         if (session()->has($cacheKey)) {
             $duplicateValues = session($cacheKey);
-           // dd($duplicateValues);
+            // dd($duplicateValues);
             $selectedProfiles = $duplicateValues;
             $mergedArray = array_unique(array_merge($fillable, $selectedProfiles));
             if (count($mergedArray) > 2) {
@@ -364,7 +364,7 @@ class InformationVbController extends Controller
         if ($vanban) {
             $vanban->delete();
             return redirect()->route('admin.profile.detail', ['id' => $vanban->profile_id])
-                 ->with('success', 'Xóa văn bản thành công');
+                ->with('success', 'Xóa văn bản thành công');
         } else {
             return redirect()->back()->with('success', 'Văn bản không tồn tại');
         }
@@ -380,13 +380,13 @@ class InformationVbController extends Controller
     {
         try {
 
-          //   Excel::import(new InformationVbImport, $request->file('importexcel'));
+            //   Excel::import(new InformationVbImport, $request->file('importexcel'));
             $file = $request->file('importexcel');
             $filePath = $file->store('imports');
-    
+
             // Đẩy job vào hàng đợi
             ProcessData::dispatch($filePath);
-            return back()->with('success', 'Dữ liệu đã được nhập thành công');
+            return back()->with('success', 'Dữ liệu đang được cập nhật...');
         } catch (\Exception $e) {
             Log::info($e->getMessage());
 
@@ -471,6 +471,7 @@ class InformationVbController extends Controller
         $title = "Quản lý trường văn bản";
         return view('admins.pages.vanban.addcolumn', compact('title', 'columnDataPaginated', 'comment'));
     }
+
     function getColumnDetail($tableName, $columnName)
     {
         $columnInfo = DB::select("SHOW FULL COLUMNS FROM `$tableName` WHERE Field = ?", [$columnName]);
@@ -487,6 +488,7 @@ class InformationVbController extends Controller
             return redirect()->back()->with('error', 'Cập nhật không thành công.');
         }
     }
+
     private function getColumnData($table)
     {
         $columns = Schema::getColumnListing($table);
@@ -673,6 +675,9 @@ class InformationVbController extends Controller
                 break;
             case "text":
                 $newType  = 'TEXT';
+                break;
+            case "date":
+                $newType  = 'DATE';
                 break;
             default:
                 $newType = 'VARCHAR(255)';

@@ -30,7 +30,7 @@
                     <div class="card">
                         <div class="card-header">
 
-                                <form action="{{ route('admin.column.store') }}" method="post" class="">
+                                <form action="{{ route('admin.column.store') }}" method="post" class="container">
                                     @csrf
                                     <div class="form-group mt-3 ">
                                         <label for="column_name">Tên Cột</label>

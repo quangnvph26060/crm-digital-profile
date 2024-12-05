@@ -217,6 +217,12 @@
                     </div>
                     <div class="mt-4">
                         @include('globals.alert')
+                        @if (Cache::has('import_status'))
+                        <div class="alert alert-info">
+                        {{ Cache::get('import_status') }}
+                    </div>
+                @endif
+
                     </div>
                     <div class="card-body" style="overflow-x: auto; max-width: 100%; padding: 20px 0px;">
 

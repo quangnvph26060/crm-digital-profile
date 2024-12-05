@@ -149,24 +149,24 @@ class ProfileImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
                 $dateString = $row['ngay_thang_bd'];
             }
          
-            if (strpos($dateString, '-') !== false) {
-                $ngay_thang_arr = explode('-', $dateString);
-            }else{
-                if (is_numeric($dateString)) {
-                    $ngay_thang  = Carbon::createFromFormat('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['ngay_thang_bd_kt'])->format('Y-m-d'))->format('d/m/Y');
-                } else {
-                    $ngay_thang = $row['ngay_thang_bd_kt']; // Nếu không phải số, coi như đã là ngày tháng hợp lệ
-                }
-                $ngay_thang_arr = [$ngay_thang];
-            }
+            // if (strpos($dateString, '-') !== false) {
+            //     $ngay_thang_arr = explode('-', $dateString);
+            // }else{
+            //     if (is_numeric($dateString)) {
+            //         $ngay_thang  = Carbon::createFromFormat('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['ngay_thang_bd_kt'])->format('Y-m-d'))->format('d/m/Y');
+            //     } else {
+            //         $ngay_thang = $row['ngay_thang_bd_kt']; // Nếu không phải số, coi như đã là ngày tháng hợp lệ
+            //     }
+            //     $ngay_thang_arr = [$ngay_thang];
+            // }
             
-            if (is_array($ngay_thang_arr)) {
-                $ngay_bat_dau = date_create_from_format('d/m/Y', trim($ngay_thang_arr[0]));
-                if(count($ngay_thang_arr) === 2){
-                    $ngay_ket_thuc = date_create_from_format('d/m/Y', trim($ngay_thang_arr[1]));
-                }else{
-                    $ngay_ket_thuc = date_create_from_format('d/m/Y', trim($ngay_thang_arr[0]));
-                }
+            if ($dateString) {
+                // $ngay_bat_dau = date_create_from_format('d/m/Y', trim($ngay_thang_arr[0]));
+                // if(count($ngay_thang_arr) === 2){
+                //     $ngay_ket_thuc = date_create_from_format('d/m/Y', trim($ngay_thang_arr[1]));
+                // }else{
+                //     $ngay_ket_thuc = date_create_from_format('d/m/Y', trim($ngay_thang_arr[0]));
+                // }
                 Profile::unguard();
                 $data = [
                     'config_id'        => $existingCoQuan->id,
@@ -175,8 +175,7 @@ class ProfileImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
                     'hop_so'           => $existingHopSo->id ?? null,
                     'ho_so_so'         => $row['ho_so_so'] ?? null,
                     'tieu_de_ho_so'    => $row['tieu_de_ho_so'] ?? null,
-                    'ngay_bat_dau'     => $ngay_bat_dau ? $ngay_bat_dau->format('Y-m-d') : null,
-                    'ngay_ket_thuc'    => $ngay_ket_thuc ? $ngay_ket_thuc->format('Y-m-d') : null,
+                    'ngay_thang_bd_kt' => $dateString,
                     'so_to'            => $row['so_to'] ?? null,
                     'thbq'             => $row['thbq'] ?? null,
                     'ghi_chu'          => $row['ghi_chu'] ?? null,

@@ -208,11 +208,11 @@ class CustomColumnController extends Controller
 
     public function updateColumn($column, Request $request)
     {
-        $request->validate([
-            'column_name' => 'required|string|max:255',
-            'column_type' => 'required|in:string,integer,text',
-            'is_required' => 'required|boolean',
-        ]);
+        // $request->validate([
+        //     'column_name' => 'required|string|max:255',
+        //     'column_type' => 'required|in:string,integer,text',
+        //     'is_required' => 'required|boolean',
+        // ]);
         $profiles = $this->getColumnDetail('profiles', $column);
         $columnName = $request->input('column_name');
         $columnType = $request->input('column_type');
@@ -222,6 +222,7 @@ class CustomColumnController extends Controller
 
         return $result;
     }
+
     public function editColumnAndUpdateFillable($columnName, $columnType, $isRequired, $column)
     {
         $cleanColumnName = Str::lower(str_replace('-', '_', Str::slug($columnName))); // tên cột mới
@@ -235,25 +236,27 @@ class CustomColumnController extends Controller
             case "text":
                 $newType  = 'TEXT';
                 break;
+            case "date":
+                $newType  = 'DATE';
+                break;
             default:
                 $newType = 'VARCHAR(255)';
         }
         $flag = false;
         Schema::table('profiles', function (Blueprint $table) use ($cleanColumnName, $column, $columnType, $newType, $columnName, $isRequired) {
             if ($isRequired == "1") {
-                if($cleanColumnName == $column){
+                if ($cleanColumnName == $column) {
                     DB::statement("UPDATE profiles SET $cleanColumnName = '' WHERE $cleanColumnName IS NULL");
                 }
 
                 DB::statement("ALTER TABLE profiles CHANGE $column $cleanColumnName $newType  NOT NULL  COMMENT '$columnName'");
             } else {
-                if($cleanColumnName == $column){
+                if ($cleanColumnName == $column) {
                     DB::statement("UPDATE profiles SET $cleanColumnName = '' WHERE $cleanColumnName IS NULL");
                 }
 
                 DB::statement("ALTER TABLE profiles CHANGE $column $cleanColumnName $newType   DEFAULT NULL  COMMENT '$columnName'");
             }
-
         });
         // Cập nhật mảng fillable_fields_profile.php
         $fillableFields = include app_path('Models/fillable_fields_profile.php');

@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Support\Facades\Cache;
 class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
 {
     protected $batchData = []; // Tạm lưu dữ liệu batch
@@ -95,14 +96,16 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
                                     //     $filePath = Storage::disk('public')->putFileAs('documents', new \Illuminate\Http\File($row['duong_dan_file']), $fileName);
                                     //     $data['duong_dan'] = $filePath;
                                     // }
-    
-                                    // $this->batchData[] = $data;
-                                    InformationVb::query()->insert($data);
+                                    Cache::put('import_status', 'Quá trình import đang chạy...', 1200);
+                                    $this->batchData[] = $data;
+                                 //   InformationVb::query()->insert($data);
                                     // Nếu batch đủ kích thước thì thực hiện chèn
-                                    // if (count($this->batchData) >= $this->batchSize()) {
-                                    //     InformationVb::query()->insert($this->batchData);
-                                    //     $this->batchData = []; // Reset batch
-                                    // }
+                                    if (count($this->batchData) >= $this->batchSize()) {
+                                        InformationVb::query()->insert($this->batchData);
+                                        Cache::put('import_status', 'Đã chèn một batch dữ liệu vào cơ sở dữ liệu', 60);
+                                        Log::info('Đã chèn một batch dữ liệu vào cơ sở dữ liệu');
+                                        $this->batchData = []; // Reset batch
+                                    }
                                 }
                             }
                         }
@@ -119,7 +122,14 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
             Log::error('Lỗi trong hàm collection: ' . $e->getMessage() . ' at line ' . $e->getLine());
         }
     }
+    public function __destruct()
+    {
+        if (!empty($this->batchData)) {
+            Cache::forget('import_status');
 
+            InformationVb::query()->insert($this->batchData);
+        }
+    }
     public function chunkSize(): int
     {
         return 1000; // Đọc file từng khối 1000 dòng
@@ -127,7 +137,7 @@ class InformationVbImport implements ToModel, WithHeadingRow, WithCalculatedForm
 
     public function batchSize(): int
     {
-        return 1000; // Chèn 1000 bản ghi mỗi lần
+        return 500; // Chèn 1000 bản ghi mỗi lần
     }
     public function getCsvSettings(): array
     {

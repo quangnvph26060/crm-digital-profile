@@ -41,7 +41,7 @@
                                             <option value="string" {{ $profiles['type'] === "varchar(255)" ? "selected" : "" }}>Chuỗi (string)</option>
                                             <option value="integer" {{ $profiles['type'] === "int" ? "selected" : "" }}>Số Nguyên (integer)</option>
                                             <option value="text" {{ $profiles['type'] === "text" ? "selected" : "" }}>Văn Bản (text)</option>
-                                            <option value="date" {{ $information_vb['type'] === "date" ? "selected" : "" }}>Ngày (date)</option>
+                                            <option value="date" {{ $profiles['type'] === "date" ? "selected" : "" }}>Ngày (date)</option>
                                             <!-- Thêm các kiểu dữ liệu khác nếu cần -->
                                         </select>
                                     </div>
