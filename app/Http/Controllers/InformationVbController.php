@@ -53,7 +53,7 @@ class InformationVbController extends Controller
         $title = "Danh sách văn bản";
         // Áp dụng các bộ lọc
         if (isset($request->name) && $request->name != '') {
-            $vanban->where('so_va_ki_hieu_van_ban', 'like', '%' . $request->name . '%');
+            $vanban->where('ky_hieu_van_ban', 'like', '%' . $request->name . '%');
         }
 
         // Sửa biến $request->config_id thành $request->phong
