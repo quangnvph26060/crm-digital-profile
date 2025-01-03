@@ -54,8 +54,14 @@ class InformationVbController extends Controller
         // Áp dụng các bộ lọc
         if (isset($request->name) && $request->name != '') {
             $vanban->where(function($query) use ($request) {
+              //  $hopSoIds = HopSoModel::where('hop_so', 'like', '%' . $request->name . '%')->pluck('id');
                 $query->where('ky_hieu_van_ban', 'like', '%' . $request->name . '%')
-                      ->orWhere('trich_yeu_noi_dung_van_ban', 'like', '%' . $request->name . '%');
+                      ->orWhere('trich_yeu_noi_dung_van_ban', 'like', '%' . $request->name . '%')
+                      ->orWhere('so_van_ban', 'like', '%' . $request->name . '%');
+                        // if ($hopSoIds->isNotEmpty()) {
+                        //     $query->orWhere('hop_so', 'like', '%' . $request->name . '%');
+                        // }
+                      
             });
         }
 

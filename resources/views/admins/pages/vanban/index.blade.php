@@ -31,7 +31,7 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label for="">Số và ký hiệu văn bản</label>
+                                        <label for="">Số và ký hiệu văn bản và trích yếu nội dung văn bản</label>
                                         <input value="{{ isset($inputs['name']) ? $inputs['name'] : '' }}"
                                             autocomplete="off" name="name" placeholder="Tìm kiếm..." type="text"
                                             class="form-control">
